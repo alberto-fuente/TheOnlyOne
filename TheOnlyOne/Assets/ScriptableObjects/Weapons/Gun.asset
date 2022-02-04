@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc305b07e2e92da418f9565002e5f5ac, type: 3}
+  m_Name: Gun
+  m_EditorClassIdentifier: 
+  weaponName: Gun
+  prefab: {fileID: 6673130762343892805, guid: b777a322bd4110b41845bef7656be19b, type: 3}
+  anim: {fileID: 0}
+  maxClipAmmo: 10
+  currentAmmo: 10
+  totalAmmo: 90
+  range: 90
+  fireRate: 0.33
+  reloadTime: 1.5
+  aimSpeed: 20
+  autoShoot: 0
+  damage: 5
+  swayIntensity: 10
+  swaySpeed: 5
+  recoilRotation: {x: 1.99, y: 1.29, z: 1.89}
+  aimRecoilRotation: {x: 1.14, y: 1.77, z: 0.42}
+  recoilSpeed: 5.86
+  returnSpeed: 2.89
+  vRecoilRotation: {x: 6.54, y: 1.98, z: 2.1}
+  vRecoilKickBack: {x: 0.48, y: 0.6, z: -2}
+  vRecoilRotationAim: {x: 0.56, y: 2.55, z: 0}
+  vRecoilKickBackAim: {x: 0.93, y: 0.87, z: -1}
+  vPositionRecoilSpeed: 0
+  vRotationRecoilSpeed: 5.11
+  vPositionReturnSpeed: 6.42
+  vRotationReturnSpeed: 6.51
+  shootSound: {fileID: 8300000, guid: 6739c01659ad96d47987f4ddee226b36, type: 3}
+  reloadSound: {fileID: 8300000, guid: edd711667fcd1db4988c376b8b1f577e, type: 3}
+  pitch: 1
+  pitchRand: 0.05
+  bulletDecal: {fileID: 8843144634977441555, guid: fbd92e76c83f9f14c83f5a19ec1e74be, type: 3}
+  mainFOV: 65
+  aimFOV: 50
