@@ -4,64 +4,94 @@ using UnityEngine;
 
 public class WeaponChanger : MonoBehaviour
 {
-    public Weapon[] weapons;
-    private Weapon activeWeapon;
-    private static int index=0;
-    public GameManager gm;
-
+    public Pickable[] items;
+    public int lenght;
+    public int maxItems=5;
+    public int currentIndex;
+    public GameManager gameManager;
     [SerializeField] private bool isChanging = false;
-    [SerializeField] private float changeRate = .5f;
-    private float timer = 0f;
-    // Start is called before the first frame update
-    void Start()
+    private float changeDirection;
+
+    void Awake()
     {
-        activeWeapon = weapons[0];
-        gm = FindObjectOfType<GameManager>();
+        items = new Pickable[maxItems];
+        currentIndex = 0;
+
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            items[i] = transform.GetChild(i).GetComponent<Pickable>();
+        }
+        gameManager = FindObjectOfType<GameManager>();
         
     }
-    public Weapon GetWeapon()
+    public Pickable GetCurrentItem()
     {
-        return activeWeapon;
+        return items[currentIndex];
     }
     // Update is called once per frame
     void Update()
     {
-        //recorremos la lista
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            weapons[i] = transform.GetChild(i).GetComponent<Weapon>();
-        }
-        //provisional
-        if (Time.time >= timer)
-        {
-            timer = Time.time + changeRate;
-            isChanging = false;
-        }
-        gm.currentAmmoText.text = activeWeapon.ws.currentAmmo.ToString();
-        gm.totalAmmoText.text = activeWeapon.ws.totalAmmo.ToString();
+      
 
-        if (Input.GetAxisRaw("Mouse ScrollWheel") != 0 && !activeWeapon.isReloading && !IsChanging())
+
+        if (GetCurrentItem().typeOfItem == Pickable.TypeOfItem.GUN)
+        {
+            gameManager.ammoPanel.SetActive(true);
+            gameManager.currentAmmoText.text = GetCurrentItem().GetComponent<Weapon>().ws.currentAmmo.ToString();
+            gameManager.totalAmmoText.text = GetCurrentItem().GetComponent<Weapon>().ws.totalAmmo.ToString();
+        }
+        else
+        {
+            gameManager.ammoPanel.SetActive(false);
+        }
+        
+        
+        changeDirection = Input.GetAxisRaw("Mouse ScrollWheel");
+        if ((changeDirection != 0|| GetCurrentItem() == null) && !IsChanging())
         {
 
             isChanging = true;
-            changeWeapon(activeWeapon);
+            changeItem(changeDirection);
 
         }
     }
-    private void changeWeapon(Weapon previousWeapon)
+    private void changeItem(float changeDirection)
     {
-        if (index < weapons.Length-1)
-        {
-            index++;
-        }
-        else index = 0;
 
-        previousWeapon.Enable(false);
-        activeWeapon = weapons[index];
-        activeWeapon.Enable(true);
+        if (transform.childCount == 1) return;
+        items[currentIndex].disableItem();
+
+        int next=changeDirection<0?-1:1;
+
+        if(currentIndex==0&& next == -1)
+        {
+            currentIndex = transform.childCount - 1;
+        }else
+        if (currentIndex >= transform.childCount - 1&& next == 1)
+        {
+            currentIndex =0;
+        }
+        else currentIndex += next;
+
+        items[currentIndex].EnableItem();
+        isChanging = false;
+        //recorremos el array
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            items[i] = transform.GetChild(i).GetComponent<Pickable>();
+        }
     }
     public bool IsChanging()
     {
         return isChanging;
+    }
+
+    public void Pick(int index)
+    {
+
+    }
+    public void Drop(int index)
+    {
+
     }
 }

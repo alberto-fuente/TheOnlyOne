@@ -18,7 +18,10 @@ public class Recoil : MonoBehaviour
     {
         
         //Comprobamos cual es el arma actual
-        currentWeapon = weaponChanger.GetWeapon();
+         if (weaponChanger.GetCurrentItem().typeOfItem == Pickable.TypeOfItem.GUN)
+        {
+            currentWeapon = weaponChanger.GetCurrentItem().GetComponent<Weapon>();
+        }else return;
         //Calcula la rotación para volver a reposo
         targetRot = Vector3.Lerp(targetRot, Vector3.zero, currentWeapon.ws.returnSpeed * Time.deltaTime);
         currentRot = Vector3.Slerp(currentRot, targetRot, currentWeapon.ws.recoilSpeed * Time.fixedDeltaTime);

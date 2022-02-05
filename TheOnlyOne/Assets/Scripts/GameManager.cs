@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public int totalTargets;
     public int remainingTargets;
 
+    public GameObject ammoPanel;
     public float gameTimer = 0f;
     public Text timerText;
     public Text currentAmmoText;

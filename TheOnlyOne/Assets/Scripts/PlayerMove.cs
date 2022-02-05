@@ -22,7 +22,7 @@ public class PlayerMove : MonoBehaviour
     public float moveSpeed;
     public float idleSpeed = 0;
     public float walkSpeed=150;
-    public float crouchSpeed = 100;
+    public float crouchSpeed = 75;
     public float runSpeed=200;
     public float accel = 10f;
 
@@ -87,7 +87,11 @@ public class PlayerMove : MonoBehaviour
         //Input direccion
         horizontalMove = Input.GetAxisRaw("Horizontal");
         verticalMove = Input.GetAxisRaw("Vertical");
-        isAiming = weaponChanger.GetWeapon().isAming;
+        if (weaponChanger.GetCurrentItem().typeOfItem == Pickable.TypeOfItem.GUN)
+        {
+            isAiming = weaponChanger.GetCurrentItem().gameObject.GetComponent<Weapon>().isAming;
+        }
+        else isAiming = false;
         isJumping = Input.GetButton("Jump");
         isCrouching = Input.GetKey(KeyCode.LeftControl);
         isSprinting = Input.GetKey(KeyCode.LeftShift);
@@ -116,7 +120,8 @@ public class PlayerMove : MonoBehaviour
     }
     Vector3 HeadBob(float timePoint, float xIntensity, float yIntensity)
     {
-        return targetBobPosition = weaponChangerOrigin + new Vector3(Mathf.Cos(timePoint) * xIntensity, Mathf.Sin(timePoint * 2) * yIntensity, 0);
+        targetBobPosition = weaponChangerOrigin + new Vector3(Mathf.Cos(timePoint) * xIntensity, Mathf.Sin(timePoint * 2) * yIntensity, -headBobSpeed/90);
+        return targetBobPosition;
     }
     private void Crouch(bool crouch)
     {
@@ -179,9 +184,9 @@ public class PlayerMove : MonoBehaviour
     void ControlDrag()
     {
         if (isGrounded) {
-            /*if (isCrouching)
+            if (isCrouching)
                 rb.drag = slideDrag;
-            else*/
+            else
             rb.drag = defaultDrag;
         } 
         else rb.drag = airDrag;
@@ -193,19 +198,19 @@ public class PlayerMove : MonoBehaviour
         {
             if (isSprinting && isGrounded)
             {
-                moveSpeed = Mathf.Lerp(moveSpeed / aimDivider, runSpeed, accel * Time.deltaTime);
+                moveSpeed = Mathf.Lerp(moveSpeed , runSpeed / aimDivider, accel * Time.deltaTime);
             }
             else
             if (isCrouching && isGrounded)
             {
-                moveSpeed = Mathf.Lerp(moveSpeed / aimDivider, crouchSpeed, accel * Time.deltaTime);
+                moveSpeed = Mathf.Lerp(moveSpeed , crouchSpeed / aimDivider, accel * Time.deltaTime);
             }
             else
             {
-                moveSpeed = Mathf.Lerp(moveSpeed / aimDivider, walkSpeed, accel * Time.deltaTime);
+                moveSpeed = Mathf.Lerp(moveSpeed , walkSpeed / aimDivider, accel * Time.deltaTime);
             }
         }
-        else moveSpeed = Mathf.Lerp(moveSpeed / aimDivider, idleSpeed, accel * Time.deltaTime);
+        else moveSpeed = Mathf.Lerp(moveSpeed , idleSpeed / aimDivider, accel * Time.deltaTime);
 
     }
    

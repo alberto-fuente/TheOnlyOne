@@ -9,6 +9,8 @@ public class WeaponBlueprint : ScriptableObject
     public string weaponName;
     public GameObject prefab;
     public Animator anim;
+    public enum Type { MELEE, GUN, HEAVYGUN }
+
     [Space]
     [Header("Stats")]
     public int maxClipAmmo;
