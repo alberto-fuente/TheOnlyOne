@@ -16,8 +16,8 @@ MonoBehaviour:
   prefab: {fileID: 6673130762343892805, guid: b777a322bd4110b41845bef7656be19b, type: 3}
   anim: {fileID: 0}
   maxClipAmmo: 10
-  currentAmmo: 10
-  totalAmmo: 90
+  currentAmmo: 1
+  totalAmmo: 80
   range: 90
   fireRate: 0.33
   reloadTime: 1.5
@@ -38,7 +38,7 @@ MonoBehaviour:
   vRotationRecoilSpeed: 5.11
   vPositionReturnSpeed: 6.42
   vRotationReturnSpeed: 6.51
-  shootSound: {fileID: 8300000, guid: 6739c01659ad96d47987f4ddee226b36, type: 3}
+  shootSound: {fileID: 8300000, guid: 1c9c2fdead5c1c54aadf99151b744469, type: 3}
   reloadSound: {fileID: 8300000, guid: edd711667fcd1db4988c376b8b1f577e, type: 3}
   pitch: 1
   pitchRand: 0.05

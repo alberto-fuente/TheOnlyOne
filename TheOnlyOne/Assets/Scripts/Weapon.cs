@@ -14,7 +14,7 @@ public class Weapon : MonoBehaviour
     public AudioSource audioSource;
     private Recoil recoilScript;
     private VisualRecoil viusalRecoilScript;
-    private WeaponChanger weaponChanger;
+    private WeaponHolder weaponChanger;
 
     private float nextTimeToFire = 0f;
     public bool isReloading = false;
@@ -30,8 +30,10 @@ public class Weapon : MonoBehaviour
     {
         ws.currentAmmo = ws.maxClipAmmo;
         ws.totalAmmo = 90;
-          
-        weaponChanger = FindObjectOfType<WeaponChanger>();
+        playerCam= GameObject.Find("/CameraHolder/CameraRecoil/MainCamera").GetComponent<Camera>();
+        weaponCam = GameObject.Find("/CameraHolder/CameraRecoil/WeaponCamera").GetComponent<Camera>();
+        weaponChanger = FindObjectOfType<WeaponHolder>();
+        audioSource = weaponChanger.GetComponent<AudioSource>();
         recoilScript = FindObjectOfType<Recoil>();
         playerMove = FindObjectOfType<PlayerMove>();
         viusalRecoilScript = GetComponent<VisualRecoil>();
@@ -40,8 +42,8 @@ public class Weapon : MonoBehaviour
         aimState = transform.Find("States/Aim");
         prefabContainer = transform.Find("Anchor/Design");
         //Equip
-        prefab = Instantiate(ws.prefab, prefabContainer.position, prefabContainer.rotation, prefabContainer);
-        muzzleFlash = prefab.GetComponentInChildren<ParticleSystem>();
+        //prefab = Instantiate(ws.prefab, prefabContainer.position, prefabContainer.rotation, prefabContainer);
+       // muzzleFlash = prefab.GetComponentInChildren<ParticleSystem>();
     }
     //condiciones para poder disparar
     
@@ -71,7 +73,7 @@ public class Weapon : MonoBehaviour
         }*/
     }
     bool CanReload() { 
-        return !weaponChanger.IsChanging()&&ws.currentAmmo < ws.maxClipAmmo && ws.totalAmmo > 0 && !isReloading; 
+        return !weaponChanger.IsChanging && ws.currentAmmo < ws.maxClipAmmo && ws.totalAmmo > 0 && !isReloading; 
     }
     public IEnumerator Reload()
     {
@@ -116,14 +118,14 @@ public class Weapon : MonoBehaviour
     }
     private bool CanShoot()
     {
-        return !weaponChanger.IsChanging() && !isReloading && nextTimeToFire > ws.fireRate && ws.currentAmmo > 0;
+        return !weaponChanger.IsChanging && !isReloading && nextTimeToFire > ws.fireRate && ws.currentAmmo > 0;
     }
     private void Shoot()
     {
 
         if (ws.anim != null) ws.anim.SetTrigger("Shoot");
         audioSource.pitch = Random.Range(ws.pitch - ws.pitchRand, ws.pitch + ws.pitchRand);
-        audioSource.PlayOneShot(ws.shootSound, 0.2f);
+        audioSource.PlayOneShot(ws.shootSound, 0.3f);
         muzzleFlash.Play();
 
         //recoil
@@ -142,7 +144,6 @@ public class Weapon : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(weaponCam.transform.position, weaponCam.transform.forward, out hit, ws.range))
         {
-            if (hit.transform.tag == "Player") return;
             GameObject decal = Instantiate(ws.bulletDecal, hit.point + (hit.normal * 0.025f), Quaternion.FromToRotation(Vector3.up, hit.normal)) as GameObject;//se instancia el decal
                                                                                                                                                                //Se rota el decal para adaptarse a la superficie
             decal.transform.parent = hit.transform;//el decal se "pega" al objeto con el que impacte
