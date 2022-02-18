@@ -194,24 +194,26 @@ public class PlayerMove : MonoBehaviour
     void ControlSpeed()
     {
         int aimDivider = isAiming?3:1;
+        float desiredSpeed;
         if (horizontalMove != 0 || verticalMove != 0)
         {
             if (isSprinting && isGrounded)
             {
-                moveSpeed = Mathf.Lerp(moveSpeed , runSpeed / aimDivider, accel * Time.deltaTime);
+                desiredSpeed = runSpeed;
             }
             else
             if (isCrouching && isGrounded)
             {
-                moveSpeed = Mathf.Lerp(moveSpeed , crouchSpeed / aimDivider, accel * Time.deltaTime);
+                desiredSpeed = crouchSpeed;
             }
             else
             {
-                moveSpeed = Mathf.Lerp(moveSpeed , walkSpeed / aimDivider, accel * Time.deltaTime);
+                desiredSpeed = walkSpeed;
             }
         }
-        else moveSpeed = Mathf.Lerp(moveSpeed , idleSpeed / aimDivider, accel * Time.deltaTime);
+        else desiredSpeed = idleSpeed;
 
+        moveSpeed = Mathf.Lerp(moveSpeed, desiredSpeed / aimDivider, accel * Time.deltaTime);
     }
    
 

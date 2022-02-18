@@ -16,14 +16,12 @@ MonoBehaviour:
   prefab: {fileID: 9198787496021955775, guid: 2456160eac57e7d469935e64f637a047, type: 3}
   anim: {fileID: 0}
   maxClipAmmo: 25
-  currentAmmo: 5
-  totalAmmo: 0
   range: 50
   fireRate: 0.08
   reloadTime: 1.5
   aimSpeed: 30
   autoShoot: 1
-  damage: 2
+  damage: 20
   swayIntensity: 10
   swaySpeed: 5
   recoilRotation: {x: -2, y: 1.2, z: 0.5}

@@ -12,14 +12,13 @@ public class WeaponHolder : MonoBehaviour
     [SerializeField] private int maxItems = 5;
     private int currentIndex;
 
-    public float pickRange = 50;
-    [SerializeField] private int pickSpeed=2;
+    public float pickRange = 2;
     [SerializeField] private float dropForce = 500;
 
-    private bool isChanging;
+    [SerializeField] private bool isChanging;
     private float changeDirection;
-    
 
+    public Canvas canvas;
     public bool IsChanging { get => isChanging; private set => isChanging = value; }
 
     private void Start()
@@ -37,18 +36,25 @@ public class WeaponHolder : MonoBehaviour
 
     private void ListenPickInput()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        RaycastHit hit;
+        if (Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit))
         {
-            RaycastHit hit;
-            if (Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, pickRange))
+            if (hit.transform.GetComponent<PickableItem>() && hit.transform.GetComponent<PickableItem>().distanceToPlayer < pickRange)
             {
-                if (hit.transform.GetComponent<PickableItem>())
+                canvas = hit.transform.GetComponent<PickableItem>().labelCanvas;
+                canvas.enabled = true;
+
+                if (Input.GetKeyDown(KeyCode.E))
                 {
+                    canvas.enabled = false;
                     Pick(hit.transform.GetComponent<PickableItem>());
                 }
             }
+            else if (canvas != null)
+            {
+                canvas.enabled = false;
+            }
         }
-
     }
 
     private void ListenDropInput()
@@ -58,7 +64,7 @@ public class WeaponHolder : MonoBehaviour
             if (!isEmpty())
             {
                 Drop(inventory[currentIndex][0]);
-            } 
+            }
         }
     }
 
@@ -85,11 +91,12 @@ public class WeaponHolder : MonoBehaviour
         return null;
     }
 
-     void changeItem(float changeDirection)
+    void changeItem(float changeDirection)
     {
         if (inventory.Count <= 1) return;
 
         IsChanging = true;
+        gameManager.isSafeToReload = false;
         int nextDirection = changeDirection < 0 ? -1 : 1;
 
         if (currentIndex == 0 && nextDirection == -1)
@@ -105,6 +112,7 @@ public class WeaponHolder : MonoBehaviour
 
         RefreshInventory();
         IsChanging = false;
+
     }
     public void RefreshInventory()
     {
@@ -119,14 +127,15 @@ public class WeaponHolder : MonoBehaviour
         {
             inventory[currentIndex][0].EnableItem();
         }
-
+        gameManager.isSafeToReload = true;
+ 
     }
-     void Pick(PickableItem itemToPick)
+    void Pick(PickableItem itemToPick)
     {
         bool newItem = true;
 
-        GetComponent<AudioSource>().PlayOneShot(pickSound,0.3f);
-        
+        GetComponent<AudioSource>().PlayOneShot(pickSound, 0.3f);
+
         foreach (List<PickableItem> itemSlot in inventory)
         {
             if (itemSlot[0].itemID.Equals(itemToPick.itemID) && (itemToPick.typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE) || itemToPick.typeOfItem.Equals(GameUtils.TypeOfItem.CONSUMIBLE)))
@@ -140,9 +149,12 @@ public class WeaponHolder : MonoBehaviour
         {
             if (InventorySize() >= maxItems)
             {
+                if(inventory[currentIndex].Count==1)
+                Drop(inventory[currentIndex][0]);
+                else
                 Drop(inventory[currentIndex]);
             }
-            List < PickableItem > itemSlot=new List<PickableItem>();
+            List<PickableItem> itemSlot = new List<PickableItem>();
             inventory.Add(itemSlot);
             itemSlot.Add(itemToPick);
         }
@@ -155,317 +167,34 @@ public class WeaponHolder : MonoBehaviour
 
         RefreshInventory();
     }
-   
-     void Drop(PickableItem item)
+
+    public void Drop(PickableItem item)
     {
+        gameManager.isSafeToReload = false;
         inventory[currentIndex].Remove(item);
         item.IsEquiped = false;
         item.transform.SetParent(null);
-
+        /*
         item.itemRigidBody.AddForce(playerCam.transform.forward * dropForce, ForceMode.Impulse);
+        item.itemRigidBody.AddForce(playerCam.transform.up * dropForce, ForceMode.Impulse);
         float random = Random.Range(-1f, 1f);
         item.itemRigidBody.AddTorque(new Vector3(random, random, random) * 10);
-
-        if (inventory[currentIndex].Count == 0) inventory.Remove(inventory[currentIndex]);
-        currentIndex=Mathf.Max(currentIndex-1,0);
+        */
+        if (inventory[currentIndex].Count == 0)
+        {
+            inventory.Remove(inventory[currentIndex]);
+            currentIndex = Mathf.Max(currentIndex - 1, 0);
+        }
         RefreshInventory();
     }
 
-     void Drop(List<PickableItem> itemGroup)
+    public void Drop(List<PickableItem> itemGroup)
     {
-        foreach(PickableItem item in itemGroup)
+        foreach (PickableItem item in itemGroup)
         {
             Drop(item);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*
-    [SerializeField] public List<List<Pickable>> items;
-    public int lenght;
-    public int maxItems = 5;
-    public int currentIndex;
-    public Camera playerCam;
-    public float pickRange = 50;
-    public GameManager gameManager;
-    [SerializeField] private bool isChanging = false;
-    private float changeDirection;
-
-    private void Start()
-    {
-        
-        items = new List<List<Pickable>>();
-        for (int i = 0; i < maxItems - 1; i++)
-        {
-
-        }
-        currentIndex = 0;
-    }
-
-    private void Update()
-    {
-        lenght = items.Count;
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            RaycastHit hit;
-            if (Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit))
-            {
-
-                if (hit.transform.GetComponent<Pickable>())
-                {
-
-                    Pick(hit.transform.GetComponent<Pickable>());
-                }
-            }
-        }
-    }
-    public bool IsChanging()
-    {
-        return isChanging;
-    }
-    public bool isEmpty()
-    {
-        return items.Count == 0;
-    }
-    public Pickable GetCurrentItem()
-    {
-        return items[currentIndex][0];
-    }
-
-    public void Pick(Pickable item)
-    {
-        bool newItem = true;
-        item.isEquiped = true;
-        foreach (List<Pickable> i in items)
-        {
-            //if(i.Count==0)
-            if (i[0].itemID.Equals(item.itemID))
-            {
-                i.Add(item);
-                newItem = false;
-                break;
-            }
-            
-        }
-        if (newItem)
-        {
-            if (items.Count >= maxItems)
-            {
-                Drop(items[currentIndex]);
-            }
-            items[1].Add(item);
-        }
-
-        item.transform.SetParent(transform);
-        item.transform.localRotation = Quaternion.Euler(Vector3.zero);
-    }
-    public void Drop(List<Pickable> items)
-    {
-        foreach(Pickable i in items)
-        {
-            i.isEquiped = false;
-            i.transform.SetParent(null);
-        }
-        items.Clear();
-    }
-    */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*
-    public Pickable[] items;
-    public int lenght;
-    public int maxItems=5;
-    public int currentIndex;
-    public Camera playerCam;
-    public float pickRange = 50;
-    public GameManager gameManager;
-    [SerializeField] private bool isChanging = false;
-    private float changeDirection;
-
-    void Awake()
-    {
-        items = new Pickable[maxItems];
-        currentIndex = 0;
-
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            items[i] = transform.GetChild(i).GetComponent<Pickable>();
-        }
-        gameManager = FindObjectOfType<GameManager>();
-        
-    }
-    public Pickable GetCurrentItem()
-    {
-        return items[currentIndex];
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            RaycastHit hit;
-            if (Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit))
-            {
-
-                if (hit.transform.GetComponent<Pickable>())
-                {
-
-                    Pick(hit.transform.GetComponent<Pickable>());
-                }
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            if (items[currentIndex] != null)
-            {
-                Drop(items[currentIndex]);
-            }
-        }
-        if (!isEmpty() && GetCurrentItem().typeOfItem == Pickable.TypeOfItem.GUN)
-        {
-            gameManager.ammoPanel.SetActive(true);
-            gameManager.currentAmmoText.text = GetCurrentItem().GetComponent<Weapon>().ws.currentAmmo.ToString();
-            gameManager.totalAmmoText.text = GetCurrentItem().GetComponent<Weapon>().ws.totalAmmo.ToString();
-        }
-        else
-        {
-            gameManager.ammoPanel.SetActive(false);
-        }
-        
-        
-        changeDirection = Input.GetAxisRaw("Mouse ScrollWheel");
-        if (changeDirection != 0 && !IsChanging())
-        {
-
-            isChanging = true;
-            changeItem(changeDirection);
-
-        }
-    }
-    public bool isEmpty()
-    {
-        return transform.childCount == 0;
-    }
-    private void changeItem(float changeDirection)
-    {
-
-        if (transform.childCount <= 1) return;
-        items[currentIndex].disableItem();
-
-        int next=changeDirection<0?-1:1;
-
-        if(currentIndex==0&& next == -1)
-        {
-            currentIndex = transform.childCount - 1;
-        }else
-        if (currentIndex >= transform.childCount - 1&& next == 1)
-        {
-            currentIndex =0;
-        }
-        else currentIndex += next;
-
-        items[currentIndex].EnableItem();
-        isChanging = false;
-        //recorremos el array
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            items[i] = transform.GetChild(i).GetComponent<Pickable>();
-        }
-    }
-    public bool IsChanging()
-    {
-        return isChanging;
-    }
-
-    public void Pick(Pickable item)
-    {
-        item.transform.SetParent(transform);
-        item.transform.localRotation = Quaternion.Euler(Vector3.zero);
-
-        item.isEquiped = true;
-
-        if (transform.childCount < maxItems)
-        {
-            items[transform.childCount-1] = item;
-        }
-        else
-        {
-            Drop(items[currentIndex]);
-            items[currentIndex] = item;
-            item.transform.SetSiblingIndex(currentIndex);
-        }
-        
-    }
-    public void Drop(Pickable item)
-    {
-        item.transform.SetParent(null);
-        item.isEquiped = false;
-    }
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        //ver la direccion de las balas en el editor
-        Debug.DrawRay(playerCam.transform.position, playerCam.transform.forward);
-    }*/
 }
+
+

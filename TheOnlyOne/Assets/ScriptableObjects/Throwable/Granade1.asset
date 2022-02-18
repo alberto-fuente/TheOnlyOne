@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6fcb972c67060e4fa23c8364640ff8e, type: 3}
+  m_Name: Granade1
+  m_EditorClassIdentifier: 
+  granadeName: Granade1
+  prefab: {fileID: 0}
+  anim: {fileID: 0}
+  delay: 3
+  radius: 10
+  explosionForce: 7000
+  throwForce: 1000
+  explosionEffect: {fileID: 1764654978243476, guid: a98b15aa948478849b54661e4d9a317e, type: 3}

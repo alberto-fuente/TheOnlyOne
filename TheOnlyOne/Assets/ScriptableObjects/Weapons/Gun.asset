@@ -16,28 +16,26 @@ MonoBehaviour:
   prefab: {fileID: 6673130762343892805, guid: b777a322bd4110b41845bef7656be19b, type: 3}
   anim: {fileID: 0}
   maxClipAmmo: 10
-  currentAmmo: 1
-  totalAmmo: 80
   range: 90
   fireRate: 0.33
   reloadTime: 1.5
   aimSpeed: 20
   autoShoot: 0
-  damage: 5
+  damage: 30
   swayIntensity: 10
   swaySpeed: 5
-  recoilRotation: {x: 1.99, y: 1.29, z: 1.89}
-  aimRecoilRotation: {x: 1.14, y: 1.77, z: 0.42}
+  recoilRotation: {x: -3, y: 1.5, z: 1}
+  aimRecoilRotation: {x: -1.5, y: 1, z: 0.42}
   recoilSpeed: 5.86
   returnSpeed: 2.89
-  vRecoilRotation: {x: 6.54, y: 1.98, z: 2.1}
-  vRecoilKickBack: {x: 0.48, y: 0.6, z: -2}
-  vRecoilRotationAim: {x: 0.56, y: 2.55, z: 0}
-  vRecoilKickBackAim: {x: 0.93, y: 0.87, z: -1}
-  vPositionRecoilSpeed: 0
-  vRotationRecoilSpeed: 5.11
-  vPositionReturnSpeed: 6.42
-  vRotationReturnSpeed: 6.51
+  vRecoilRotation: {x: 27.21, y: 1.98, z: 2.1}
+  vRecoilKickBack: {x: 0, y: 0, z: -0.6}
+  vRecoilRotationAim: {x: 18, y: 0.2, z: 0}
+  vRecoilKickBackAim: {x: 0, y: 0, z: -0.2}
+  vPositionRecoilSpeed: 19
+  vRotationRecoilSpeed: 24.5
+  vPositionReturnSpeed: 23.3
+  vRotationReturnSpeed: 26.04
   shootSound: {fileID: 8300000, guid: 1c9c2fdead5c1c54aadf99151b744469, type: 3}
   reloadSound: {fileID: 8300000, guid: edd711667fcd1db4988c376b8b1f577e, type: 3}
   pitch: 1

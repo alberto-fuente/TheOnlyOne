@@ -15,7 +15,9 @@ public class Weapon : MonoBehaviour
     private Recoil recoilScript;
     private VisualRecoil viusalRecoilScript;
     private WeaponHolder weaponChanger;
-
+    private GameManager gameManager;
+    public int currentAmmo;
+    public int totalAmmo;
     private float nextTimeToFire = 0f;
     public bool isReloading = false;
     public bool isAming;
@@ -28,8 +30,9 @@ public class Weapon : MonoBehaviour
 
     void Start()
     {
-        ws.currentAmmo = ws.maxClipAmmo;
-        ws.totalAmmo = 90;
+        currentAmmo = ws.maxClipAmmo;
+        totalAmmo = 90;
+        gameManager = FindObjectOfType<GameManager>();
         playerCam= GameObject.Find("/CameraHolder/CameraRecoil/MainCamera").GetComponent<Camera>();
         weaponCam = GameObject.Find("/CameraHolder/CameraRecoil/WeaponCamera").GetComponent<Camera>();
         weaponChanger = FindObjectOfType<WeaponHolder>();
@@ -41,39 +44,43 @@ public class Weapon : MonoBehaviour
         hipState = transform.Find("States/Hip");
         aimState = transform.Find("States/Aim");
         prefabContainer = transform.Find("Anchor/Design");
+        
+
         //Equip
         //prefab = Instantiate(ws.prefab, prefabContainer.position, prefabContainer.rotation, prefabContainer);
-       // muzzleFlash = prefab.GetComponentInChildren<ParticleSystem>();
+        // muzzleFlash = prefab.GetComponentInChildren<ParticleSystem>();
     }
-    //condiciones para poder disparar
-    
-    // Update is called once per frame
+
     void Update()
     {
         nextTimeToFire += Time.deltaTime;
-
+       
         Sway();
         ListenReloadInput();
         ListenAimInput();
         ListenShootInput();
 
     }
-
+    private void LateUpdate()
+    {
+        if (!gameManager.isSafeToReload) CutReload();
+    }
     public void ListenReloadInput()
     {
-        if ((Input.GetKeyDown(KeyCode.R) || ws.currentAmmo <= 0) && CanReload())
+        if ((Input.GetKeyDown(KeyCode.R) || currentAmmo <= 0) && CanReload())
         {
-            StartCoroutine(Reload());
+            StartCoroutine("Reload");
         }
-        /*if (weaponChanger.IsChanging())
-        {
-            audioSource.volume = 0 ;
-            StopCoroutine(Reload());
-            isReloading = false;
-        }*/
     }
     bool CanReload() { 
-        return !weaponChanger.IsChanging && ws.currentAmmo < ws.maxClipAmmo && ws.totalAmmo > 0 && !isReloading; 
+        return gameManager.isSafeToReload && !isReloading && currentAmmo < ws.maxClipAmmo && totalAmmo > 0; 
+    }
+    public void CutReload()
+    {
+        audioSource.Stop();
+        StopCoroutine("Reload");
+        isReloading = false;
+        gameManager.isSafeToReload = true;
     }
     public IEnumerator Reload()
     {
@@ -82,17 +89,18 @@ public class Weapon : MonoBehaviour
         audioSource.pitch = 1;
         audioSource.PlayOneShot(ws.reloadSound, 0.2f);
         yield return new WaitForSeconds(ws.reloadTime);
-        if (ws.totalAmmo + ws.currentAmmo < ws.maxClipAmmo)
+        if (totalAmmo + currentAmmo < ws.maxClipAmmo)
         {
-            ws.currentAmmo += ws.totalAmmo;
-            ws.totalAmmo = 0;
+            currentAmmo += totalAmmo;
+            totalAmmo = 0;
         }
         else
         {
-            ws.totalAmmo -= ws.maxClipAmmo - ws.currentAmmo;
-            ws.currentAmmo = ws.maxClipAmmo;
+            totalAmmo -= ws.maxClipAmmo - currentAmmo;
+            currentAmmo = ws.maxClipAmmo;
         }
         isReloading = false;
+        
     }
     private void ListenAimInput()
     {
@@ -118,7 +126,7 @@ public class Weapon : MonoBehaviour
     }
     private bool CanShoot()
     {
-        return !weaponChanger.IsChanging && !isReloading && nextTimeToFire > ws.fireRate && ws.currentAmmo > 0;
+        return !weaponChanger.IsChanging && !isReloading && nextTimeToFire > ws.fireRate && currentAmmo > 0;
     }
     private void Shoot()
     {
@@ -149,7 +157,7 @@ public class Weapon : MonoBehaviour
             decal.transform.parent = hit.transform;//el decal se "pega" al objeto con el que impacte
             Destroy(decal, 10f);//Se destruye el decal a los 10 segundos
         }
-        ws.currentAmmo--;
+        currentAmmo--;
         nextTimeToFire = 0;
         if (hit.transform != null)
             if (hit.transform.gameObject.tag == "Target")
@@ -175,10 +183,6 @@ public class Weapon : MonoBehaviour
             playerCam.fieldOfView = Mathf.Lerp(playerCam.fieldOfView, ws.mainFOV, ws.aimSpeed * Time.deltaTime);
 
         }
-    }
-    public void Enable(bool enable)
-    {
-        this.gameObject.SetActive(enable);
     }
 
     public void Sway()
