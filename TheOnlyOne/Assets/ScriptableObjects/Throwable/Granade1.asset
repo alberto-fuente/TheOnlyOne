@@ -17,6 +17,6 @@ MonoBehaviour:
   anim: {fileID: 0}
   delay: 3
   radius: 10
-  explosionForce: 7000
-  throwForce: 1000
+  explosionForce: 700
+  throwForce: 25
   explosionEffect: {fileID: 1764654978243476, guid: a98b15aa948478849b54661e4d9a317e, type: 3}

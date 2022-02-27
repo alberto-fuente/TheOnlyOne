@@ -6,6 +6,7 @@ using UnityEngine;
 public class Granade : MonoBehaviour
 {
     public GranadeBlueprint granadeData;
+    public PickableItem item;
     Rigidbody granadeRigidbody;
     float countdown;
     bool hasExploded;
@@ -14,6 +15,7 @@ public class Granade : MonoBehaviour
     void Start()
     {
         granadeRigidbody = GetComponent<Rigidbody>();
+        item = GetComponent<PickableItem>();
         countdown = granadeData.delay;
     }
 
@@ -28,7 +30,7 @@ public class Granade : MonoBehaviour
         if (countdown <= 0f&&!hasExploded)
         {
             Explode();
-            hasExploded = true;
+
         }
     }
 
@@ -45,11 +47,14 @@ public class Granade : MonoBehaviour
             }
             //Damage
         }
+        hasExploded = true;
         Destroy(gameObject);
     }
 
     public void Throw(Vector3 direction)
     {
+        item.granadeIdleCollider.enabled = false;
+        item.enabled = false;
         granadeRigidbody.AddForce(direction * granadeData.throwForce, ForceMode.VelocityChange);
         hasBeenthrown = true;
     }

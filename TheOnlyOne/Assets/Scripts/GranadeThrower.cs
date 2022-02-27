@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class GranadeThrower : MonoBehaviour
 {
-    WeaponHolder weaponHolder;
+    ItemHolder weaponHolder;
     
     // Start is called before the first frame update
     void Start()
     {
-        weaponHolder = FindObjectOfType<WeaponHolder>();
+        weaponHolder = FindObjectOfType<ItemHolder>();
 
     }
 
@@ -21,11 +21,10 @@ public class GranadeThrower : MonoBehaviour
 
     void ListenThrowInput()
     {
-        PickableItem currentGranade;
-        if (Input.GetMouseButtonDown(0) && !weaponHolder.isEmpty() && weaponHolder.GetCurrentItem().typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE))
+        PickableItem currentGranade=weaponHolder.GetCurrentItem();
+        if (Input.GetMouseButtonDown(0) && currentGranade != null && weaponHolder.GetCurrentItem().typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE))
         {
-            currentGranade = weaponHolder.GetCurrentItem();
-            weaponHolder.Drop(currentGranade);
+            weaponHolder.DropItem(currentGranade);
             currentGranade.GetComponent<Granade>().Throw(transform.forward);
         }
     }

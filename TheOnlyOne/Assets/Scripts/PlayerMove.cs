@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    private WeaponHolder weaponChanger;
+    private ItemHolder weaponChanger;
     private Vector3 weaponChangerOrigin;
     private float headBobTime;
     //private float idleTime;
@@ -62,7 +62,7 @@ public class PlayerMove : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        weaponChanger = FindObjectOfType<WeaponHolder>();
+        weaponChanger = FindObjectOfType<ItemHolder>();
         weaponChangerOrigin = weaponChanger.transform.localPosition;
         playerScale = transform.localScale;
         crouchedCamPos = new Vector3(cameraRot.position.x, cameraRot.position.y-0.7f, cameraRot.position.z);
@@ -87,7 +87,7 @@ public class PlayerMove : MonoBehaviour
         //Input direccion
         horizontalMove = Input.GetAxisRaw("Horizontal");
         verticalMove = Input.GetAxisRaw("Vertical");
-        if (!weaponChanger.isEmpty() && weaponChanger.GetCurrentItem().typeOfItem == GameUtils.TypeOfItem.GUN)
+        if (weaponChanger.GetCurrentItem()!=null && weaponChanger.GetCurrentItem().typeOfItem == GameUtils.TypeOfItem.GUN)
         {
             isAiming = weaponChanger.GetCurrentItem().gameObject.GetComponent<Weapon>().isAming;
         }

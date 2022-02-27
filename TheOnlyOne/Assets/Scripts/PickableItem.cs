@@ -6,22 +6,31 @@ using UnityEngine;
 public class PickableItem : MonoBehaviour
 {
     [Header("Item Components")]
+    public string itemName;
     public Rigidbody itemRigidBody;
     public Collider itemCollider;
+    public Collider granadeIdleCollider;
+    public GameObject prefab;
+    public Sprite Icon;
     public Canvas labelCanvas;
-
-    public WeaponHolder weaponHolder;
+    public bool isStackable;
+    public string itemID;
+    public ItemHolder weaponHolder;
     public GameUtils.TypeOfItem typeOfItem;
 
-    private bool isEquiped;
-    public string itemID;
+    public bool isEquiped;
 
+    private InventorySlot slot;
+    public InventorySlot Slot { get => slot; set => slot = value; }
+    public int slotId;
     public float distanceToPlayer;
-    public bool IsEquiped { get => isEquiped; set => isEquiped = value; }
+    
+    
 
     void Start()
     {
-        weaponHolder = FindObjectOfType<WeaponHolder>();
+
+        weaponHolder = FindObjectOfType<ItemHolder>();
         itemRigidBody = GetComponentInChildren<Rigidbody>();
         itemCollider = GetComponentInChildren<Collider>();
         labelCanvas = transform.GetComponentInChildren<Canvas>();
@@ -32,9 +41,13 @@ public class PickableItem : MonoBehaviour
     {
         distanceToPlayer = Vector3.Distance(transform.position, weaponHolder.transform.position);
         CheckEquiped();
-
         //Si está equipado, lo renderiza la WeaponCam
-        SetLayerRecursively(gameObject, IsEquiped ? 7 : 0);
+        if (typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE))
+        {
+            SetLayerRecursively(gameObject, isEquiped ? 13 : 12);
+        }else
+
+        SetLayerRecursively(gameObject, isEquiped ? 7 : 12);
 
     }
 
@@ -58,13 +71,15 @@ public class PickableItem : MonoBehaviour
 
         //animacion de guardar objeto
     }
-    void CheckEquiped()
+    public void CheckEquiped()
     {
-        itemRigidBody.isKinematic = IsEquiped;
-        itemCollider.isTrigger = IsEquiped;
-        if (typeOfItem.Equals(GameUtils.TypeOfItem.GUN)){
-            gameObject.GetComponent<Weapon>().enabled = IsEquiped;
-            gameObject.GetComponent<VisualRecoil>().enabled = IsEquiped;
+        itemRigidBody.isKinematic = isEquiped;
+        itemCollider.isTrigger = isEquiped;
+        if (typeOfItem.Equals(GameUtils.TypeOfItem.GUN))
+        {
+            gameObject.GetComponent<Weapon>().enabled = isEquiped;
+            gameObject.GetComponent<VisualRecoil>().enabled = isEquiped;
         }
+
     }
 }

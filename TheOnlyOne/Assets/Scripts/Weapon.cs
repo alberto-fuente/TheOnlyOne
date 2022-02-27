@@ -5,7 +5,7 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
     //atributos propios del arma
-    public WeaponBlueprint ws;
+    public WeaponBlueprint weaponData;
 
     //atributos comunes de todas las armas
     public Camera weaponCam;
@@ -14,7 +14,7 @@ public class Weapon : MonoBehaviour
     public AudioSource audioSource;
     private Recoil recoilScript;
     private VisualRecoil viusalRecoilScript;
-    private WeaponHolder weaponChanger;
+    private ItemHolder weaponChanger;
     private GameManager gameManager;
     public int currentAmmo;
     public int totalAmmo;
@@ -27,16 +27,14 @@ public class Weapon : MonoBehaviour
     public Transform prefabContainer;
     GameObject prefab;
     public ParticleSystem muzzleFlash;
-
-    void Start()
+    //public bool isSafe;
+    private void Awake()
     {
-        currentAmmo = ws.maxClipAmmo;
-        totalAmmo = 90;
         gameManager = FindObjectOfType<GameManager>();
-        playerCam= GameObject.Find("/CameraHolder/CameraRecoil/MainCamera").GetComponent<Camera>();
+        playerCam = GameObject.Find("/CameraHolder/CameraRecoil/MainCamera").GetComponent<Camera>();
         weaponCam = GameObject.Find("/CameraHolder/CameraRecoil/WeaponCamera").GetComponent<Camera>();
-        weaponChanger = FindObjectOfType<WeaponHolder>();
-        audioSource = weaponChanger.GetComponent<AudioSource>();
+        weaponChanger = FindObjectOfType<ItemHolder>();
+        audioSource = GetComponent<AudioSource>();
         recoilScript = FindObjectOfType<Recoil>();
         playerMove = FindObjectOfType<PlayerMove>();
         viusalRecoilScript = GetComponent<VisualRecoil>();
@@ -44,26 +42,33 @@ public class Weapon : MonoBehaviour
         hipState = transform.Find("States/Hip");
         aimState = transform.Find("States/Aim");
         prefabContainer = transform.Find("Anchor/Design");
-        
-
+    }
+    void Start()
+    {
+        currentAmmo = weaponData.maxClipAmmo;
+        totalAmmo = 90;
         //Equip
         //prefab = Instantiate(ws.prefab, prefabContainer.position, prefabContainer.rotation, prefabContainer);
         // muzzleFlash = prefab.GetComponentInChildren<ParticleSystem>();
     }
-
+    private void OnEnable()
+    {
+        weaponChanger.OnItemRemoved += CutReload;
+        weaponChanger.OnNewItemSwitched += CutReload;
+    }
+    private void OnDisable()
+    {
+        weaponChanger.OnItemRemoved -= CutReload;
+        weaponChanger.OnNewItemSwitched -= CutReload;
+    }
     void Update()
     {
         nextTimeToFire += Time.deltaTime;
-       
         Sway();
         ListenReloadInput();
         ListenAimInput();
         ListenShootInput();
-
-    }
-    private void LateUpdate()
-    {
-        if (!gameManager.isSafeToReload) CutReload();
+        
     }
     public void ListenReloadInput()
     {
@@ -72,32 +77,32 @@ public class Weapon : MonoBehaviour
             StartCoroutine("Reload");
         }
     }
-    bool CanReload() { 
-        return gameManager.isSafeToReload && !isReloading && currentAmmo < ws.maxClipAmmo && totalAmmo > 0; 
+    bool CanReload() {
+        return !isReloading && currentAmmo < weaponData.maxClipAmmo && totalAmmo > 0;//&& gameManager.IsSafeToReload; 
     }
-    public void CutReload()
+    public void CutReload(object sender, InventoryEventArgs e)
     {
         audioSource.Stop();
         StopCoroutine("Reload");
         isReloading = false;
-        gameManager.isSafeToReload = true;
+       // gameManager.IsSafeToReload = true;
     }
     public IEnumerator Reload()
     {
         isReloading = true;
-        if (ws.anim != null) ws.anim.SetTrigger("Reload");
+        if (weaponData.anim != null) weaponData.anim.SetTrigger("Reload");
         audioSource.pitch = 1;
-        audioSource.PlayOneShot(ws.reloadSound, 0.2f);
-        yield return new WaitForSeconds(ws.reloadTime);
-        if (totalAmmo + currentAmmo < ws.maxClipAmmo)
+        audioSource.PlayOneShot(weaponData.reloadSound, 0.2f);
+        yield return new WaitForSeconds(weaponData.reloadTime);
+        if (totalAmmo + currentAmmo < weaponData.maxClipAmmo)
         {
             currentAmmo += totalAmmo;
             totalAmmo = 0;
         }
         else
         {
-            totalAmmo -= ws.maxClipAmmo - currentAmmo;
-            currentAmmo = ws.maxClipAmmo;
+            totalAmmo -= weaponData.maxClipAmmo - currentAmmo;
+            currentAmmo = weaponData.maxClipAmmo;
         }
         isReloading = false;
         
@@ -111,7 +116,7 @@ public class Weapon : MonoBehaviour
     private void ListenShootInput()
     {
 
-        if (ws.autoShoot)
+        if (weaponData.autoShoot)
         {
             if (Input.GetMouseButton(0) && CanShoot())
             {
@@ -126,33 +131,33 @@ public class Weapon : MonoBehaviour
     }
     private bool CanShoot()
     {
-        return !weaponChanger.IsChanging && !isReloading && nextTimeToFire > ws.fireRate && currentAmmo > 0;
+        return !weaponChanger.IsChanging && !isReloading && nextTimeToFire > weaponData.fireRate && currentAmmo > 0;
     }
     private void Shoot()
     {
 
-        if (ws.anim != null) ws.anim.SetTrigger("Shoot");
-        audioSource.pitch = Random.Range(ws.pitch - ws.pitchRand, ws.pitch + ws.pitchRand);
-        audioSource.PlayOneShot(ws.shootSound, 0.3f);
+        if (weaponData.anim != null) weaponData.anim.SetTrigger("Shoot");
+        audioSource.pitch = Random.Range(weaponData.pitch - weaponData.pitchRand, weaponData.pitch + weaponData.pitchRand);
+        audioSource.PlayOneShot(weaponData.shootSound, 0.3f);
         muzzleFlash.Play();
 
         //recoil
         if (isAming)
         {
-            recoilScript.RecoilFire(ws.aimRecoilRotation);
-            viusalRecoilScript.VisualRecoilFire(ws.vRecoilRotationAim, ws.vRecoilKickBackAim);
+            recoilScript.RecoilFire(weaponData.aimRecoilRotation);
+            viusalRecoilScript.VisualRecoilFire(weaponData.vRecoilRotationAim, weaponData.vRecoilKickBackAim);
         }
         else
         {
-            recoilScript.RecoilFire(ws.recoilRotation);
-            viusalRecoilScript.VisualRecoilFire(ws.vRecoilRotation, ws.vRecoilKickBack);
+            recoilScript.RecoilFire(weaponData.recoilRotation);
+            viusalRecoilScript.VisualRecoilFire(weaponData.vRecoilRotation, weaponData.vRecoilKickBack);
         }
 
 
         RaycastHit hit;
-        if (Physics.Raycast(weaponCam.transform.position, weaponCam.transform.forward, out hit, ws.range))
+        if (Physics.Raycast(weaponCam.transform.position, weaponCam.transform.forward, out hit, weaponData.range))
         {
-            GameObject decal = Instantiate(ws.bulletDecal, hit.point + (hit.normal * 0.025f), Quaternion.FromToRotation(Vector3.up, hit.normal)) as GameObject;//se instancia el decal
+            GameObject decal = Instantiate(weaponData.bulletDecal, hit.point + (hit.normal * 0.025f), Quaternion.FromToRotation(Vector3.up, hit.normal)) as GameObject;//se instancia el decal
                                                                                                                                                                //Se rota el decal para adaptarse a la superficie
             decal.transform.parent = hit.transform;//el decal se "pega" al objeto con el que impacte
             Destroy(decal, 10f);//Se destruye el decal a los 10 segundos
@@ -173,14 +178,14 @@ public class Weapon : MonoBehaviour
         if (aiming)
         {
 
-            anchor.position = Vector3.Lerp(anchor.position, aimState.position, Time.deltaTime * ws.aimSpeed);
-            playerCam.fieldOfView = Mathf.Lerp(playerCam.fieldOfView, ws.aimFOV, ws.aimSpeed * Time.deltaTime);
+            anchor.position = Vector3.Lerp(anchor.position, aimState.position, Time.deltaTime * weaponData.aimSpeed);
+            playerCam.fieldOfView = Mathf.Lerp(playerCam.fieldOfView, weaponData.aimFOV, weaponData.aimSpeed * Time.deltaTime);
         }
         else
         {
 
-            anchor.position = Vector3.Lerp(anchor.position, hipState.position, Time.deltaTime * ws.aimSpeed);
-            playerCam.fieldOfView = Mathf.Lerp(playerCam.fieldOfView, ws.mainFOV, ws.aimSpeed * Time.deltaTime);
+            anchor.position = Vector3.Lerp(anchor.position, hipState.position, Time.deltaTime * weaponData.aimSpeed);
+            playerCam.fieldOfView = Mathf.Lerp(playerCam.fieldOfView, weaponData.mainFOV, weaponData.aimSpeed * Time.deltaTime);
 
         }
     }
@@ -190,11 +195,11 @@ public class Weapon : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
 
-        Quaternion xSway = Quaternion.AngleAxis(ws.swayIntensity * -mouseX, Vector3.up);//horizontal sway
-        Quaternion ySway = Quaternion.AngleAxis(ws.swayIntensity * mouseY, Vector3.right);//vertical sway
+        Quaternion xSway = Quaternion.AngleAxis(weaponData.swayIntensity * -mouseX, Vector3.up);//horizontal sway
+        Quaternion ySway = Quaternion.AngleAxis(weaponData.swayIntensity * mouseY, Vector3.right);//vertical sway
         Quaternion target_rotation = xSway * ySway;
 
-        transform.localRotation = Quaternion.Slerp(transform.localRotation, target_rotation, Time.deltaTime * ws.swaySpeed);
+        transform.localRotation = Quaternion.Slerp(transform.localRotation, target_rotation, Time.deltaTime * weaponData.swaySpeed);
     }
     private void OnDrawGizmos()
     {

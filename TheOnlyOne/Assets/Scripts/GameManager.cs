@@ -8,19 +8,22 @@ public class GameManager : MonoBehaviour
 {
     public int totalTargets;
     public int remainingTargets;
-    public WeaponHolder weaponHolder;
+    public ItemHolder weaponHolder;
     public GameObject ammoPanel;
     public float gameTimer = 0f;
     public Text timerText;
     public Text currentAmmoText;
     public Text totalAmmoText;
 
-    public bool isSafeToReload;
+    //public bool isSafeToReload;
+
+    //public bool IsSafeToReload { get => isSafeToReload; set => isSafeToReload = value; }
+
     // Start is called before the first frame update
     void Start()
     {
-        isSafeToReload = true;
-        weaponHolder = FindObjectOfType<WeaponHolder>();
+        //IsSafeToReload = true;
+        weaponHolder = FindObjectOfType<ItemHolder>();
         totalTargets = GameObject.FindGameObjectsWithTag("Target").Length;
         remainingTargets = totalTargets;
         Physics.IgnoreLayerCollision(10, 11);//player and bullet
@@ -37,7 +40,7 @@ public class GameManager : MonoBehaviour
             gameTimer += Time.deltaTime;
         }
 
-        if (!weaponHolder.isEmpty()&&weaponHolder.GetCurrentItem().typeOfItem.Equals(GameUtils.TypeOfItem.GUN))
+        if (weaponHolder.GetCurrentItem()!=null&&weaponHolder.GetCurrentItem().typeOfItem.Equals(GameUtils.TypeOfItem.GUN))
         {
             ammoPanel.SetActive(true);
             currentAmmoText.text = weaponHolder.GetCurrentItem().GetComponent<Weapon>().currentAmmo.ToString();

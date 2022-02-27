@@ -96,7 +96,7 @@ public class WeaponHolder : MonoBehaviour
         if (inventory.Count <= 1) return;
 
         IsChanging = true;
-        gameManager.isSafeToReload = false;
+       // gameManager.IsSafeToReload = false;
         int nextDirection = changeDirection < 0 ? -1 : 1;
 
         if (currentIndex == 0 && nextDirection == -1)
@@ -127,7 +127,7 @@ public class WeaponHolder : MonoBehaviour
         {
             inventory[currentIndex][0].EnableItem();
         }
-        gameManager.isSafeToReload = true;
+        //gameManager.IsSafeToReload = true;
  
     }
     void Pick(PickableItem itemToPick)
@@ -163,16 +163,16 @@ public class WeaponHolder : MonoBehaviour
         itemToPick.transform.localPosition = Vector3.zero;
         itemToPick.transform.localRotation = Quaternion.Euler(Vector3.zero);
 
-        itemToPick.IsEquiped = true;
+        itemToPick.isEquiped = true;
 
         RefreshInventory();
     }
 
     public void Drop(PickableItem item)
     {
-        gameManager.isSafeToReload = false;
+        //gameManager.IsSafeToReload = false;
         inventory[currentIndex].Remove(item);
-        item.IsEquiped = false;
+        item.isEquiped = false;
         item.transform.SetParent(null);
         /*
         item.itemRigidBody.AddForce(playerCam.transform.forward * dropForce, ForceMode.Impulse);
