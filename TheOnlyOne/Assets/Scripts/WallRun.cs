@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class WallRun : MonoBehaviour
 {
+    [Header("References")]
+    [SerializeField] PlayerMove playerMove;
+
     [Header("Movement")]
     [SerializeField] Transform orientation;
 
@@ -15,6 +18,15 @@ public class WallRun : MonoBehaviour
     [SerializeField] private float wallRunGravity;
     [SerializeField] private float wallRunJumpForce;
 
+    [Header("Camera Effects")]
+    [SerializeField] private Camera cam;
+    [SerializeField] private float fov;
+    [SerializeField] private float wallRunFov;
+    [SerializeField] private float wallRunFovTime;
+    [SerializeField] private float camTilt;
+    [SerializeField] private float camTiltTime;
+    public float tilt { get; private set; }
+
     bool isWallLeft = false;
     bool isWallRight = false;
 
@@ -25,7 +37,7 @@ public class WallRun : MonoBehaviour
     void CheckWall()
     {
         isWallLeft = Physics.Raycast(transform.position, -orientation.right,out wallLeftRC,wallDist);
-        isWallRight = Physics.Raycast(transform.position, -orientation.right, out wallRightRC, wallDist);
+        isWallRight = Physics.Raycast(transform.position, orientation.right, out wallRightRC, wallDist);
     }
 
     bool CanWallRun()
@@ -36,30 +48,50 @@ public class WallRun : MonoBehaviour
     void StartWallRun()
     {
         rb.useGravity = false;
+
+        if(playerMove.moveSpeed<playerMove.runSpeed)
+        playerMove.moveSpeed =playerMove.runSpeed;
         rb.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
+
+        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, wallRunFov, wallRunFovTime * Time.deltaTime);
+
+        if (isWallLeft)
+            tilt = Mathf.Lerp(tilt, -camTilt, camTiltTime * Time.deltaTime);
+        else if(isWallRight)
+            tilt = Mathf.Lerp(tilt, camTilt, camTiltTime * Time.deltaTime);
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Vector3 wallRunDirection =Vector3.zero;
             if (isWallLeft)
             {
                  wallRunDirection = transform.up + wallLeftRC.normal;
-                
-            }else if (isWallRight)
+                rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+                rb.AddForce(wallRunDirection * wallRunJumpForce * 100, ForceMode.Force);
+
+            }
+            else if (isWallRight)
             {
                  wallRunDirection = transform.up + wallRightRC.normal;
+                rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+                rb.AddForce(wallRunDirection * wallRunJumpForce * 100, ForceMode.Force);
             }
-            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-            rb.AddForce(wallRunDirection * wallRunJumpForce * 100, ForceMode.Force);
+            
         }
     }
     void StopWallRun()
     {
         rb.useGravity = true;
+        //playerMove.moveSpeed = playerMove.walkSpeed;
+        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, fov, wallRunFovTime * Time.deltaTime);
+        tilt = Mathf.Lerp(tilt, 0, camTiltTime * Time.deltaTime);
+
     }
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        playerMove = GetComponent<PlayerMove>();
     }
 
     // Update is called once per frame

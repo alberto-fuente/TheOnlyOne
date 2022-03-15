@@ -24,12 +24,14 @@ public class PickableItem : MonoBehaviour
     public InventorySlot Slot { get => slot; set => slot = value; }
     public int slotId;
     public float distanceToPlayer;
-    
-    
+    private float headBobTime;
+    private float headBobSpeed = 5;
 
+    public float originalY=0.5f;
+    private float bobStrength = 0.05f ;
     void Start()
     {
-
+        //originalY = transform.position.y;
         weaponHolder = FindObjectOfType<ItemHolder>();
         itemRigidBody = GetComponentInChildren<Rigidbody>();
         itemCollider = GetComponentInChildren<Collider>();
@@ -41,6 +43,11 @@ public class PickableItem : MonoBehaviour
     {
         distanceToPlayer = Vector3.Distance(transform.position, weaponHolder.transform.position);
         CheckEquiped();
+        headBobTime += Time.deltaTime * headBobSpeed;
+        if (!isEquiped)
+        {
+            //transform.position = new Vector3(transform.position.x, originalY + (float)Mathf.Sin(Time.time)*bobStrength, transform.position.z);
+        }
         //Si está equipado, lo renderiza la WeaponCam
         if (typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE))
         {

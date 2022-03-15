@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class InventoryEventArgs : EventArgs
 {
+    public PickableItem Item;
+
+    public int SlotId;
     public InventoryEventArgs(int slotId)
     {
         SlotId = slotId;
@@ -14,7 +17,5 @@ public class InventoryEventArgs : EventArgs
         Item = item;
         SlotId = slotId;
     }
-    public PickableItem Item;
 
-    public int SlotId;
 }

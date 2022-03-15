@@ -32,7 +32,7 @@ public class ItemHolder : MonoBehaviour
     private void Start()
     {
         activeSlotIndex = 0;
-        //if (OnNewItemSwitched != null) OnNewItemSwitched(this, new InventoryEventArgs(activeSlotIndex));
+        if (OnNewItemSwitched != null) OnNewItemSwitched(this, new InventoryEventArgs(activeSlotIndex));
     }
 
     private void Update()

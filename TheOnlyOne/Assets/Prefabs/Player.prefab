@@ -29,9 +29,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.432, z: 0}
   m_LocalScale: {x: 1, y: 1.5, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 9079290935460380668}
   m_Father: {fileID: 9079290935105068159}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &9079290933643883168
 MeshFilter:
@@ -124,7 +125,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9079290935105068159}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9079290935105068154
 GameObject:
@@ -158,7 +159,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 9079290935151952618}
-  - {fileID: 9079290935460380668}
   - {fileID: 9079290933643883199}
   - {fileID: 9079290934094490634}
   m_Father: {fileID: 0}
@@ -192,6 +192,7 @@ MonoBehaviour:
   isGrounded: 0
   isCrouching: 0
   isJumping: 0
+  isSliding: 0
   rbDrag: 10
   playerScale: {x: 0, y: 0, z: 0}
   crouchScale: {x: 1, y: 0.5, z: 1}
@@ -221,6 +222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2493dad0889cab4449ed7d65c6303c0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  wallRun: {fileID: 0}
   cam: {fileID: 0}
   orientation: {fileID: 9079290935151952618}
   sensitivity: 200
@@ -258,6 +260,12 @@ MonoBehaviour:
   minJumpHeight: 1.5
   wallRunGravity: 0.5
   wallRunJumpForce: 10
+  cam: {fileID: 0}
+  fov: 0
+  wallRunFov: 0
+  wallRunFovTime: 0
+  camTilt: 0
+  camTiltTime: 0
 --- !u!1 &9079290935151952619
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,10 +385,10 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9079290935460380669}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.05, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.98800004, z: 0}
+  m_LocalScale: {x: 1, y: 0.6666667, z: 1}
   m_Children: []
-  m_Father: {fileID: 9079290935105068159}
-  m_RootOrder: 1
+  m_Father: {fileID: 9079290933643883199}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

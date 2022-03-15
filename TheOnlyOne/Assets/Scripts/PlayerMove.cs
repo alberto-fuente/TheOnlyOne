@@ -6,6 +6,9 @@ public class PlayerMove : MonoBehaviour
 {
     private ItemHolder weaponChanger;
     private Vector3 weaponChangerOrigin;
+    [SerializeField] private Camera camera;
+    [SerializeField] private float normalFov;
+    [SerializeField] private float slideFov;
     private float headBobTime;
     //private float idleTime;
     public float headBobAmplitude=0.005f;
@@ -32,13 +35,14 @@ public class PlayerMove : MonoBehaviour
     public bool isGrounded;
     public bool isCrouching;
     public bool isJumping;
+    public bool isSliding;
 
     //RigidBody
     public float rbDrag=10f; 
     private Rigidbody rb;
-
+    public Transform mesh;
     //Scale and direction
-    public Vector3 playerScale;
+    public Vector3 standScale = new Vector3(1, 1f, 1);
     public Vector3 crouchScale=new Vector3(1,0.5f,1);
     Vector3 moveDirection;
     public Transform cameraRot;
@@ -52,20 +56,20 @@ public class PlayerMove : MonoBehaviour
     //Drag
     public float defaultDrag = 10f;
     public float airDrag = 2f;
-    public float slideDrag = 0f;
+    public float slideDrag = 0.1f;
 
     //ground check
     public Transform groundCheck;
     public float groundDistance = 0.1f;
     public LayerMask Ground;
 
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         weaponChanger = FindObjectOfType<ItemHolder>();
         weaponChangerOrigin = weaponChanger.transform.localPosition;
-        playerScale = transform.localScale;
-        crouchedCamPos = new Vector3(cameraRot.position.x, cameraRot.position.y-0.7f, cameraRot.position.z);
+        crouchedCamPos = new Vector3(cameraRot.position.x, cameraRot.position.x-crouchScale.y, cameraRot.position.z);
     }
     private void Update()
     {
@@ -80,6 +84,7 @@ public class PlayerMove : MonoBehaviour
     void FixedUpdate()
     {
         MovePlayer();
+        Crouch(isCrouching);
        
     }
     public void MyInput()
@@ -94,15 +99,13 @@ public class PlayerMove : MonoBehaviour
         else isAiming = false;
         isJumping = Input.GetButton("Jump");
         isCrouching = Input.GetKey(KeyCode.LeftControl);
-        isSprinting = Input.GetKey(KeyCode.LeftShift);
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            isSprinting = !isSprinting;
+        }
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, Ground);
 
-        //Crouching
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-            Crouch(true);
-
-        if (Input.GetKeyUp(KeyCode.LeftControl))
-            Crouch(false);
+  
     }
 
     void ControlHeadBob()
@@ -125,19 +128,27 @@ public class PlayerMove : MonoBehaviour
     }
     private void Crouch(bool crouch)
     {
-        CapsuleCollider coll = GetComponentInChildren<CapsuleCollider>();
         if (crouch)
         {
             Vector3.Lerp(cameraRot.position, crouchedCamPos, Time.deltaTime);
-            coll.height = 1f;
+            mesh.localScale = crouchScale;
+            if (moveSpeed > walkSpeed && !isSliding){
+                isSliding = true;
+                rb.AddForce(transform.forward * slideForce, ForceMode.VelocityChange);
+              //  camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, slideFov, 20 * Time.deltaTime);
+            }
+            if (moveSpeed == 0) isSliding = false;
+            
             //moveSpeed = crouchSpeed;
            // coll.center.Set(0, -0.4f, 0);
 
         }
         else
         {
+            isSliding = false;
+           // camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, normalFov, 20 * Time.deltaTime);
             Vector3.Lerp(crouchedCamPos,cameraRot.position, Time.deltaTime);
-            coll.height = 2f;
+            mesh.localScale = standScale;
             //coll.center.Set(0,0,0);
         }
         
@@ -153,7 +164,8 @@ public class PlayerMove : MonoBehaviour
         moveDirection.Normalize();
 
         //aplicar fuerza sobre el rigidBody del jugador para que se mueva
-        rb.AddForce(moveDirection * moveSpeed * GetMultiplier() * Time.deltaTime, ForceMode.Impulse);        
+        rb.AddForce(moveDirection * moveSpeed * GetMultiplier() * Time.deltaTime, ForceMode.Impulse);      
+        
     }
     public void Jump()
     {
@@ -172,8 +184,10 @@ public class PlayerMove : MonoBehaviour
         float multiplier;
         if (isGrounded)
         {
-            if (isCrouching)
+            if (isSliding)
                 multiplier = 0f;
+            else if(isCrouching)
+                multiplier = 0.7f;
             else
                 multiplier = 1f;
         }
@@ -184,7 +198,7 @@ public class PlayerMove : MonoBehaviour
     void ControlDrag()
     {
         if (isGrounded) {
-            if (isCrouching)
+            if (isSliding)
                 rb.drag = slideDrag;
             else
             rb.drag = defaultDrag;
@@ -197,14 +211,14 @@ public class PlayerMove : MonoBehaviour
         float desiredSpeed;
         if (horizontalMove != 0 || verticalMove != 0)
         {
-            if (isSprinting && isGrounded)
-            {
-                desiredSpeed = runSpeed;
-            }
-            else
             if (isCrouching && isGrounded)
             {
                 desiredSpeed = crouchSpeed;
+            }
+            else
+             if (isSprinting && isGrounded)
+            {
+                desiredSpeed = runSpeed;
             }
             else
             {

@@ -8,6 +8,7 @@ public class Weapon : MonoBehaviour
     public WeaponBlueprint weaponData;
 
     //atributos comunes de todas las armas
+    public Transform cameraHolder;
     public Camera weaponCam;
     public Camera playerCam;
     public PlayerMove playerMove;
@@ -31,6 +32,7 @@ public class Weapon : MonoBehaviour
     private void Awake()
     {
         gameManager = FindObjectOfType<GameManager>();
+        cameraHolder = GameObject.Find("/CameraHolder").transform;
         playerCam = GameObject.Find("/CameraHolder/CameraRecoil/MainCamera").GetComponent<Camera>();
         weaponCam = GameObject.Find("/CameraHolder/CameraRecoil/WeaponCamera").GetComponent<Camera>();
         weaponChanger = FindObjectOfType<ItemHolder>();
@@ -47,6 +49,8 @@ public class Weapon : MonoBehaviour
     {
         currentAmmo = weaponData.maxClipAmmo;
         totalAmmo = 90;
+        weaponChanger.OnItemRemoved += CutReload;
+        weaponChanger.OnNewItemSwitched += CutReload;
         //Equip
         //prefab = Instantiate(ws.prefab, prefabContainer.position, prefabContainer.rotation, prefabContainer);
         // muzzleFlash = prefab.GetComponentInChildren<ParticleSystem>();
@@ -61,8 +65,13 @@ public class Weapon : MonoBehaviour
         weaponChanger.OnItemRemoved -= CutReload;
         weaponChanger.OnNewItemSwitched -= CutReload;
     }
+    private void FixedUpdate()
+    {
+        anchor.rotation = cameraHolder.rotation;
+    }
     void Update()
     {
+        
         nextTimeToFire += Time.deltaTime;
         Sway();
         ListenReloadInput();
@@ -85,7 +94,7 @@ public class Weapon : MonoBehaviour
         audioSource.Stop();
         StopCoroutine("Reload");
         isReloading = false;
-       // gameManager.IsSafeToReload = true;
+
     }
     public IEnumerator Reload()
     {

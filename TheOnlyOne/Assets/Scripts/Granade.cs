@@ -55,7 +55,7 @@ public class Granade : MonoBehaviour
     {
         item.granadeIdleCollider.enabled = false;
         item.enabled = false;
-        granadeRigidbody.AddForce(direction * granadeData.throwForce, ForceMode.VelocityChange);
+        granadeRigidbody.AddForce(direction * granadeData.throwForce, ForceMode.Impulse);
         hasBeenthrown = true;
     }
 }

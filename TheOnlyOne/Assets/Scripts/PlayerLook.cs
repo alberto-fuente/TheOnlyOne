@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerLook : MonoBehaviour
 {
     #region Variables
+    [SerializeField] WallRun wallRun;
     public Transform cam;
     public Transform orientation;
 
@@ -34,9 +35,9 @@ public class PlayerLook : MonoBehaviour
         xRotation -= mouseY * Time.deltaTime * sensitivity * sensMult;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
         //rotacion horizontal
-        cam.transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
+        cam.transform.localRotation = Quaternion.Euler(xRotation, yRotation, wallRun.tilt);
         //rotamos también la orientacion horizontalmente
-        orientation.transform.rotation= Quaternion.Euler(0, yRotation, 0);
+        orientation.transform.rotation= Quaternion.Euler(0, yRotation, wallRun.tilt);
         
     }
     private void hideCursor()
