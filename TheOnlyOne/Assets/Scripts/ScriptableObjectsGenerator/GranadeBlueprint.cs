@@ -17,7 +17,7 @@ public class GranadeBlueprint : ScriptableObject
     public float radius;
     public float explosionForce;
     public float throwForce;
-
+    public int damage;
     [Space]
     [Header("VFX")]
     public GameObject explosionEffect;

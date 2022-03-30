@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Target
   - PickableItem
+  - FxTemporaire
+  - ignore
   layers:
   - Default
   - TransparentFX
@@ -21,7 +23,7 @@ TagManager:
   - Player
   - Pick
   - Throw
-  - 
+  - Enemy
   - 
   - 
   - 

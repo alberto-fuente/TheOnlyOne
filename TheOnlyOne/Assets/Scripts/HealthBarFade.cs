@@ -21,16 +21,16 @@ public class HealthBarFade : MonoBehaviour
 
     public TMP_Text healthText;
     public TMP_Text shieldText;
-    private void Awake()
+    /*private void Awake()
     {
         healthFill = transform.Find("HealthFill").GetComponent<Image>();
         shieldFill = transform.Find("ShieldFill").GetComponent<Image>();
         damagedHealthBar = transform.Find("DamagedHealthBar").GetComponent<Image>();
         damagedShieldBar = transform.Find("DamagedShieldBar").GetComponent<Image>();
-    }
+    }*/
     private void Start()
     {
-        SetHealth(healthSystem.GetHealthNormalized());
+        UISetHealth(healthSystem.GetHealthNormalized());
         damagedHealthBar.fillAmount = healthFill.fillAmount;
         damagedShieldBar.fillAmount = shieldFill.fillAmount;
 
@@ -55,7 +55,7 @@ public class HealthBarFade : MonoBehaviour
     }
     private void HealthSystem_OnHealthHealed(object sender, System.EventArgs e)
     {
-        SetHealth(healthSystem.GetHealthNormalized());
+        UISetHealth(healthSystem.GetHealthNormalized());
         damagedHealthBar.fillAmount = healthFill.fillAmount;
     }
 
@@ -64,24 +64,26 @@ public class HealthBarFade : MonoBehaviour
 
         damagedBarShrinkTimer = DAMAGED_BAR_SHRINK_TIMER_MAX;
 
-        SetShield(healthSystem.GetShieldNormalized());
-        SetHealth(healthSystem.GetHealthNormalized());
+        UISetShield(healthSystem.GetShieldNormalized());
+        UISetHealth(healthSystem.GetHealthNormalized());
 
     }
     private void HealthSystem_OnShieldHealed(object sender, EventArgs e)
     {
         damagedShieldBar.fillAmount = shieldFill.fillAmount;
-        SetShield(healthSystem.GetShieldNormalized());
+        UISetShield(healthSystem.GetShieldNormalized());
     }
 
-    private void SetHealth(float amount)
+    private void UISetHealth(float amount)
     {
         healthFill.fillAmount = amount;
-        healthText.text = healthSystem.CurrentHealth.ToString("");
+        if(healthText!=null)
+            healthText.text = healthSystem.CurrentHealth.ToString("");
     }
-    private void SetShield(float amount)
+    private void UISetShield(float amount)
     {
         shieldFill.fillAmount = amount;
-        shieldText.text = healthSystem.CurrentShield.ToString("");
+        if (shieldText != null)
+            shieldText.text = healthSystem.CurrentShield.ToString("");
     }
 }

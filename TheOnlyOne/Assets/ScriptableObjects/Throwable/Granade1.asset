@@ -16,7 +16,8 @@ MonoBehaviour:
   prefab: {fileID: 0}
   anim: {fileID: 0}
   delay: 3
-  radius: 10
+  radius: 20
   explosionForce: 700
   throwForce: 25
+  damage: 80
   explosionEffect: {fileID: 1764654978243476, guid: a98b15aa948478849b54661e4d9a317e, type: 3}

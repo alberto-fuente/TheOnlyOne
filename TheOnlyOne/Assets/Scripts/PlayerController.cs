@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     [Header("References")]
     [SerializeField] PlayerMove playerMove;
     [SerializeField] PlayerLook playerLook;
-
+    [SerializeField] ItemHolder inventory;
     public HealthSystem healthSystem;
     public GameObject hurtPanel;
     // Start is called before the first frame update
@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     {
         playerMove = GetComponent<PlayerMove>();
         playerLook = GetComponent<PlayerLook>();
+        //inventory == FindObjectOfType(ItemHolder);
     }
 
     // Update is called once per frame

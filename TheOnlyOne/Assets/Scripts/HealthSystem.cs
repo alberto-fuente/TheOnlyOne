@@ -17,15 +17,23 @@ public class HealthSystem : MonoBehaviour
     int currentHealth;
     int currentShield;
 
+    bool isDead;
     public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
     public int CurrentShield { get => currentShield; set => currentShield = value; }
 
-    private void Start()
+    private void Awake()
     {
         CurrentHealth = maxHealth;
         CurrentShield = maxShield;
     }
+    private void Update()
+    {
+        if (currentHealth <= 0&&!isDead)
+        {
+            Die();
+        }
 
+    }
     public void HealHealth(int amount)
     {
         CurrentHealth += amount;
@@ -55,6 +63,11 @@ public class HealthSystem : MonoBehaviour
             if (OnDead != null) OnDead(this, EventArgs.Empty);
         }
         if (OnDamaged != null) OnDamaged(this, EventArgs.Empty);
+    }
+    public void Die()
+    {
+        isDead = true;
+        Destroy(gameObject);
     }
     public float GetHealthNormalized()
     {

@@ -45,6 +45,13 @@ public class Granade : MonoBehaviour
             {
                 objectRigidBody.AddExplosionForce(granadeData.explosionForce, transform.position, granadeData.radius);
             }
+            HealthSystem healthSystem = nearObject.gameObject.GetComponentInParent<HealthSystem>();
+            if (healthSystem != null)
+            {
+                healthSystem.Damage(granadeData.damage);
+                Debug.Log("PAAAAAAAAM");
+            }
+            else Debug.Log("jo");
             //Damage
         }
         hasExploded = true;

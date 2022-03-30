@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class LabelWeapon: MonoBehaviour
 {
-    private Transform cameraTransform;
     public TMP_Text weaponNameText;
 
     public WeaponBlueprint weapon;
@@ -16,17 +15,11 @@ public class LabelWeapon: MonoBehaviour
 
     void Start()
     {
-        cameraTransform = GameObject.Find("/CameraHolder/CameraRecoil/MainCamera").transform;
         weaponNameText.text = weapon.weaponName;
 
         damageBar.fillAmount = weapon.damage / GameUtils.maxDamage;
         rangeBar.fillAmount = weapon.range / GameUtils.maxRange;
         FireRateBar.fillAmount = GameUtils.maxFireRate - weapon.fireRate;
     }
-    void LateUpdate()
-    {
-        transform.LookAt(transform.position + cameraTransform.forward);
-
-    }
-
+  
 }

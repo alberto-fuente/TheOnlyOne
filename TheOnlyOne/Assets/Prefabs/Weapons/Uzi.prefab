@@ -395,6 +395,7 @@ GameObject:
   - component: {fileID: 405619297}
   - component: {fileID: 405619296}
   - component: {fileID: 405619295}
+  - component: {fileID: 2862401857416489542}
   m_Layer: 7
   m_Name: Label
   m_TagString: Untagged
@@ -540,6 +541,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2862401857416489542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405619293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ee205d3cbb324247aadc64d453ecca3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &529507836
 GameObject:
   m_ObjectHideFlags: 0
@@ -1731,6 +1744,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponData: {fileID: 11400000, guid: 560900c34c4c7734db2b4e5212eb3c67, type: 2}
+  cameraHolder: {fileID: 0}
   weaponCam: {fileID: 0}
   playerCam: {fileID: 0}
   playerMove: {fileID: 0}
@@ -1782,6 +1796,7 @@ MonoBehaviour:
   isEquiped: 0
   slotId: 0
   distanceToPlayer: 0
+  originalY: 0
 --- !u!54 &2753509620105117955
 Rigidbody:
   m_ObjectHideFlags: 0
