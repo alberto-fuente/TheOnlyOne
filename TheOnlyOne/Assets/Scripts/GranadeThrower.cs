@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,27 +6,57 @@ using UnityEngine;
 public class GranadeThrower : MonoBehaviour
 {
     ItemHolder weaponHolder;
-    
+    public ProjectPath projectPath;
+    public Transform shotPoint;
+
+    private PickableItem currentItem;
     // Start is called before the first frame update
     void Start()
     {
         weaponHolder = FindObjectOfType<ItemHolder>();
-
     }
 
     // Update is called once per frame
     void Update()
     {
         ListenThrowInput();
+        ListenAimInput();
+    }
+    private void FixedUpdate()
+    {
+       
+    }
+
+    private void ListenAimInput()
+    {
+        if (currentItemIsThroweable())
+        {
+            if (Input.GetMouseButton(1))
+            {
+                projectPath.SimulateProjection(shotPoint);
+
+            }
+            if (Input.GetMouseButtonUp(1))
+            {
+                projectPath.StopSimulateProjection();
+            }
+        }
     }
 
     void ListenThrowInput()
     {
-        PickableItem currentGranade=weaponHolder.GetCurrentItem();
-        if (Input.GetMouseButtonDown(0) && currentGranade != null && weaponHolder.GetCurrentItem().typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE))
+        if (Input.GetMouseButtonDown(0)&&currentItemIsThroweable())
         {
-            weaponHolder.DropItem(currentGranade);
-            currentGranade.GetComponent<Granade>().Throw(transform.forward);
+            weaponHolder.DropItem(currentItem);
+            currentItem.GetComponent<Granade>().Throw(shotPoint.position,shotPoint.forward);
+            projectPath.StopSimulateProjection();
         }
+    }
+    private bool currentItemIsThroweable()
+    {
+        currentItem = weaponHolder.GetCurrentItem();
+        if (currentItem != null && weaponHolder.GetCurrentItem().typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE))
+            return true;
+        return false;
     }
 }

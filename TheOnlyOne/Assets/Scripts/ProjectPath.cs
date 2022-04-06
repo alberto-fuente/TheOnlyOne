@@ -12,22 +12,20 @@ public class ProjectPath : MonoBehaviour
     public GranadeBlueprint granadeData;
     public int maxIterations;
     public LineRenderer lineRenderer;
-    List<GameObject> dummyObstacles;
+   
+    // Start is called before the first frame update
+    void Start()
+    {
+        CreatePhysicsScene();
+    }
     void CreatePhysicsScene()
     {
         CreateSceneParameters parameters = new CreateSceneParameters(LocalPhysicsMode.Physics3D);
         predictionScene = SceneManager.CreateScene("Prediction", parameters);
         predictionPhysicsScene = predictionScene.GetPhysicsScene();
         Physics.autoSimulation = false;
-        dummyObstacles = new List<GameObject>();
-        
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        CreatePhysicsScene();
-    }
 
+    }
     public void SimulateProjection(Transform shotPoint)
     {
         lineRenderer.enabled = true;

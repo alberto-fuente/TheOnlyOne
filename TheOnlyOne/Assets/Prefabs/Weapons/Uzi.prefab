@@ -442,6 +442,8 @@ MonoBehaviour:
   damageBar: {fileID: 2113833356}
   rangeBar: {fileID: 1286007434}
   FireRateBar: {fileID: 784134234}
+  mainCanvas: {fileID: 405619295}
+  pickCanvas: {fileID: 1440499150}
 --- !u!223 &405619299
 Canvas:
   m_ObjectHideFlags: 0
@@ -1744,6 +1746,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponData: {fileID: 11400000, guid: 560900c34c4c7734db2b4e5212eb3c67, type: 2}
+  rarityData: {fileID: 11400000, guid: 837c1f732566d6143b736dc803ce4121, type: 2}
   cameraHolder: {fileID: 0}
   weaponCam: {fileID: 0}
   playerCam: {fileID: 0}
@@ -1785,10 +1788,8 @@ MonoBehaviour:
   itemName: 
   itemRigidBody: {fileID: 0}
   itemCollider: {fileID: 0}
-  granadeIdleCollider: {fileID: 0}
   prefab: {fileID: 0}
   Icon: {fileID: 21300000, guid: 1e053e2cbe9cc8f44a8f954ac9add015, type: 3}
-  labelCanvas: {fileID: 0}
   isStackable: 0
   itemID: uzi
   weaponHolder: {fileID: 0}
@@ -1810,7 +1811,7 @@ Rigidbody:
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 2
+  m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 3
 --- !u!65 &3047587068817416525
@@ -2131,6 +2132,10 @@ PrefabInstance:
     - target: {fileID: 9198787496021955775, guid: 2456160eac57e7d469935e64f637a047, type: 3}
       propertyPath: m_Name
       value: UziPrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 9198787496021955775, guid: 2456160eac57e7d469935e64f637a047, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2456160eac57e7d469935e64f637a047, type: 3}

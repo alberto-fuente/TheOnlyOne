@@ -5,7 +5,7 @@ using UnityEngine;
 public class DrawPath : MonoBehaviour
 {
    // public Transform granadeThrower;
-    public canon canon;
+    public Transform shotPoint;
     LineRenderer lineRenderer;
     public GranadeBlueprint granadeData;
     public int numberOfPoints=50;
@@ -22,8 +22,8 @@ public class DrawPath : MonoBehaviour
     {
         lineRenderer.positionCount = numberOfPoints;
         List<Vector3> points = new List<Vector3>();
-        Vector3 startingPos = canon.shotPoint.position;
-        Vector3 startingVel = canon.shotPoint.up * 25;
+        Vector3 startingPos = shotPoint.position;
+        Vector3 startingVel = shotPoint.up * granadeData.throwForce;
         for (float i = 0; i < numberOfPoints; i+=distanceBetweenPoints)
         {
             Vector3 newPoint = startingPos + i * startingVel;

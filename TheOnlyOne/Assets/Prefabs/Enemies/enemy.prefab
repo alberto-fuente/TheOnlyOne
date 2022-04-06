@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 223236732205020131}
   m_Layer: 14
   m_Name: ENEMYmesh
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -562,9 +562,10 @@ GameObject:
   - component: {fileID: 223236733099175856}
   - component: {fileID: 223236733099175862}
   - component: {fileID: 8018660894223061553}
+  - component: {fileID: 922386868768360904}
   m_Layer: 14
   m_Name: enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -582,6 +583,7 @@ Transform:
   m_Children:
   - {fileID: 223236732205019932}
   - {fileID: 223236734091588730}
+  - {fileID: 2748270874384264905}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -647,6 +649,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e690909b608437f4ab35973c6469a6c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 100
+  maxShield: 60
 --- !u!114 &223236733099175856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -680,6 +684,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyIA: {fileID: 223236733099175857}
   healthSystem: {fileID: 223236733099175863}
+  weapon: {fileID: 0}
 --- !u!82 &8018660894223061553
 AudioSource:
   m_ObjectHideFlags: 0
@@ -776,6 +781,23 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &922386868768360904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 223236733099175852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8ce554626655744282027d6da304a78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponsAvailable:
+  - {fileID: 11400000, guid: ae9fbfa8b092223498b381ad3769dccb, type: 2}
+  - {fileID: 11400000, guid: 560900c34c4c7734db2b4e5212eb3c67, type: 2}
+  - {fileID: 11400000, guid: be88b0a587e01bf49a7f8c1ad8808713, type: 2}
+  anchorPoint: {fileID: 2748270874384264905}
 --- !u!1 &223236733410396739
 GameObject:
   m_ObjectHideFlags: 0
@@ -865,7 +887,7 @@ GameObject:
   - component: {fileID: 223236733572068465}
   m_Layer: 0
   m_Name: glasses
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1141,3 +1163,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ee205d3cbb324247aadc64d453ecca3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &4009664046584033956
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2748270874384264905}
+  m_Layer: 14
+  m_Name: anchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2748270874384264905
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4009664046584033956}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.515, y: 0.048, z: 0.058}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 223236733099175859}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

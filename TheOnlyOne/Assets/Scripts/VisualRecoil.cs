@@ -19,12 +19,14 @@ public class VisualRecoil : MonoBehaviour
     }
     void FixedUpdate()
     {
+
         rotationRecoil = Vector3.Lerp(rotationRecoil, Vector3.zero, weapon.weaponData.vRotationReturnSpeed * Time.fixedDeltaTime);
         positionRecoil = Vector3.Lerp(positionRecoil, Vector3.zero, weapon.weaponData.vPositionReturnSpeed * Time.fixedDeltaTime);
 
         recoilPosition.localPosition = Vector3.Slerp(recoilPosition.localPosition, positionRecoil, weapon.weaponData.vPositionRecoilSpeed * Time.fixedDeltaTime);
         Rot = Vector3.Slerp(Rot, rotationRecoil, weapon.weaponData.vRotationRecoilSpeed * Time.fixedDeltaTime);
         rotationPoint.localRotation = Quaternion.Euler(Rot);
+
     }
 
     public void VisualRecoilFire(Vector3 recoilRot,Vector3 recoilKickback)

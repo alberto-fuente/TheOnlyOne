@@ -10,6 +10,8 @@ public class GranadeBlueprint : ScriptableObject
     public string granadeName;
     public GameObject prefab;
     public Animator anim;
+    public Material offMaterial;
+    public Material onMaterial;
 
     [Space]
     [Header("Stats")]

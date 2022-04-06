@@ -6,7 +6,7 @@ using System;
 public class ItemHolder : MonoBehaviour
 {
     [SerializeField] private const int SLOTS = 5;
-    private IList<InventorySlot> inventory = new List<InventorySlot>();
+    public IList<InventorySlot> inventory = new List<InventorySlot>();
 
     public event EventHandler<InventoryEventArgs> OnItemAdded;
     public event EventHandler<InventoryEventArgs> OnItemRemoved;
@@ -92,18 +92,21 @@ public class ItemHolder : MonoBehaviour
         //gameManager.IsSafeToReload = false;
         if (activeSlot().RemoveItem(item))
         {
-            GetComponent<AudioSource>().PlayOneShot(dropSound, 0.3f);
+            
             item.isEquiped = false;
             item.transform.parent = null;
             item.CheckEquiped();
-            item.itemRigidBody.AddForce(playerCam.transform.forward * dropForce, ForceMode.Impulse);
-            item.itemRigidBody.AddForce(playerCam.transform.up * dropForce, ForceMode.Impulse);
-            float random = UnityEngine.Random.Range(-1f, 1f);
-            item.itemRigidBody.AddTorque(new Vector3(random, random, random) * 10);
+
             if (item.typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE))
             {
-                item.granadeIdleCollider.enabled = true;
+                item.gameObject.GetComponent<Granade>().granadeIdleCollider.enabled = true;
             }
+            else {
+                GetComponent<AudioSource>().PlayOneShot(dropSound, 0.3f);
+                item.itemRigidBody.AddForce((playerCam.transform.forward + playerCam.transform.up) * dropForce, ForceMode.Impulse);
+            }
+            float random = UnityEngine.Random.Range(-1f, 1f);
+            item.itemRigidBody.AddTorque(new Vector3(random, random, random) * 10);
             if (OnItemRemoved != null) OnItemRemoved(this, new InventoryEventArgs(item,activeSlotIndex));
             
             RefreshInventory();
@@ -116,7 +119,7 @@ public class ItemHolder : MonoBehaviour
         {
             if (hit.transform.GetComponent<PickableItem>() && hit.transform.GetComponent<PickableItem>().enabled&&hit.transform.GetComponent<PickableItem>().distanceToPlayer < pickRange)
             {
-                canvas = hit.transform.GetComponent<PickableItem>().labelCanvas;
+                canvas = hit.transform.GetComponent<PickableItem>().LabelCanvas;
                 canvas.enabled = true;
 
                 if (Input.GetKeyDown(KeyCode.E))

@@ -6,7 +6,7 @@ public class Weapon : MonoBehaviour
 {
     //atributos propios del arma
     public WeaponBlueprint weaponData;
-
+    public ItemRarityBlueprint rarityData;
     //atributos comunes de todas las armas
     public Transform cameraHolder;
     public Camera weaponCam;
@@ -44,6 +44,12 @@ public class Weapon : MonoBehaviour
         hipState = transform.Find("States/Hip");
         aimState = transform.Find("States/Aim");
         prefabContainer = transform.Find("Anchor/Design");
+        GenerateWeapon();
+        Transform[] weaponChildren = GetComponentsInChildren<Transform>();
+        foreach(Transform child in weaponChildren)
+        {
+            if(child.name.Equals("MuzzleFlash")) muzzleFlash=child.GetComponent<ParticleSystem>();
+        }
     }
     void Start()
     {
@@ -55,15 +61,49 @@ public class Weapon : MonoBehaviour
         //prefab = Instantiate(ws.prefab, prefabContainer.position, prefabContainer.rotation, prefabContainer);
         // muzzleFlash = prefab.GetComponentInChildren<ParticleSystem>();
     }
+
+    private void GenerateWeapon()
+    {
+
+        switch (weaponData.weaponID)
+        {
+            case 0: //Pistol
+                rarityData = GetRarityWeapon(gameManager.rarityDataPistols);
+                break;
+            case 1: //Subfusil
+                rarityData = GetRarityWeapon(gameManager.rarityDataSubfusils);
+                break;
+            case 2: //Rifle
+                rarityData = GetRarityWeapon(gameManager.rarityDataRifles);
+                break;
+
+        }
+        Instantiate(rarityData.prefab, prefabContainer);
+    }
+    ItemRarityBlueprint GetRarityWeapon(ItemRarityBlueprint[] collection)
+    {
+        int i = Random.Range(0, 100);
+        for (int j = 0; j < collection.Length; j++)
+        {
+            if (i >= collection[j].Minprobabilty && i <= collection[j].Maxprobabilty)
+            {
+                return collection[j];
+            }
+        }
+        return collection[0];//si hay algún error genera un arma común
+    }
     private void OnEnable()
     {
         weaponChanger.OnItemRemoved += CutReload;
         weaponChanger.OnNewItemSwitched += CutReload;
+        gameManager.hudCrosshair.sprite = weaponData.crosshair;
     }
     private void OnDisable()
     {
         weaponChanger.OnItemRemoved -= CutReload;
         weaponChanger.OnNewItemSwitched -= CutReload;
+        if(gameManager.hudCrosshair.sprite!=null)
+            gameManager.hudCrosshair.sprite = null;
     }
     private void FixedUpdate()
     {
@@ -91,7 +131,9 @@ public class Weapon : MonoBehaviour
     }
     public void CutReload(object sender, InventoryEventArgs e)
     {
+        if(audioSource!=null)
         audioSource.Stop();
+        if(gameObject!=null)
         StopCoroutine("Reload");
         isReloading = false;
 
@@ -148,7 +190,7 @@ public class Weapon : MonoBehaviour
         if (weaponData.anim != null) weaponData.anim.SetTrigger("Shoot");
         audioSource.pitch = Random.Range(weaponData.pitch - weaponData.pitchRand, weaponData.pitch + weaponData.pitchRand);
         audioSource.PlayOneShot(weaponData.shootSound, 0.3f);
-        muzzleFlash.Play();
+        if(muzzleFlash!=null) muzzleFlash.Play();
 
         //recoil
         if (isAming)
@@ -174,12 +216,25 @@ public class Weapon : MonoBehaviour
         currentAmmo--;
         nextTimeToFire = 0;
         if (hit.transform != null)
-            if (hit.transform.gameObject.tag == "Target")
-            {
-                Destroy(hit.transform.gameObject);
-                FindObjectOfType<GameManager>().remainingTargets--;
-            }
+        {
+            CheckEnemyHit(hit);
+            //Destroy(hit.transform.gameObject);
+            //FindObjectOfType<GameManager>().remainingTargets--;
+        }
 
+    }
+    private bool CheckEnemyHit(RaycastHit hit)
+    {
+        HealthSystem enemyHealthSystem=null;
+        if (hit.transform.CompareTag("Enemy"))
+            enemyHealthSystem = hit.transform.gameObject.GetComponentInParent<HealthSystem>();
+        if (enemyHealthSystem != null)
+        {
+            float damage = weaponData.damage * rarityData.multiplier;
+            enemyHealthSystem.Damage((int)damage);
+            return true;
+        }
+        return false;
     }
     private void Aim(bool aiming)
     {

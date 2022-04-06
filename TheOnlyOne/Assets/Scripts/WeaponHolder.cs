@@ -41,7 +41,7 @@ public class WeaponHolder : MonoBehaviour
         {
             if (hit.transform.GetComponent<PickableItem>() && hit.transform.GetComponent<PickableItem>().distanceToPlayer < pickRange)
             {
-                canvas = hit.transform.GetComponent<PickableItem>().labelCanvas;
+                canvas = hit.transform.GetComponent<PickableItem>().LabelCanvas;
                 canvas.enabled = true;
 
                 if (Input.GetKeyDown(KeyCode.E))

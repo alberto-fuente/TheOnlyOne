@@ -6,8 +6,11 @@ using UnityEngine;
 public class Granade : MonoBehaviour
 {
     public GranadeBlueprint granadeData;
+    public GameObject mesh;
     public PickableItem item;
     Rigidbody granadeRigidbody;
+    public Collider granadeIdleCollider;
+    private TrailRenderer trail;
     float countdown;
     bool hasExploded;
     bool hasBeenthrown;
@@ -17,6 +20,9 @@ public class Granade : MonoBehaviour
         granadeRigidbody = GetComponent<Rigidbody>();
         item = GetComponent<PickableItem>();
         countdown = granadeData.delay;
+        mesh=Instantiate(granadeData.prefab, transform);
+        trail = mesh.transform.GetChild(0).GetComponent<TrailRenderer>();
+        trail.enabled = false;
     }
 
 
@@ -25,6 +31,7 @@ public class Granade : MonoBehaviour
         if (hasBeenthrown)
         {
             countdown -= Time.deltaTime;
+            mesh.GetComponent<Renderer>().material = granadeData.onMaterial;
         }
         
         if (countdown <= 0f&&!hasExploded)
@@ -49,19 +56,18 @@ public class Granade : MonoBehaviour
             if (healthSystem != null)
             {
                 healthSystem.Damage(granadeData.damage);
-                Debug.Log("PAAAAAAAAM");
             }
-            else Debug.Log("jo");
-            //Damage
         }
         hasExploded = true;
         Destroy(gameObject);
     }
 
-    public void Throw(Vector3 direction)
+    public void Throw(Vector3 position,Vector3 direction)
     {
-        item.granadeIdleCollider.enabled = false;
+        granadeIdleCollider.enabled = false;
+        trail.enabled = true;
         item.enabled = false;
+        gameObject.transform.position = position;
         granadeRigidbody.AddForce(direction * granadeData.throwForce, ForceMode.Impulse);
         hasBeenthrown = true;
     }

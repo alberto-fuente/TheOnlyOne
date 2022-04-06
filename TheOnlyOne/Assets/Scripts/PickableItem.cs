@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class PickableItem : MonoBehaviour
@@ -9,19 +10,20 @@ public class PickableItem : MonoBehaviour
     public string itemName;
     public Rigidbody itemRigidBody;
     public Collider itemCollider;
-    public Collider granadeIdleCollider;
     public GameObject prefab;
     public Sprite Icon;
-    public Canvas labelCanvas;
+    private Canvas labelCanvas;
     public bool isStackable;
     public string itemID;
     public ItemHolder weaponHolder;
     public GameUtils.TypeOfItem typeOfItem;
 
     public bool isEquiped;
-
+    private GameManager gameManager;
     private InventorySlot slot;
     public InventorySlot Slot { get => slot; set => slot = value; }
+    public Canvas LabelCanvas { get => labelCanvas; set => labelCanvas = value; }
+
     public int slotId;
     public float distanceToPlayer;
     private float headBobTime;
@@ -31,12 +33,14 @@ public class PickableItem : MonoBehaviour
     private float bobStrength = 0.05f ;
     void Start()
     {
+
+        gameManager = FindObjectOfType<GameManager>();
         //originalY = transform.position.y;
         weaponHolder = FindObjectOfType<ItemHolder>();
         itemRigidBody = GetComponentInChildren<Rigidbody>();
         itemCollider = GetComponentInChildren<Collider>();
-        labelCanvas = transform.GetComponentInChildren<Canvas>();
-        labelCanvas.enabled = false;
+        LabelCanvas = transform.GetComponentInChildren<Canvas>();
+        LabelCanvas.enabled = false;
     }
 
     void Update()
@@ -68,12 +72,15 @@ public class PickableItem : MonoBehaviour
     }
     public void EnableItem()
     {
+        gameManager.hudCrosshair.enabled = true;
         gameObject.SetActive(true);
+        
 
         //animacion de sacar objeto
     }
     public void disableItem()
     {
+        gameManager.hudCrosshair.enabled=false;
         gameObject.SetActive(false);
 
         //animacion de guardar objeto

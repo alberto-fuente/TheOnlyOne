@@ -6,10 +6,11 @@ using UnityEngine;
 public class WeaponBlueprint : ScriptableObject
 {
     [Header("Attributes")]
+    public int weaponID;
     public string weaponName;
-    public GameObject prefab;
+    public GameObject enemyPrefab;
+    public Sprite crosshair;
     public Animator anim;
-
     [Space]
     [Header("Stats")]
     public int maxClipAmmo;
@@ -20,7 +21,7 @@ public class WeaponBlueprint : ScriptableObject
     public float reloadTime;
     public float aimSpeed;
     public bool autoShoot;
-    public float damage;
+    public int damage;
     [Space]
     [Header("Sway")]
     public float swayIntensity;

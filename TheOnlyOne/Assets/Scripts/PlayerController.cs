@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     [Header("References")]
     [SerializeField] PlayerMove playerMove;
     [SerializeField] PlayerLook playerLook;
-    [SerializeField] ItemHolder inventory;
+    public ItemHolder itemHolder;
     public HealthSystem healthSystem;
     public GameObject hurtPanel;
     // Start is called before the first frame update
@@ -25,10 +25,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            healthSystem.Damage(22);
-        }
         if (Input.GetKeyDown(KeyCode.Alpha9))
         {
             healthSystem.HealHealth(40);
@@ -48,4 +44,5 @@ public class PlayerController : MonoBehaviour
             speed = 10;
         }*/
     }
+    
 }

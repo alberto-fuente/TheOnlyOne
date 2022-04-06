@@ -9,6 +9,10 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private Camera camera;
     [SerializeField] private float normalFov;
     [SerializeField] private float slideFov;
+
+    public  Vector3 idleItemHolderRotation;
+    public Vector3 sprintItemHolderRotation;
+
     private float headBobTime;
     //private float idleTime;
     public float headBobAmplitude=0.005f;
@@ -69,6 +73,8 @@ public class PlayerMove : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         weaponChanger = FindObjectOfType<ItemHolder>();
         weaponChangerOrigin = weaponChanger.transform.localPosition;
+        idleItemHolderRotation = Vector3.zero;
+        sprintItemHolderRotation = new Vector3(0, -60f, 0);
         crouchedCamPos = new Vector3(cameraRot.position.x, cameraRot.position.x-crouchScale.y, cameraRot.position.z);
     }
     private void Update()
@@ -79,13 +85,22 @@ public class PlayerMove : MonoBehaviour
         ControlHeadBob();
         //jump
         if (isJumping && isGrounded && readyToJump) Jump();
+        
 
     }
     void FixedUpdate()
     {
         MovePlayer();
         Crouch(isCrouching);
-       
+       /* if (isSprinting && !isAiming)
+        {
+            weaponChanger.transform.localEulerAngles = Vector3.Lerp(sprintItemHolderRotation, idleItemHolderRotation, Time.deltaTime*20);
+        }
+        else
+        {
+            weaponChanger.transform.localEulerAngles = Vector3.Lerp(idleItemHolderRotation, sprintItemHolderRotation, Time.deltaTime*20);
+        }
+       */
     }
     public void MyInput()
     {
@@ -99,10 +114,7 @@ public class PlayerMove : MonoBehaviour
         else isAiming = false;
         isJumping = Input.GetButton("Jump");
         isCrouching = Input.GetKey(KeyCode.LeftControl);
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            isSprinting = !isSprinting;
-        }
+        isSprinting = Input.GetKey(KeyCode.LeftShift);
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, Ground);
 
   
@@ -120,6 +132,7 @@ public class PlayerMove : MonoBehaviour
             headBobTime += Time.deltaTime * headBobSpeed;
             weaponChanger.transform.localPosition = Vector3.Lerp(weaponChanger.transform.localPosition, HeadBob(headBobTime, headBobAmplitude / headBobAimDividerX * headBobSpeed, headBobAmplitude / headBobAimDividerY * headBobSpeed), Time.deltaTime * 5);
         }
+        
     }
     Vector3 HeadBob(float timePoint, float xIntensity, float yIntensity)
     {
@@ -132,7 +145,7 @@ public class PlayerMove : MonoBehaviour
         {
             Vector3.Lerp(cameraRot.position, crouchedCamPos, Time.deltaTime);
             mesh.localScale = crouchScale;
-            if (moveSpeed > walkSpeed && !isSliding){
+            if (moveSpeed > walkSpeed/2 && !isSliding){
                 isSliding = true;
                 rb.AddForce(transform.forward * slideForce, ForceMode.VelocityChange);
               //  camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, slideFov, 20 * Time.deltaTime);

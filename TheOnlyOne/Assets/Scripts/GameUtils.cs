@@ -14,4 +14,12 @@ public static class GameUtils
         CONSUMIBLE 
     }
 
+    /*public enum Rarity
+    {
+        COMMON,
+        RARE,
+        EPIC,
+        LEGENDARY
+    }*/
+
 }

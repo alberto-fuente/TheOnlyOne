@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc305b07e2e92da418f9565002e5f5ac, type: 3}
   m_Name: Rifle
   m_EditorClassIdentifier: 
+  weaponID: 2
   weaponName: Rifle
-  prefab: {fileID: 1075221723834894483, guid: 60bf9481b23793049b9176d04286e7d5, type: 3}
+  enemyPrefab: {fileID: 3734686458158196455, guid: fac4502128029fc41ba8e5c7bc500855, type: 3}
+  crosshair: {fileID: 21300000, guid: 72ed2f2022c632e4ba6448e308a9dea9, type: 3}
   anim: {fileID: 0}
   maxClipAmmo: 35
   range: 100
@@ -21,19 +23,19 @@ MonoBehaviour:
   reloadTime: 2.5
   aimSpeed: 20
   autoShoot: 1
-  damage: 40
+  damage: 10
   swayIntensity: 10
   swaySpeed: 5
   recoilRotation: {x: -2, y: 1.2, z: 0.5}
   aimRecoilRotation: {x: -1.2, y: 0.5, z: 0}
   recoilSpeed: 4
   returnSpeed: 2
-  vRecoilRotation: {x: 2, y: 2, z: 2}
-  vRecoilKickBack: {x: 0.02, y: 0.02, z: -0.5}
+  vRecoilRotation: {x: -2, y: -2, z: -2}
+  vRecoilKickBack: {x: -0.02, y: 0.02, z: -0.5}
   vRecoilRotationAim: {x: 2, y: 0, z: 0}
-  vRecoilKickBackAim: {x: 0.015, y: 0, z: -0.2}
+  vRecoilKickBackAim: {x: -0.015, y: 0, z: -0.2}
   vPositionRecoilSpeed: 2
-  vRotationRecoilSpeed: 10
+  vRotationRecoilSpeed: 1.1
   vPositionReturnSpeed: 15
   vRotationReturnSpeed: 15
   shootSound: {fileID: 8300000, guid: 2d90940e80be4be4d964372eb04a6b49, type: 3}
@@ -42,4 +44,4 @@ MonoBehaviour:
   pitchRand: 0.1
   bulletDecal: {fileID: 8843144634977441555, guid: fbd92e76c83f9f14c83f5a19ec1e74be, type: 3}
   mainFOV: 80
-  aimFOV: 50
+  aimFOV: 40

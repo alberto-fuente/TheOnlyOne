@@ -11,8 +11,8 @@ public class HealthSystem : MonoBehaviour
     public event EventHandler OnShieldDestroyed;
     public event EventHandler OnDead;
 
-    int maxHealth=100;
-    int maxShield=60;
+    [SerializeField] private int maxHealth=100;
+    [SerializeField] private int maxShield=60;
 
     int currentHealth;
     int currentShield;
@@ -20,11 +20,13 @@ public class HealthSystem : MonoBehaviour
     bool isDead;
     public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
     public int CurrentShield { get => currentShield; set => currentShield = value; }
+    public int MaxHealth { get => maxHealth; }
+    public int MaxShield { get => maxShield; }
 
     private void Awake()
     {
-        CurrentHealth = maxHealth;
-        CurrentShield = maxShield;
+        CurrentHealth = MaxHealth;
+        CurrentShield = MaxShield;
     }
     private void Update()
     {
@@ -37,13 +39,13 @@ public class HealthSystem : MonoBehaviour
     public void HealHealth(int amount)
     {
         CurrentHealth += amount;
-        if (CurrentHealth >maxHealth) CurrentHealth = maxHealth;
+        if (CurrentHealth >MaxHealth) CurrentHealth = MaxHealth;
         if (OnHealthHealed != null) OnHealthHealed(this, EventArgs.Empty);
     }
     public void HealShield(int amount)
     {
         CurrentShield += amount;
-        if (CurrentShield > maxShield) CurrentShield = maxShield;
+        if (CurrentShield > MaxShield) CurrentShield = MaxShield;
         if (OnShieldHealed != null) OnShieldHealed(this, EventArgs.Empty);
     }
     public void Damage(int amount)
@@ -71,10 +73,10 @@ public class HealthSystem : MonoBehaviour
     }
     public float GetHealthNormalized()
     {
-        return (float)CurrentHealth / maxHealth;
+        return (float)CurrentHealth / MaxHealth;
     }
     public float GetShieldNormalized()
     {
-        return (float)CurrentShield / maxShield;
+        return (float)CurrentShield / MaxShield;
     }
 }

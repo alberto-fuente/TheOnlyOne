@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc305b07e2e92da418f9565002e5f5ac, type: 3}
+  m_Name: sniper
+  m_EditorClassIdentifier: 
+  weaponID: 3
+  weaponName: 
+  enemyPrefab: {fileID: 0}
+  crosshair: {fileID: 0}
+  anim: {fileID: 0}
+  maxClipAmmo: 0
+  range: 0
+  fireRate: 0
+  reloadTime: 0
+  aimSpeed: 0
+  autoShoot: 0
+  damage: 0
+  swayIntensity: 0
+  swaySpeed: 0
+  recoilRotation: {x: 0, y: 0, z: 0}
+  aimRecoilRotation: {x: 0, y: 0, z: 0}
+  recoilSpeed: 0
+  returnSpeed: 0
+  vRecoilRotation: {x: 0, y: 0, z: 0}
+  vRecoilKickBack: {x: 0, y: 0, z: 0}
+  vRecoilRotationAim: {x: 0, y: 0, z: 0}
+  vRecoilKickBackAim: {x: 0, y: 0, z: 0}
+  vPositionRecoilSpeed: 0
+  vRotationRecoilSpeed: 0
+  vPositionReturnSpeed: 0
+  vRotationReturnSpeed: 0
+  shootSound: {fileID: 0}
+  reloadSound: {fileID: 0}
+  pitch: 0
+  pitchRand: 0
+  bulletDecal: {fileID: 0}
+  mainFOV: 0
+  aimFOV: 0

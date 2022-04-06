@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4867a44d2e10b28439cf1df59e8bf2f4, type: 3}
+  m_Name: EpicAmmoPack
+  m_EditorClassIdentifier: 
+  name: EpicAmmoPack
+  prefab: {fileID: 8121593748169125817, guid: 1d52e2f1881ba5141afca5d6ddf6b30f, type: 3}
+  multiplier: 3
+  Minprobabilty: 80
+  Maxprobabilty: 94

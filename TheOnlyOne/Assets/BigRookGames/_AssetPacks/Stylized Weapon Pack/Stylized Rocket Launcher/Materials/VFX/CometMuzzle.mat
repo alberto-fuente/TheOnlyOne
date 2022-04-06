@@ -22,14 +22,16 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: CometMuzzle
   m_Shader: {fileID: 4800000, guid: b7839dad95683814aa64166edc107ae2, type: 3}
-  m_ShaderKeywords: _ALPHABLEND_ON _COLORADDSUBDIFF_ON _FLIPBOOKBLENDING_OFF
-  m_LightmapFlags: 0
+  m_ShaderKeywords: _COLORADDSUBDIFF_ON _EMISSION
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 3000
+  stringTagMap:
+    RenderType: Transparent
   disabledShaderPasses:
   - ALWAYS
+  - SHADOWCASTER
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -125,7 +127,7 @@ Material:
     - _ZWrite: 0
     m_Colors:
     - _BaseColor: {r: 6.6660085, g: 1.2564204, b: 0.48860788, a: 1}
-    - _BaseColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
+    - _BaseColorAddSubDiff: {r: 1, g: 0, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
     - _Color: {r: 6.666008, g: 1.2564204, b: 0.4886079, a: 1}
     - _ColorAddSubDiff: {r: 1, g: 0, b: 0, a: 0}

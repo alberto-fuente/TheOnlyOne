@@ -8,6 +8,8 @@ TagManager:
   - PickableItem
   - FxTemporaire
   - ignore
+  - Enemy
+  - AmmoPack
   layers:
   - Default
   - TransparentFX

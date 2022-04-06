@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: GranadeTrail 1
+  m_Shader: {fileID: -6465566751694194690, guid: 67bc6bb1ca814d04e8b3961bfb3b6f6a, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Texture2D_0873486805784ef5bac49e11cbdfb524:
+        m_Texture: {fileID: 2800000, guid: 07bdbc01e19fe2748a3087fb279cc2ba, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 6344bf96fbda94141a525046d088fb23, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_2b2da3cd75814070a52b8a659c3541f1: 35
+    - _Glossiness: 0.5
+    - _Metallic: 0
+    m_Colors:
+    - Color_5dec470256374b138796dab40b599929: {r: 0, g: 4.561278, b: 8.376962, a: 0}
+    - Color_84d56afb2b544fd181f32db5144e2bdb: {r: 15.581815, g: 0, b: 60.737278, a: 0}
+    - Vector2_ae05c698c60d415f9d77fbd4dfc74a38: {r: -1.1, g: 0, b: 0, a: 0}
+    - Vector2_ffae4625feca4647af480565645ef7ad: {r: -1.1, g: 0, b: 0, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []

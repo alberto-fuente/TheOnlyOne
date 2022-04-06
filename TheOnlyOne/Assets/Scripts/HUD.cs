@@ -23,7 +23,7 @@ public class HUD : MonoBehaviour
         Transform inventoryPanel = transform.Find("InventoryPanel");
 
         inventoryPanel.GetChild(e.SlotId).localScale = new Vector3(1.8f, 1.15f, 1.15f);
-        inventoryPanel.GetChild(e.SlotId).GetChild(0).GetComponent<Image>().color = new Color(196f,231f,0f);
+        inventoryPanel.GetChild(e.SlotId).GetChild(0).GetComponent<Image>().color = new Color(0f,255f,238f);
     }
     private void InventoryScript_OldItemSwitched(object sender, InventoryEventArgs e)
     {

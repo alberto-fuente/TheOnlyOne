@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    public Image hudCrosshair;
+    [SerializeField] private Sprite defaultCrosshair;
     public int totalTargets;
     public int remainingTargets;
     public ItemHolder weaponHolder;
@@ -17,33 +20,50 @@ public class GameManager : MonoBehaviour
     public Text currentAmmoText;
     public Text totalAmmoText;
 
-    Scene currentScene;
+    public ItemRarityBlueprint[] rarityDataPistols;
+    public ItemRarityBlueprint[] rarityDataSubfusils;
+    public ItemRarityBlueprint[] rarityDataRifles;
+
+    public ItemRarityBlueprint[] rarityPackAmmo;
+    public ItemRarityBlueprint[] rarityPackHealth;
+    public ItemRarityBlueprint[] rarityPackArmor;
+
+    public int playersLeft;
+    public TMP_Text playersLeftText;
+    //Scene currentScene;
     PhysicsScene currentPhysicsScene;
 
+    //public Scene CurrentScene { get => currentScene; set => currentScene = value; }
+    public PhysicsScene CurrentPhysicsScene { get => currentPhysicsScene; set => currentPhysicsScene = value; }
+    
     // Start is called before the first frame update
     void Start()
     {
-        //IsSafeToReload = true;
+        hudCrosshair.enabled=false;
         weaponHolder = FindObjectOfType<ItemHolder>();
         totalTargets = GameObject.FindGameObjectsWithTag("Target").Length;
         remainingTargets = totalTargets;
         Physics.IgnoreLayerCollision(10, 11);//player and bullet
         Physics.IgnoreLayerCollision(7, 11);
     }
+    
     private void FixedUpdate()
     {
-        if (currentPhysicsScene.IsValid())
+        if (CurrentPhysicsScene.IsValid())
         {
-            currentPhysicsScene.Simulate(Time.fixedDeltaTime);
+            CurrentPhysicsScene.Simulate(Time.fixedDeltaTime);
         }
     }
     // Update is called once per frame
     void Update()
     {
+        playersLeft = FindObjectsOfType<HealthSystem>().Length;
+        playersLeftText.text = playersLeft.ToString();
+        if (hudCrosshair.sprite == null) hudCrosshair.sprite=defaultCrosshair;
         fpsRate = 1f / Time.deltaTime;
         fpsText.text = fpsRate.ToString("F2");
-        currentScene = SceneManager.GetActiveScene();
-        currentPhysicsScene = currentScene.GetPhysicsScene();
+       // CurrentScene = SceneManager.GetActiveScene();
+       // CurrentPhysicsScene = CurrentScene.GetPhysicsScene();
 
         timerText.text = gameTimer.ToString("F2");
 
