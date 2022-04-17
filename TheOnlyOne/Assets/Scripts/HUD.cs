@@ -22,14 +22,14 @@ public class HUD : MonoBehaviour
     {
         Transform inventoryPanel = transform.Find("InventoryPanel");
 
-        inventoryPanel.GetChild(e.SlotId).localScale = new Vector3(1.8f, 1.15f, 1.15f);
+        inventoryPanel.GetChild(e.SlotId).localScale = new Vector3(1.73511267f, 1.50905013f, 0.853804648f);
         inventoryPanel.GetChild(e.SlotId).GetChild(0).GetComponent<Image>().color = new Color(0f,255f,238f);
     }
     private void InventoryScript_OldItemSwitched(object sender, InventoryEventArgs e)
     {
         Transform inventoryPanel = transform.Find("InventoryPanel");
 
-        inventoryPanel.GetChild(e.SlotId).localScale = new Vector3(1.568628f, 1f, 1f);
+        inventoryPanel.GetChild(e.SlotId).localScale = new Vector3(1.60050941f, 1.39198422f, 0.78757f);
         inventoryPanel.GetChild(e.SlotId).GetChild(0).GetComponent<Image>().color = Color.white;
     }
 

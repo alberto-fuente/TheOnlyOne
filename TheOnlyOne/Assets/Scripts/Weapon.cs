@@ -26,7 +26,6 @@ public class Weapon : MonoBehaviour
     Transform hipState;
     Transform aimState;
     public Transform prefabContainer;
-    GameObject prefab;
     public ParticleSystem muzzleFlash;
     //public bool isSafe;
     private void Awake()

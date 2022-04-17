@@ -12,7 +12,10 @@ public class GranadeBlueprint : ScriptableObject
     public Animator anim;
     public Material offMaterial;
     public Material onMaterial;
-
+    public float Minprobabilty;
+    public float Maxprobabilty;
+    public Material freezeMaterial;
+    public int effectDuration;
     [Space]
     [Header("Stats")]
     public float delay;
@@ -23,5 +26,9 @@ public class GranadeBlueprint : ScriptableObject
     [Space]
     [Header("VFX")]
     public GameObject explosionEffect;
+    public AudioClip throwSound;
+    public AudioClip counterSound;
+    public AudioClip explodeSound;
+
 
 }

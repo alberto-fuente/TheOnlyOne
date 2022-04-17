@@ -41,6 +41,10 @@ public class PickableItem : MonoBehaviour
         itemCollider = GetComponentInChildren<Collider>();
         LabelCanvas = transform.GetComponentInChildren<Canvas>();
         LabelCanvas.enabled = false;
+        if (typeOfItem == GameUtils.TypeOfItem.THROWEABLE)
+        {
+            itemID = GetComponent<Granade>().granadeData.name;
+        }
     }
 
     void Update()

@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviour
     public ItemRarityBlueprint[] rarityPackHealth;
     public ItemRarityBlueprint[] rarityPackArmor;
 
+    public GranadeBlueprint[] granadeTypes;
+
     public int playersLeft;
     public TMP_Text playersLeftText;
     //Scene currentScene;

@@ -611,9 +611,10 @@ MonoBehaviour:
   scanTimer: 0
   targetSet: 0
   attackDelay: 0.5
-  target: {fileID: 0}
+  target: {fileID: 4842986878343244105, guid: 7320ca31a84db0e4eaf77cc4c3affe0d, type: 3}
   destinationSet: 0
   state: 0
+  agent: {fileID: 0}
   laser: {fileID: 8300000, guid: 35b0895be591da2428ab26d73c429d8e, type: 3}
 --- !u!195 &223236733099175858
 NavMeshAgent:
@@ -706,7 +707,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 64.93934
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -964,7 +965,7 @@ BoxCollider:
   m_GameObject: {fileID: 223236733572068467}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}

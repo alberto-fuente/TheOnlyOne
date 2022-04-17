@@ -20,6 +20,8 @@ public class EnemyIA : MonoBehaviour
 
     public bool targetSet;
 
+    public bool isFrozen;
+
     public float attackDelay;
     bool isAttacking;
 
@@ -43,7 +45,7 @@ public class EnemyIA : MonoBehaviour
     private float hitProbability = 0.5f;
     public bool destinationSet;
     [SerializeField] State state;
-    private NavMeshAgent agent;
+    public NavMeshAgent agent;
     //temporal
     private AudioSource audioSource;
     public AudioClip laser;
@@ -86,56 +88,63 @@ public class EnemyIA : MonoBehaviour
         else state = State.Wander;
 
         targetSet = target != null;
-       
-        switch (state)
+        if (!isFrozen)
         {
-            case State.Wander:
-                agent.isStopped = false;
-                float destination = 1f;
-                if (!destinationSet|| Vector3.Distance(transform.position, wanderPosition) < destination)
-                {
-                    wanderPosition = GetWanderPosition(transform.position);
-                }
-                destinationSet = agent.SetDestination(wanderPosition);
-                
-                break;
-            case State.ChaseTarget:
-                
-                agent.isStopped = false;
-                if (target != null)
-                {
-                    agent.SetDestination(target.transform.position);
-                    transform.LookAt(target.transform.position);
-                    if (Vector3.Distance(transform.position, target.transform.position) > stopChasingRange)
+            switch (state)
+            {
+                case State.Wander:
+                    agent.isStopped = false;
+                    float destination = 1f;
+                    if (!destinationSet || Vector3.Distance(transform.position, wanderPosition) < destination)
                     {
+                        wanderPosition = GetWanderPosition(transform.position);
+                    }
+                    destinationSet = agent.SetDestination(wanderPosition);
+
+                    break;
+                case State.ChaseTarget:
+                    agent.isStopped = false;
+                    if (target != null)
+                    {
+                        agent.SetDestination(target.transform.position);
+                        transform.LookAt(target.transform.position);
+                        if (Vector3.Distance(transform.position, target.transform.position) > stopChasingRange)
+                        {
+                            entityInSightRange = false;
+                            entityInAttackRange = false;
+                        }
+                    }
+                    else
                         entityInSightRange = false;
+                    break;
+                case State.AttackTarget:
+                    agent.isStopped = true;
+                    if (target != null)
+                    {
+                        targetHealthSystem = target.GetComponentInParent<HealthSystem>();
+                        transform.LookAt(target.transform.position);
+                        if (!isAttacking && targetHealthSystem != null)
+                        {
+                            isAttacking = true;
+                            if (Random.value <= hitProbability)
+                            {
+                                targetHealthSystem.Damage(Random.Range(minHitDamage, maxHitDamage));
+                                audioSource.PlayOneShot(laser, 0.1f);
+
+                            }
+                            Invoke(nameof(ResetAttack), attackDelay);
+                        }
+                    }
+                    else
+                    {
                         entityInAttackRange = false;
                     }
-                }
-                else
-                    entityInSightRange = false;
-                break;
-            case State.AttackTarget:
-                agent.isStopped=true;
-                if (target != null)
-                {
-                    targetHealthSystem = target.GetComponentInParent<HealthSystem>();
-                    transform.LookAt(target.transform.position);
-                    if (!isAttacking && targetHealthSystem != null)
-                    {
-                        isAttacking = true;
-                        if (Random.value <= hitProbability)
-                        {
-                            targetHealthSystem.Damage(Random.Range(minHitDamage,maxHitDamage));
-                            audioSource.PlayOneShot(laser, 0.1f);
-
-                        }
-                        Invoke(nameof(ResetAttack), attackDelay);
-                    }
-                }else
-                    entityInAttackRange = false;
-                break;
+                    break;
+            }
         }
+        else
+            agent.isStopped = true;
+       
        
     }
     private GameObject FindTarget(float range)
