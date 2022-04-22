@@ -983,7 +983,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.461}
+  m_AnchoredPosition: {x: 0, y: 0.69}
   m_SizeDelta: {x: 67.39, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2346726857872041875
@@ -1721,7 +1721,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8870931786396110628}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.42, y: -0.31, z: 0.548}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8870931786898493998}
@@ -1783,7 +1783,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8870931786898493999}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.076, z: 0.196}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8870931786396110635}
@@ -1863,12 +1863,11 @@ GameObject:
   - component: {fileID: 8870931787838259526}
   - component: {fileID: 8870931787838259531}
   - component: {fileID: 8870931787838259525}
-  - component: {fileID: 4403804422971604178}
   - component: {fileID: 3963318074788262050}
   - component: {fileID: 7547929747486496289}
   m_Layer: 7
   m_Name: PistolPrefab
-  m_TagString: Untagged
+  m_TagString: Grab
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1896,7 +1895,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8870931787838259520}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4ee754557e441134baa3cc316d966449, type: 3}
   m_Name: 
@@ -1906,7 +1905,6 @@ MonoBehaviour:
   cameraHolder: {fileID: 0}
   weaponCam: {fileID: 0}
   playerCam: {fileID: 0}
-  playerMove: {fileID: 0}
   audioSource: {fileID: 0}
   currentAmmo: 0
   totalAmmo: 0
@@ -1950,23 +1948,11 @@ MonoBehaviour:
   itemID: gun
   weaponHolder: {fileID: 0}
   typeOfItem: 1
+  isPointed: 0
   isEquiped: 0
   slotId: 0
   distanceToPlayer: 0
   originalY: 0
---- !u!65 &4403804422971604178
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8870931787838259520}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.07349038, y: 0.2985053, z: 0.49685907}
-  m_Center: {x: 0.4196812, y: -0.31204414, z: 0.70633197}
 --- !u!54 &3963318074788262050
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2003,8 +1989,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 1.0232342
+  MaxDistance: 66.752945
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0

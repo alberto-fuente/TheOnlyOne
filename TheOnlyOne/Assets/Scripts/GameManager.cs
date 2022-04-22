@@ -17,8 +17,8 @@ public class GameManager : MonoBehaviour
     public float fpsRate;
     public Text timerText;
     public Text fpsText;
-    public Text currentAmmoText;
-    public Text totalAmmoText;
+    public TMP_Text currentAmmoText;
+    public TMP_Text totalAmmoText;
 
     public ItemRarityBlueprint[] rarityDataPistols;
     public ItemRarityBlueprint[] rarityDataSubfusils;

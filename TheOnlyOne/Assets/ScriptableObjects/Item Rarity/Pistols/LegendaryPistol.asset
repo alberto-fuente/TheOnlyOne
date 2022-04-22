@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: LegendaryPistol
   prefab: {fileID: 8247633700974616963, guid: baf3ea1cdf687ad4bbb694d2ac02e1e8, type: 3}
-  multiplier: 2
+  multiplier: 4
   Minprobabilty: 95
   Maxprobabilty: 99

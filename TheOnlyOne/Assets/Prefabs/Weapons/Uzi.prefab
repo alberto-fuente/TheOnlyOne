@@ -438,7 +438,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponNameText: {fileID: 1286523019}
-  weapon: {fileID: 11400000, guid: 560900c34c4c7734db2b4e5212eb3c67, type: 2}
+  weapon: {fileID: 0}
+  data: {fileID: 0}
+  rarity: {fileID: 0}
   damageBar: {fileID: 2113833356}
   rangeBar: {fileID: 1286007434}
   FireRateBar: {fileID: 784134234}
@@ -1757,7 +1759,7 @@ MonoBehaviour:
   isReloading: 0
   isAming: 0
   prefabContainer: {fileID: 0}
-  muzzleFlash: {fileID: 7361562330246664188}
+  muzzleFlash: {fileID: 0}
 --- !u!114 &8336322030334828172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2041,8 +2043,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 528429206117902189}
+  m_Children: []
   m_Father: {fileID: 8336322031185840726}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2078,74 +2079,3 @@ Transform:
   m_Father: {fileID: 8336322030334828163}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &8369011041385751777
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 8336322031380369097}
-    m_Modifications:
-    - target: {fileID: 8318685776401908620, guid: 2456160eac57e7d469935e64f637a047, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8318685776401908620, guid: 2456160eac57e7d469935e64f637a047, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8318685776401908620, guid: 2456160eac57e7d469935e64f637a047, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8318685776401908620, guid: 2456160eac57e7d469935e64f637a047, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8318685776401908620, guid: 2456160eac57e7d469935e64f637a047, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8318685776401908620, guid: 2456160eac57e7d469935e64f637a047, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8318685776401908620, guid: 2456160eac57e7d469935e64f637a047, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8318685776401908620, guid: 2456160eac57e7d469935e64f637a047, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8318685776401908620, guid: 2456160eac57e7d469935e64f637a047, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8318685776401908620, guid: 2456160eac57e7d469935e64f637a047, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8318685776401908620, guid: 2456160eac57e7d469935e64f637a047, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9198787496021955775, guid: 2456160eac57e7d469935e64f637a047, type: 3}
-      propertyPath: m_Name
-      value: UziPrefab
-      objectReference: {fileID: 0}
-    - target: {fileID: 9198787496021955775, guid: 2456160eac57e7d469935e64f637a047, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 2456160eac57e7d469935e64f637a047, type: 3}
---- !u!198 &7361562330246664188 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 1300756186523593501, guid: 2456160eac57e7d469935e64f637a047, type: 3}
-  m_PrefabInstance: {fileID: 8369011041385751777}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &528429206117902189 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8318685776401908620, guid: 2456160eac57e7d469935e64f637a047, type: 3}
-  m_PrefabInstance: {fileID: 8369011041385751777}
-  m_PrefabAsset: {fileID: 0}

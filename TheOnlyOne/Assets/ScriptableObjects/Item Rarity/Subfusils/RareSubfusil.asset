@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: RareSubfusil
   prefab: {fileID: 1839468706238409700, guid: 338172620756a774ba7da62f75c0da54, type: 3}
-  multiplier: 1.3
+  multiplier: 2
   Minprobabilty: 50
   Maxprobabilty: 79

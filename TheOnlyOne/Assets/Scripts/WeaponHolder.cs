@@ -29,11 +29,11 @@ public class WeaponHolder : MonoBehaviour
 
     private void Update()
     {
-        ListenPickInput();
+        //ListenPickInput();
         ListenDropInput();
         ListenChangeInput();
     }
-
+    /*
     private void ListenPickInput()
     {
         RaycastHit hit;
@@ -56,7 +56,7 @@ public class WeaponHolder : MonoBehaviour
             }
         }
     }
-
+    */
     private void ListenDropInput()
     {
         if (Input.GetKeyDown(KeyCode.Q))
@@ -138,7 +138,7 @@ public class WeaponHolder : MonoBehaviour
 
         foreach (List<PickableItem> itemSlot in inventory)
         {
-            if (itemSlot[0].itemID.Equals(itemToPick.itemID) && (itemToPick.typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE) || itemToPick.typeOfItem.Equals(GameUtils.TypeOfItem.CONSUMIBLE)))
+            if (itemSlot[0].itemID.Equals(itemToPick.itemID) && (itemToPick.typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE)))
             {
                 itemSlot.Add(itemToPick);
                 newItem = false;

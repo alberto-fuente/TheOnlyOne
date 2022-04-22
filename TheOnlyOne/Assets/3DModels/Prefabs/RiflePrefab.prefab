@@ -191,11 +191,10 @@ GameObject:
   - component: {fileID: 2377728429118372906}
   - component: {fileID: 2377728429118372900}
   - component: {fileID: 4997447639971316539}
-  - component: {fileID: 4859501411371171258}
   - component: {fileID: 5640686560202466793}
   m_Layer: 7
   m_Name: RiflePrefab
-  m_TagString: PickableItem
+  m_TagString: Grab
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -223,7 +222,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2377728429118372897}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4ee754557e441134baa3cc316d966449, type: 3}
   m_Name: 
@@ -233,7 +232,6 @@ MonoBehaviour:
   cameraHolder: {fileID: 0}
   weaponCam: {fileID: 0}
   playerCam: {fileID: 0}
-  playerMove: {fileID: 0}
   audioSource: {fileID: 0}
   currentAmmo: 0
   totalAmmo: 0
@@ -248,7 +246,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2377728429118372897}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7f43febc6e97f0c42a033633f5eb1879, type: 3}
   m_Name: 
@@ -270,13 +268,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Rifle de asalto
   itemRigidBody: {fileID: 4997447639971316539}
-  itemCollider: {fileID: 4859501411371171258}
+  itemCollider: {fileID: 0}
   prefab: {fileID: 0}
   Icon: {fileID: 21300000, guid: a97d997eef736a6479855c6d003f66aa, type: 3}
   isStackable: 0
   itemID: rifle
   weaponHolder: {fileID: 0}
   typeOfItem: 1
+  isPointed: 0
   isEquiped: 0
   slotId: 0
   distanceToPlayer: 0
@@ -316,19 +315,6 @@ Rigidbody:
   m_Interpolate: 2
   m_Constraints: 0
   m_CollisionDetection: 3
---- !u!65 &4859501411371171258
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2377728429118372897}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.32380307, y: 1.0641222, z: 3.634521}
-  m_Center: {x: 0.67619723, y: -0.7607219, z: 1.4738343}
 --- !u!82 &5640686560202466793
 AudioSource:
   m_ObjectHideFlags: 0
@@ -449,7 +435,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2377728429456431120}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.657, y: -0.793, z: 0.912}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2377728430486873040}
@@ -513,7 +499,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2377728429930927379}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.657, y: -0.793, z: 0.912}
+  m_LocalPosition: {x: -0.179, y: 1.174, z: 1.019}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2377728429822045209}
@@ -543,7 +529,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2377728430486873043}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.089, z: 0.622}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2377728429456431121}
@@ -573,7 +559,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2377728430594411465}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.666, z: 0.181}
+  m_LocalPosition: {x: -0.734, y: 1.324, z: 0.575}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2377728429822045209}
@@ -1439,7 +1425,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7645417191679954019}
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0.4430005}
+  m_LocalPosition: {x: 0, y: 0, z: 0.4}
   m_LocalScale: {x: 0.01570147, y: 0.01570147, z: 0.01570147}
   m_Children:
   - {fileID: 9078060688318463910}
@@ -1450,7 +1436,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0.88}
   m_SizeDelta: {x: 67.39, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7645417191679954018

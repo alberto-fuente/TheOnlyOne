@@ -18,7 +18,7 @@ public class Granade : MonoBehaviour
     bool hasExploded;
     bool hasBeenthrown;
     //Freeze
-    float freezeCountdown=8;
+    float freezeCountdown;
     Material originalMatRef;
     Collider colliderRef;
     EnemyIA enemyRef;
@@ -43,6 +43,7 @@ public class Granade : MonoBehaviour
 
     void Start()
     {
+        freezeCountdown = granadeData.effectDuration;
         granadeRigidbody = GetComponent<Rigidbody>();
         item = GetComponent<PickableItem>();
         audioSource = GetComponent<AudioSource>();
@@ -58,7 +59,7 @@ public class Granade : MonoBehaviour
         if (hasBeenthrown)
         {
             countdown -= Time.deltaTime;
-            mesh.GetComponent<Renderer>().material = granadeData.onMaterial;
+            mesh.GetComponentInChildren<Renderer>().material = granadeData.onMaterial;
         }
         
         if (countdown <= 0f&&!hasExploded)
@@ -67,16 +68,19 @@ public class Granade : MonoBehaviour
 
         }
         //Freeze
-        if(enemyRef!=null)
+        if (enemyRef != null)
+        {
             if (enemyRef.isFrozen)
             {
                 freezeCountdown -= Time.deltaTime;
             }
-        if (freezeCountdown <= 0)
-        {
-            colliderRef.gameObject.GetComponent<Renderer>().material = originalMatRef;
-            enemyRef.isFrozen = false;
+            if (freezeCountdown <= 0)
+            {
+                colliderRef.gameObject.GetComponentInChildren<Renderer>().material = originalMatRef;
+                enemyRef.isFrozen = false;
+            }
         }
+            
     }
 
     private void Explode()
@@ -105,8 +109,8 @@ public class Granade : MonoBehaviour
                 EnemyIA enemy = nearObject.gameObject.GetComponentInParent<EnemyIA>();
                 if (enemy != null)
                 {
-                    originalMatRef = nearObject.gameObject.GetComponent<Renderer>().material;
-                    nearObject.gameObject.GetComponent<Renderer>().material = granadeData.freezeMaterial;
+                    originalMatRef = nearObject.gameObject.GetComponentInChildren<Renderer>().material;
+                    nearObject.gameObject.GetComponentInChildren<Renderer>().material = granadeData.freezeMaterial;
                     enemy.isFrozen = true;
                     colliderRef = nearObject;
                     enemyRef=enemy;
@@ -117,7 +121,7 @@ public class Granade : MonoBehaviour
         hasExploded = true;
         mesh.GetComponent<MeshRenderer>().enabled = false;
         trail.enabled = false;
-        Destroy(gameObject,10);
+        Destroy(gameObject,15);
     }
 
     public void Throw(Vector3 position,Vector3 direction)

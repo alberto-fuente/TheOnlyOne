@@ -20,13 +20,14 @@ public class ItemHolder : MonoBehaviour
 
     public int activeSlotIndex;
     public int slotsOc;
-    public float pickRange = 5;
+    public float interactRange = 5;
     [SerializeField] private float dropForce = 5;
 
     [SerializeField] private bool isChanging;
     private float changeDirection;
 
-    private Canvas canvas;
+    private PickableItem itemRef=null;
+    private Crate crateRef = null;
     public bool IsChanging { get => isChanging; private set => isChanging = value; }
 
     private void Start()
@@ -82,6 +83,7 @@ public class ItemHolder : MonoBehaviour
         item.transform.localPosition = Vector3.zero;
         item.transform.localRotation = Quaternion.Euler(Vector3.zero);
         item.isEquiped = true;
+        item.GetComponent<Rigidbody>().isKinematic = true;
         item.CheckEquiped();
         if (OnItemAdded != null) OnItemAdded(this, new InventoryEventArgs(item, slot.Id));
         item.disableItem();
@@ -94,6 +96,7 @@ public class ItemHolder : MonoBehaviour
         {
             
             item.isEquiped = false;
+            item.GetComponent<Rigidbody>().isKinematic = false;
             item.transform.parent = null;
             item.CheckEquiped();
 
@@ -117,24 +120,39 @@ public class ItemHolder : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit))
         {
-            if (hit.transform.GetComponent<PickableItem>() && hit.transform.GetComponent<PickableItem>().enabled&&hit.transform.GetComponent<PickableItem>().distanceToPlayer < pickRange)
+            if (hit.transform.CompareTag("Grab"))
             {
-                canvas = hit.transform.GetComponent<PickableItem>().LabelCanvas;
-                canvas.enabled = true;
-
+                itemRef = hit.transform.gameObject.GetComponent<PickableItem>();
+                if (!itemRef.isEquiped && GetDistanceToObject(itemRef.transform) <= interactRange)
+                    itemRef.isPointed = true;
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    canvas.enabled = false;
                     PickItem(hit.transform.GetComponent<PickableItem>());
                 }
             }
-            else if (canvas != null)
+            else if (hit.transform.CompareTag("Crate"))
             {
-                canvas.enabled = false;
+                crateRef = hit.transform.gameObject.GetComponent<Crate>();
+                if (!crateRef.hasBeenOpened && GetDistanceToObject(crateRef.transform) <= interactRange)
+                    crateRef.canBeOpened = true;
+            }
+            else
+            {
+                if (itemRef != null)
+                {
+                    itemRef.isPointed = false;
+                }
+                if (crateRef != null)
+                {
+                    crateRef.canBeOpened = false;
+                }
             }
         }
     }
-
+    private float GetDistanceToObject(Transform obj)
+    {
+        return Vector3.Distance(transform.position, obj.position);
+    }
     private void ListenDropInput()
     {
         if (Input.GetKeyDown(KeyCode.Q))

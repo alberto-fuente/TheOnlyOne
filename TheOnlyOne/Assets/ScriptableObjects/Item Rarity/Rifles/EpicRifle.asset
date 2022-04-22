@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: EpicRifle
   prefab: {fileID: 1581618984743321317, guid: 357a3785ea6acc8458b92ce20c70aec4, type: 3}
-  multiplier: 1.7
+  multiplier: 3
   Minprobabilty: 80
   Maxprobabilty: 94

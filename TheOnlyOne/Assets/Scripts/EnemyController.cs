@@ -7,15 +7,4 @@ public class EnemyController : MonoBehaviour
     public EnemyIA enemyIA;
     public HealthSystem healthSystem;
     public EnemyWeapons weapon;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

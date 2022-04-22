@@ -33,16 +33,17 @@ public class PlayerController : MonoBehaviour
         {
             healthSystem.HealShield(15);
         }
-        /*hurtAnimator.SetInteger("health", health);
 
-        if (hasTimePowerUp)
-        {
-            speed = 18;
+            /*hurtAnimator.SetInteger("health", health);
+
+            if (hasTimePowerUp)
+            {
+                speed = 18;
+            }
+            else
+            {
+                speed = 10;
+            }*/
         }
-        else
-        {
-            speed = 10;
-        }*/
-    }
     
 }

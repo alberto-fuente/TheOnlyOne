@@ -129,7 +129,7 @@ public class EnemyIA : MonoBehaviour
                             if (Random.value <= hitProbability)
                             {
                                 targetHealthSystem.Damage(Random.Range(minHitDamage, maxHitDamage));
-                                audioSource.PlayOneShot(laser, 0.1f);
+                                audioSource.PlayOneShot(laser, 0.05f);
 
                             }
                             Invoke(nameof(ResetAttack), attackDelay);

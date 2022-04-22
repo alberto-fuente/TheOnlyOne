@@ -11,7 +11,6 @@ public class Weapon : MonoBehaviour
     public Transform cameraHolder;
     public Camera weaponCam;
     public Camera playerCam;
-    public PlayerMove playerMove;
     public AudioSource audioSource;
     private Recoil recoilScript;
     private VisualRecoil viusalRecoilScript;
@@ -27,7 +26,7 @@ public class Weapon : MonoBehaviour
     Transform aimState;
     public Transform prefabContainer;
     public ParticleSystem muzzleFlash;
-    //public bool isSafe;
+
     private void Awake()
     {
         gameManager = FindObjectOfType<GameManager>();
@@ -37,7 +36,6 @@ public class Weapon : MonoBehaviour
         weaponChanger = FindObjectOfType<ItemHolder>();
         audioSource = GetComponent<AudioSource>();
         recoilScript = FindObjectOfType<Recoil>();
-        playerMove = FindObjectOfType<PlayerMove>();
         viusalRecoilScript = GetComponent<VisualRecoil>();
         anchor = transform.Find("Anchor");
         hipState = transform.Find("States/Hip");
@@ -203,17 +201,18 @@ public class Weapon : MonoBehaviour
             viusalRecoilScript.VisualRecoilFire(weaponData.vRecoilRotation, weaponData.vRecoilKickBack);
         }
 
-
+        currentAmmo--;
+        nextTimeToFire = 0;
         RaycastHit hit;
+        Physics.Raycast(weaponCam.transform.position, weaponCam.transform.forward, out hit, weaponData.range);
+        /*Decal
         if (Physics.Raycast(weaponCam.transform.position, weaponCam.transform.forward, out hit, weaponData.range))
         {
             GameObject decal = Instantiate(weaponData.bulletDecal, hit.point + (hit.normal * 0.025f), Quaternion.FromToRotation(Vector3.up, hit.normal)) as GameObject;//se instancia el decal
                                                                                                                                                                //Se rota el decal para adaptarse a la superficie
             decal.transform.parent = hit.transform;//el decal se "pega" al objeto con el que impacte
             Destroy(decal, 10f);//Se destruye el decal a los 10 segundos
-        }
-        currentAmmo--;
-        nextTimeToFire = 0;
+        }*/
         if (hit.transform != null)
         {
             CheckEnemyHit(hit);
@@ -229,8 +228,8 @@ public class Weapon : MonoBehaviour
             enemyHealthSystem = hit.transform.gameObject.GetComponentInParent<HealthSystem>();
         if (enemyHealthSystem != null)
         {
-            float damage = weaponData.damage * rarityData.multiplier;
-            enemyHealthSystem.Damage((int)damage);
+            int damage = weaponData.damage * rarityData.multiplier;
+            enemyHealthSystem.Damage(damage);
             return true;
         }
         return false;

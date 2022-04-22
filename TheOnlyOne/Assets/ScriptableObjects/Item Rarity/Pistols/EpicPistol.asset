@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: EpicPistol
   prefab: {fileID: 8247633700974616963, guid: 2acd6840bfae1bc488d5ea6ec1a9b751, type: 3}
-  multiplier: 1.7
+  multiplier: 3
   Minprobabilty: 80
   Maxprobabilty: 94

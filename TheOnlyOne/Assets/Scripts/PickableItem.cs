@@ -18,6 +18,7 @@ public class PickableItem : MonoBehaviour
     public ItemHolder weaponHolder;
     public GameUtils.TypeOfItem typeOfItem;
 
+    public bool isPointed;
     public bool isEquiped;
     private GameManager gameManager;
     private InventorySlot slot;
@@ -25,7 +26,6 @@ public class PickableItem : MonoBehaviour
     public Canvas LabelCanvas { get => labelCanvas; set => labelCanvas = value; }
 
     public int slotId;
-    public float distanceToPlayer;
     private float headBobTime;
     private float headBobSpeed = 5;
 
@@ -40,16 +40,15 @@ public class PickableItem : MonoBehaviour
         itemRigidBody = GetComponentInChildren<Rigidbody>();
         itemCollider = GetComponentInChildren<Collider>();
         LabelCanvas = transform.GetComponentInChildren<Canvas>();
-        LabelCanvas.enabled = false;
         if (typeOfItem == GameUtils.TypeOfItem.THROWEABLE)
         {
             itemID = GetComponent<Granade>().granadeData.name;
         }
+        itemRigidBody.isKinematic = true;
     }
 
     void Update()
     {
-        distanceToPlayer = Vector3.Distance(transform.position, weaponHolder.transform.position);
         CheckEquiped();
         headBobTime += Time.deltaTime * headBobSpeed;
         if (!isEquiped)
@@ -63,9 +62,8 @@ public class PickableItem : MonoBehaviour
         }else
 
         SetLayerRecursively(gameObject, isEquiped ? 7 : 12);
-
     }
-
+    
     public static void SetLayerRecursively(GameObject gameObject, int layer)
     {
         foreach (Transform transform in gameObject.GetComponentsInChildren<Transform>(true))
@@ -91,7 +89,17 @@ public class PickableItem : MonoBehaviour
     }
     public void CheckEquiped()
     {
-        itemRigidBody.isKinematic = isEquiped;
+        if (isPointed)
+        {
+            labelCanvas.enabled = true;
+            GetComponentInChildren<Outline>().enabled = true;
+        }
+        else
+        {
+            labelCanvas.enabled = false;
+            GetComponentInChildren<Outline>().enabled = false;
+        }
+        //itemRigidBody.isKinematic = isEquiped;
         itemCollider.isTrigger = isEquiped;
         if (typeOfItem.Equals(GameUtils.TypeOfItem.GUN))
         {

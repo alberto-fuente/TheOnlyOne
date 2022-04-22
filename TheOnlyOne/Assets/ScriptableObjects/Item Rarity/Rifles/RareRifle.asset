@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: RareRifle
   prefab: {fileID: 3734686458158196455, guid: b7c2d57fa865ee1458a31d55545f540c, type: 3}
-  multiplier: 1.3
+  multiplier: 2
   Minprobabilty: 50
   Maxprobabilty: 79

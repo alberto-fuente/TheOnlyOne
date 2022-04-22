@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: EpicSubfusil
   prefab: {fileID: 1839468706238409700, guid: 02c9d75307b9dc84b8a7b543605e8249, type: 3}
-  multiplier: 0.7
+  multiplier: 3
   Minprobabilty: 80
   Maxprobabilty: 94

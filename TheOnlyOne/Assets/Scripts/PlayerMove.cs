@@ -16,9 +16,9 @@ public class PlayerMove : MonoBehaviour
     private float headBobTime;
     //private float idleTime;
     public float headBobAmplitude=0.005f;
-    public float headBobSpeed;
-    public float headBobAimDividerX;
-    public float headBobAimDividerY;
+    float headBobSpeed;
+    float headBobAimDividerX;
+    float headBobAimDividerY;
     Vector3 targetBobPosition;
     [SerializeField] Transform orientation;
     //input
@@ -46,8 +46,8 @@ public class PlayerMove : MonoBehaviour
     private Rigidbody rb;
     public Transform mesh;
     //Scale and direction
-    public Vector3 standScale = new Vector3(1, 1f, 1);
-    public Vector3 crouchScale=new Vector3(1,0.5f,1);
+    public Vector3 standScale = new Vector3(1, 2f, 1);
+    public Vector3 crouchScale=new Vector3(1,0.7f,1);
     Vector3 moveDirection;
     public Transform cameraRot;
     public Vector3 crouchedCamPos;
@@ -56,7 +56,7 @@ public class PlayerMove : MonoBehaviour
     public bool readyToJump=true;
     public float jumpCooldown=0.6f;
     //slide
-    public float slideForce = 400;
+    public float slideForce = 600;
     //Drag
     public float defaultDrag = 10f;
     public float airDrag = 2f;

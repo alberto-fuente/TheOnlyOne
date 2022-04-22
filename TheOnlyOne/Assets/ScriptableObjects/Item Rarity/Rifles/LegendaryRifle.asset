@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: LegendaryRifle
   prefab: {fileID: 1581618984743321317, guid: fadb491c78691a841820c081879d95b1, type: 3}
-  multiplier: 2
+  multiplier: 4
   Minprobabilty: 95
   Maxprobabilty: 99

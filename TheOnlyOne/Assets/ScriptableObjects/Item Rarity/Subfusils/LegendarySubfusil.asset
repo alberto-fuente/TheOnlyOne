@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: LegendarySubfusil
   prefab: {fileID: 1839468706238409700, guid: a76d9981d78087749a630c9ddda8917a, type: 3}
-  multiplier: 2
+  multiplier: 4
   Minprobabilty: 95
   Maxprobabilty: 99

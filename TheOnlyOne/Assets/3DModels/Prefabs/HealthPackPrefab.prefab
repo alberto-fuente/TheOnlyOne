@@ -10,11 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2443405433640324341}
   - component: {fileID: -8907733796201788527}
-  - component: {fileID: 7177552786601677870}
   - component: {fileID: 4443713271800536761}
   m_Layer: 0
   m_Name: HealthPackPrefab
-  m_TagString: Untagged
+  m_TagString: Grab
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46,19 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   packName: Health
---- !u!65 &7177552786601677870
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2443405433640292565}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.8646232, y: 0.45278138, z: 0.52809733}
-  m_Center: {x: 0.0070319767, y: -0.0015716999, z: 0.0029797256}
 --- !u!95 &4443713271800536761
 Animator:
   serializedVersion: 3
