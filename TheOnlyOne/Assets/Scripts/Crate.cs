@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Crate : MonoBehaviour
 {
+    private GameManager gameManager;
    //[SerializeField] private Transform plate;
     public Transform[] spawnPoints;
-    public GameObject[] spawnableItems;
+
     //Visual
     public Animator animator;
     private AudioSource audioSource;
@@ -20,6 +21,7 @@ public class Crate : MonoBehaviour
     private Canvas labelCanvas;
     void Start()
     {
+        gameManager = FindObjectOfType<GameManager>();
         labelCanvas = transform.GetComponentInChildren<Canvas>();
         labelCanvas.enabled = false;
         GetComponent<Renderer>().material.SetColor("_EmissionColor", closedColor);
@@ -41,7 +43,7 @@ public class Crate : MonoBehaviour
                 {
                     foreach (Transform point in spawnPoints)
                     {
-                        Instantiate(spawnableItems[Random.Range(0, spawnableItems.Length)], point.position, point.rotation, point);
+                        Instantiate(gameManager.spawnableItems[Random.Range(0, gameManager.spawnableItems.Length)], point.position, point.rotation, point);
                     }
                     GetComponent<Renderer>().material.SetColor("_EmissionColor", openedColor);
                     animator.Play("Open");

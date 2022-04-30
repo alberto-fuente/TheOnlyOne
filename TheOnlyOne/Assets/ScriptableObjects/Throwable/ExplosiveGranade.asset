@@ -25,7 +25,7 @@ MonoBehaviour:
   radius: 10
   explosionForce: 500
   throwForce: 30
-  damage: 80
+  damage: 100
   explosionEffect: {fileID: 4490500517945182438, guid: 7194951d704d74147bed7da4af8a4ad9, type: 3}
   throwSound: {fileID: 8300000, guid: 5715752c0257f794686d6d5d47461ea2, type: 3}
   counterSound: {fileID: 8300000, guid: d6d9abc29ecbe0b4683dc2c77bbf33a3, type: 3}

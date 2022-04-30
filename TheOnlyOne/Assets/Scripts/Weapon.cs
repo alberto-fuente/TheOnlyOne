@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
@@ -18,14 +17,16 @@ public class Weapon : MonoBehaviour
     private GameManager gameManager;
     public int currentAmmo;
     public int totalAmmo;
-    private float nextTimeToFire = 0f;
-    public bool isReloading = false;
+    private float nextTimeToFire;
+    public bool isReloading;
     public bool isAming;
     Transform anchor;
     Transform hipState;
     Transform aimState;
     public Transform prefabContainer;
     public ParticleSystem muzzleFlash;
+    const int HEADSHOTMULTIPLIER = 2;
+
 
     private void Awake()
     {
@@ -43,9 +44,9 @@ public class Weapon : MonoBehaviour
         prefabContainer = transform.Find("Anchor/Design");
         GenerateWeapon();
         Transform[] weaponChildren = GetComponentsInChildren<Transform>();
-        foreach(Transform child in weaponChildren)
+        foreach (Transform child in weaponChildren)
         {
-            if(child.name.Equals("MuzzleFlash")) muzzleFlash=child.GetComponent<ParticleSystem>();
+            if (child.name.Equals("MuzzleFlash")) muzzleFlash = child.GetComponent<ParticleSystem>();
         }
     }
     void Start()
@@ -99,7 +100,7 @@ public class Weapon : MonoBehaviour
     {
         weaponChanger.OnItemRemoved -= CutReload;
         weaponChanger.OnNewItemSwitched -= CutReload;
-        if(gameManager.hudCrosshair.sprite!=null)
+        if (gameManager.hudCrosshair != null)
             gameManager.hudCrosshair.sprite = null;
     }
     private void FixedUpdate()
@@ -108,13 +109,13 @@ public class Weapon : MonoBehaviour
     }
     void Update()
     {
-        
+
         nextTimeToFire += Time.deltaTime;
         Sway();
         ListenReloadInput();
         ListenAimInput();
         ListenShootInput();
-        
+
     }
     public void ListenReloadInput()
     {
@@ -123,15 +124,16 @@ public class Weapon : MonoBehaviour
             StartCoroutine("Reload");
         }
     }
-    bool CanReload() {
+    bool CanReload()
+    {
         return !isReloading && currentAmmo < weaponData.maxClipAmmo && totalAmmo > 0;//&& gameManager.IsSafeToReload; 
     }
     public void CutReload(object sender, InventoryEventArgs e)
     {
-        if(audioSource!=null)
-        audioSource.Stop();
-        if(gameObject!=null)
-        StopCoroutine("Reload");
+        if (audioSource != null)
+            audioSource.Stop();
+        if (gameObject != null)
+            StopCoroutine("Reload");
         isReloading = false;
 
     }
@@ -153,7 +155,7 @@ public class Weapon : MonoBehaviour
             currentAmmo = weaponData.maxClipAmmo;
         }
         isReloading = false;
-        
+
     }
     private void ListenAimInput()
     {
@@ -187,7 +189,7 @@ public class Weapon : MonoBehaviour
         if (weaponData.anim != null) weaponData.anim.SetTrigger("Shoot");
         audioSource.pitch = Random.Range(weaponData.pitch - weaponData.pitchRand, weaponData.pitch + weaponData.pitchRand);
         audioSource.PlayOneShot(weaponData.shootSound, 0.3f);
-        if(muzzleFlash!=null) muzzleFlash.Play();
+        if (muzzleFlash != null) muzzleFlash.Play();
 
         //recoil
         if (isAming)
@@ -213,7 +215,7 @@ public class Weapon : MonoBehaviour
             decal.transform.parent = hit.transform;//el decal se "pega" al objeto con el que impacte
             Destroy(decal, 10f);//Se destruye el decal a los 10 segundos
         }*/
-        if (hit.transform != null)
+        if (hit.transform)
         {
             CheckEnemyHit(hit);
             //Destroy(hit.transform.gameObject);
@@ -223,13 +225,20 @@ public class Weapon : MonoBehaviour
     }
     private bool CheckEnemyHit(RaycastHit hit)
     {
-        HealthSystem enemyHealthSystem=null;
-        if (hit.transform.CompareTag("Enemy"))
-            enemyHealthSystem = hit.transform.gameObject.GetComponentInParent<HealthSystem>();
-        if (enemyHealthSystem != null)
+        var hitBox = hit.collider.GetComponent<EnemyHitBox>();
+        if (hitBox)
         {
-            int damage = weaponData.damage * rarityData.multiplier;
-            enemyHealthSystem.Damage(damage);
+            hitBox.healthSystem.waslastHitHead = false;//reiniciamos la variable
+            if (hitBox.CompareTag("Head"))//Headshot
+            {
+                hitBox.healthSystem.waslastHitHead = true;
+                hitBox.OnHit(weaponData.damage * rarityData.multiplier * HEADSHOTMULTIPLIER);
+                audioSource.PlayOneShot(gameManager.headshotSound, 0.2f);
+            }
+            else
+            {
+                hitBox.OnHit(weaponData.damage * rarityData.multiplier);
+            }
             return true;
         }
         return false;

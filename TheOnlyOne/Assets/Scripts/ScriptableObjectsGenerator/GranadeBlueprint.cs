@@ -26,9 +26,12 @@ public class GranadeBlueprint : ScriptableObject
     [Space]
     [Header("VFX")]
     public GameObject explosionEffect;
+    public GameObject icePilar;
+    public GameObject icePilarFragmented;
     public AudioClip throwSound;
     public AudioClip counterSound;
     public AudioClip explodeSound;
+    public AudioClip freezelessSound;
 
 
 }

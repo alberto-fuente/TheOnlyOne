@@ -1,52 +1,43 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+
 public class HealthSystem : MonoBehaviour
 {
-    public event EventHandler OnDamaged;
-    public event EventHandler OnHealthHealed;
-    public event EventHandler OnShieldHealed;
-    public event EventHandler OnShieldDestroyed;
+    public event EventHandler<HealthArgs> OnDamaged;
+    public event EventHandler<HealthArgs> OnHealthHealed;
+    public event EventHandler<HealthArgs> OnShieldHealed;
+    public event EventHandler<HealthArgs> OnShieldDestroyed;
     public event EventHandler OnDead;
 
-    [SerializeField] private int maxHealth=100;
-    [SerializeField] private int maxShield=60;
+    [SerializeField] const int MAXHEALTH = 100;
+    [SerializeField] const int MAXSHIELD = 100;
 
     int currentHealth;
     int currentShield;
 
-    bool isDead;
+    public bool isDead;
+    public bool waslastHitHead;
     public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
     public int CurrentShield { get => currentShield; set => currentShield = value; }
-    public int MaxHealth { get => maxHealth; }
-    public int MaxShield { get => maxShield; }
+    public int MaxHealth { get => MAXHEALTH; }
+    public int MaxShield { get => MAXSHIELD; }
 
     private void Awake()
     {
         CurrentHealth = MaxHealth;
         CurrentShield = MaxShield;
     }
-    private void Update()
-    {
-        if (currentHealth <= 0&&!isDead)
-        {
-            Die();
-        }
-
-    }
     public void HealHealth(int amount)
     {
         CurrentHealth += amount;
-        if (CurrentHealth >MaxHealth) CurrentHealth = MaxHealth;
-        if (OnHealthHealed != null) OnHealthHealed(this, EventArgs.Empty);
+        if (CurrentHealth > MaxHealth) CurrentHealth = MaxHealth;
+        if (OnHealthHealed != null) OnHealthHealed(this, new HealthArgs(amount));
     }
     public void HealShield(int amount)
     {
         CurrentShield += amount;
         if (CurrentShield > MaxShield) CurrentShield = MaxShield;
-        if (OnShieldHealed != null) OnShieldHealed(this, EventArgs.Empty);
+        if (OnShieldHealed != null) OnShieldHealed(this, new HealthArgs(amount));
     }
     public void Damage(int amount)
     {
@@ -55,21 +46,23 @@ public class HealthSystem : MonoBehaviour
         if (CurrentShield < 0)
         {
             CurrentShield = 0;
-            if (OnShieldDestroyed != null) OnShieldDestroyed(this, EventArgs.Empty);
+            if (OnShieldDestroyed != null) OnShieldDestroyed(this, new HealthArgs(amount));
             CurrentHealth -= Mathf.Abs(dif);
         }
+
+        if (OnDamaged != null) OnDamaged(this, new HealthArgs(amount));
 
         if (CurrentHealth < 0)
         {
             CurrentHealth = 0;
-            if (OnDead != null) OnDead(this, EventArgs.Empty);
+            if (!isDead) Die();
         }
-        if (OnDamaged != null) OnDamaged(this, EventArgs.Empty);
+        
     }
     public void Die()
     {
         isDead = true;
-        Destroy(gameObject);
+        if (OnDead != null) OnDead(this, EventArgs.Empty);
     }
     public float GetHealthNormalized()
     {

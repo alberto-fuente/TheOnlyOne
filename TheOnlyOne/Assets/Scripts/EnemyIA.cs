@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemyIA : MonoBehaviour
 {
+    private EnemyController enemyController;
     private enum State
     {
         Wander,
@@ -22,33 +21,29 @@ public class EnemyIA : MonoBehaviour
 
     public bool isFrozen;
 
-    public float attackDelay;
     bool isAttacking;
-
+    public bool isHurted;
     bool entityInSightRange;
-    private float sightRange=10;
 
-    [Range(0,360)]
-    private float sightAngle=60;
+    [Range(0, 360)]
+    private float sightAngle = 60;
 
     bool entityInAttackRange;
-    private float attackRange=3;
 
-    private float stopChasingRange = 40;
 
     public GameObject target;
     HealthSystem targetHealthSystem;
 
+    public Animator animatorController;
     Collider[] entitiesInRange = new Collider[100];
-    private int minHitDamage = 3;
-    private int maxHitDamage = 10;
-    private float hitProbability = 0.5f;
+    public bool hurt;
     public bool destinationSet;
     [SerializeField] State state;
     public NavMeshAgent agent;
     //temporal
     private AudioSource audioSource;
-    public AudioClip laser;
+
+    GameObject player;//Referencia al jugador para perseguirle cuendo le dispare
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -56,10 +51,13 @@ public class EnemyIA : MonoBehaviour
     }
     private void Start()
     {
+
+        enemyController = GetComponent<EnemyController>();
+        animatorController = enemyController.enemyPrefab.GetComponentInChildren<Animator>();
         wanderPosition = GetWanderPosition(transform.position);
         audioSource = GetComponent<AudioSource>();
         scanInterval = 1f / scanFrecuency;
-
+        player = GameObject.FindGameObjectWithTag("Player");
     }
     private void Update()
     {
@@ -70,94 +68,123 @@ public class EnemyIA : MonoBehaviour
 
         //sightAngle += transform.eulerAngles.y;
         //new Vector3(Mathf.Sin(sightAngle * Mathf.Deg2Rad), 0, Mathf.Cos(sightAngle * Mathf.Deg2Rad));
-
-        scanTimer -= Time.deltaTime;
-        if (scanTimer < 0)
+        if (!isHurted)
         {
-            scanTimer += scanInterval;
-            target = FindTarget(sightRange);
-            if (target != null)
+            scanTimer -= Time.deltaTime;
+            if (scanTimer < 0)
             {
-                entityInSightRange = true;
-                entityInAttackRange = Vector3.Distance(transform.position, target.transform.position) < attackRange;
+                scanTimer += scanInterval;
+                //if(target==null)
+                target = FindTarget(enemyController.enemyData.sightRange);
+                if (target != null)
+                {
+                    entityInSightRange = true;
+                    entityInAttackRange = Vector3.Distance(transform.position, target.transform.position) < enemyController.enemyData.attackRange;
+                }
             }
-        }
 
-        if (entityInAttackRange) state = State.AttackTarget;
-        else if (entityInSightRange) state = State.ChaseTarget;
-        else state = State.Wander;
+            if (entityInAttackRange) state = State.AttackTarget;
+            else if (entityInSightRange) state = State.ChaseTarget;
+            else state = State.Wander;
 
-        targetSet = target != null;
-        if (!isFrozen)
-        {
-            switch (state)
+            targetSet = target != null;
+            if (!isFrozen)
             {
-                case State.Wander:
-                    agent.isStopped = false;
-                    float destination = 1f;
-                    if (!destinationSet || Vector3.Distance(transform.position, wanderPosition) < destination)
-                    {
-                        wanderPosition = GetWanderPosition(transform.position);
-                    }
-                    destinationSet = agent.SetDestination(wanderPosition);
-
-                    break;
-                case State.ChaseTarget:
-                    agent.isStopped = false;
-                    if (target != null)
-                    {
-                        agent.SetDestination(target.transform.position);
-                        transform.LookAt(target.transform.position);
-                        if (Vector3.Distance(transform.position, target.transform.position) > stopChasingRange)
+                animatorController.SetBool("Frozen", false);
+                switch (state)
+                {
+                    case State.Wander:
+                        animatorController.SetInteger("State", 1);//Walk
+                        agent.isStopped = false;
+                        float destination = 1f;
+                        if (!destinationSet || Vector3.Distance(transform.position, wanderPosition) < destination)
                         {
+                            wanderPosition = GetWanderPosition(transform.position);
+                        }
+                        destinationSet = agent.SetDestination(wanderPosition);
+
+                        break;
+                    case State.ChaseTarget:
+                        animatorController.SetInteger("State", 2);//Run
+                        agent.isStopped = false;
+                        if (target != null)
+                        {
+                            agent.SetDestination(target.transform.position);
+                            transform.LookAt(target.transform.position);
+                            if (Vector3.Distance(transform.position, target.transform.position) > enemyController.enemyData.stopChasingRange)
+                            {
+                                entityInSightRange = false;
+                                entityInAttackRange = false;
+                            }
+                        }
+                        else
                             entityInSightRange = false;
+                        break;
+                    case State.AttackTarget:
+                        animatorController.SetInteger("State", 3);
+                        agent.isStopped = true;
+                        if (target != null)
+                        {
+                            targetHealthSystem = target.GetComponentInParent<HealthSystem>();
+                            var lookPos = target.transform.position - transform.position;
+                            lookPos.y = 0;
+                            var rotation = Quaternion.LookRotation(lookPos);
+                            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 2);
+                            if (!isAttacking && targetHealthSystem != null)
+                            {
+                                isAttacking = true;
+                                if (Random.value <= enemyController.enemyData.hitProbability)
+                                {
+
+                                    animatorController.SetTrigger("Shoot");
+                                    targetHealthSystem.Damage(Random.Range(enemyController.enemyData.minDamage, enemyController.enemyData.maxDamage));
+                                    audioSource.PlayOneShot(enemyController.enemyData.shootSound, 0.2f);
+
+
+                                }
+                                Invoke(nameof(ResetAttack), enemyController.enemyData.attackDelay);
+                            }
+                        }
+                        else
+                        {
                             entityInAttackRange = false;
                         }
-                    }
-                    else
-                        entityInSightRange = false;
-                    break;
-                case State.AttackTarget:
-                    agent.isStopped = true;
-                    if (target != null)
-                    {
-                        targetHealthSystem = target.GetComponentInParent<HealthSystem>();
-                        transform.LookAt(target.transform.position);
-                        if (!isAttacking && targetHealthSystem != null)
-                        {
-                            isAttacking = true;
-                            if (Random.value <= hitProbability)
-                            {
-                                targetHealthSystem.Damage(Random.Range(minHitDamage, maxHitDamage));
-                                audioSource.PlayOneShot(laser, 0.05f);
-
-                            }
-                            Invoke(nameof(ResetAttack), attackDelay);
-                        }
-                    }
-                    else
-                    {
-                        entityInAttackRange = false;
-                    }
-                    break;
+                        break;
+                    default:
+                        agent.isStopped = true;
+                        break;
+                }
             }
+            else//congelado
+            {
+                //animatorController.SetInteger("State", 0);
+                animatorController.SetBool("Frozen", true);
+                agent.isStopped = true;
+            }
+
+
+
         }
         else
+        {
             agent.isStopped = true;
-       
-       
+            //perseguir al jugador
+            entityInSightRange = true;
+            target = player;
+        }
     }
+
     private GameObject FindTarget(float range)
     {
         int enemyLayer = 14;
         int temporaryIgnoreLayer = 0;
-        
+
         int numberOfEntitiesInRange;
 
-        transform.GetChild(0).gameObject.layer = temporaryIgnoreLayer;//evitar colisionar consigo mismo
+        enemyController.enemyPrefab.layer = temporaryIgnoreLayer;//evitar colisionar consigo mismo
         numberOfEntitiesInRange = Physics.OverlapSphereNonAlloc(transform.position, range, entitiesInRange, whatIsEntity);
-        transform.GetChild(0).gameObject.layer = enemyLayer;
-        
+        enemyController.enemyPrefab.layer = enemyLayer;
+
         Collider closestTarget = null;
         if (numberOfEntitiesInRange > 0)
         {
@@ -166,7 +193,7 @@ public class EnemyIA : MonoBehaviour
                 if (coll == null) break;
                 if (coll.gameObject.layer == 11)//Player
                 {
-                    closestTarget= coll;
+                    closestTarget = coll;
                     break;
                 }
                 closestTarget = coll;
@@ -183,16 +210,14 @@ public class EnemyIA : MonoBehaviour
     }
     private Vector3 GetWanderPosition(Vector3 currentPosition)
     {
-        Vector3 randomDirection= new Vector3(UnityEngine.Random.Range(-1f, 1f),0, UnityEngine.Random.Range(-1f, 1f)).normalized;
-        Vector3 newDestination= currentPosition + randomDirection * Random.Range(10f, 70f);
+        Vector3 randomDirection = new Vector3(UnityEngine.Random.Range(-1f, 1f), 0, UnityEngine.Random.Range(-1f, 1f)).normalized;
+        Vector3 newDestination = currentPosition + randomDirection * Random.Range(10f, 70f);
         return newDestination;
         /* if (Physics.Raycast(newDestination, -transform.up, 2f, whatIsGround))
          {
              destinationSet = true;
              return newDestination; 
          }*/
-
-
     }
-  
+
 }

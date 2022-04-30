@@ -78,7 +78,7 @@ GameObject:
   - component: {fileID: 919132148218972512}
   m_Layer: 0
   m_Name: crate
-  m_TagString: Untagged
+  m_TagString: Crate
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -216,14 +216,6 @@ MonoBehaviour:
   - {fileID: 6982909003004260723}
   - {fileID: 6896074673606691916}
   - {fileID: 1621161834119725046}
-  spawnableItems:
-  - {fileID: 8870931787838259520, guid: 005b746513b7ce24aa7ebd8957cf193d, type: 3}
-  - {fileID: 2736688927727232572, guid: df0556d1c7e849449adc0183fe40b129, type: 3}
-  - {fileID: 2377728429118372897, guid: 84fbe398cb2c69148b747cc921c46b7a, type: 3}
-  - {fileID: 2443405433640292565, guid: fc8164841e4dd9040b176f7fb582ce90, type: 3}
-  - {fileID: 7214342114894322236, guid: 822737f75e0ffd5438f8445123765017, type: 3}
-  - {fileID: 5874444639856154749, guid: 294d7c48490280d4991c72b35e3d6b7f, type: 3}
-  - {fileID: 488620423843621853, guid: 899c7fb69575f3c4e8f9b430f88bf6b3, type: 3}
   animator: {fileID: 2783477376037301112}
   openSound: {fileID: 8300000, guid: b7b79d0362e308048818c55fa25988f1, type: 3}
   smoke: {fileID: 1034304074789696066}

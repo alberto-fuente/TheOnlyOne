@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Pack : MonoBehaviour
 {
-    [SerializeField] private string packName;
+    public string packName;//cambiarlo por un enum con los tipos de packs que hay
     private GameManager gameManager;
     private ItemRarityBlueprint packData;
     private HealthSystem healthSystem;
@@ -45,25 +43,17 @@ public class Pack : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(packName.Equals("Health")|| packName.Equals("Armor"))
+        if (other.CompareTag("Player"))
         {
-            if (other.CompareTag("Player") || other.CompareTag("Enemy"))
-            {
-                Collect(other,packName);
-            }
-        }
-        else if (packName.Equals("Ammo")){
-            if (other.CompareTag("Player"))
-            {
-                Collect(other,packName);
-            }
+            Collect(other, packName);
         }
     }
-    void Collect(Collider collector,string packName)
+    public void Collect(Collider collector, string packName)
     {
         switch (packName)
         {
             case "Ammo":
+
                 ItemHolder itemHolder = collector.gameObject.GetComponentInParent<PlayerController>().itemHolder;
                 foreach (InventorySlot slot in itemHolder.inventory)
                 {
@@ -83,6 +73,7 @@ public class Pack : MonoBehaviour
                     * Common: +100
                     */
                 healthSystem.HealHealth(healthSystem.MaxHealth / 4 * (int)packData.multiplier);
+                Debug.Log(healthSystem.MaxHealth / 4 * (int)packData.multiplier);
                 break;
             case "Armor":
                 healthSystem = collector.gameObject.GetComponentInParent<HealthSystem>();
@@ -95,7 +86,7 @@ public class Pack : MonoBehaviour
                 healthSystem.HealShield(healthSystem.MaxShield / 4 * packData.multiplier);
                 break;
         }
-        
+
         Destroy(gameObject);
     }
 }

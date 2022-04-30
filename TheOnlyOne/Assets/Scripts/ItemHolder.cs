@@ -28,6 +28,7 @@ public class ItemHolder : MonoBehaviour
 
     private PickableItem itemRef=null;
     private Crate crateRef = null;
+    private Pack packRef = null;
     public bool IsChanging { get => isChanging; private set => isChanging = value; }
 
     private void Start()
@@ -135,6 +136,14 @@ public class ItemHolder : MonoBehaviour
                 crateRef = hit.transform.gameObject.GetComponent<Crate>();
                 if (!crateRef.hasBeenOpened && GetDistanceToObject(crateRef.transform) <= interactRange)
                     crateRef.canBeOpened = true;
+            }
+            else if (hit.transform.CompareTag("Pack"))
+            {
+                packRef = hit.transform.gameObject.GetComponent<Pack>();
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    packRef.Collect(FindObjectOfType<PlayerController>().GetComponentInChildren<Collider>(), packRef.packName);
+                }
             }
             else
             {

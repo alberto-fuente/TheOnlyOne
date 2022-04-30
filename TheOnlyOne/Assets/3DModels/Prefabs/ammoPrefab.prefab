@@ -10,11 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 6308892152559323300}
   - component: {fileID: 8483506709042541862}
-  - component: {fileID: 8348272154463011080}
   - component: {fileID: 2669225313109342395}
+  - component: {fileID: -2409142893570782778}
+  - component: {fileID: -7050047368883931638}
   m_Layer: 0
   m_Name: ammoPrefab
-  m_TagString: Grab
+  m_TagString: Pack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46,25 +47,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   packName: Ammo
---- !u!95 &8348272154463011080
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5874444639856154749}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 933b3221a44e0884b8ee0aff3935d3a6, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!54 &2669225313109342395
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -73,11 +55,37 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5874444639856154749}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!135 &-2409142893570782778
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5874444639856154749}
+  m_Material: {fileID: 13400000, guid: 6837e0af30bea2c44bcac7fb575bd0c7, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.7
+  m_Center: {x: 0.0000032931573, y: -0.0000008940696, z: -0.00055903953}
+--- !u!135 &-7050047368883931638
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5874444639856154749}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.8
+  m_Center: {x: 0.0000032931573, y: -0.0000008940696, z: -0.00055903953}

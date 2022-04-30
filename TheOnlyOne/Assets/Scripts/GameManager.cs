@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public Text fpsText;
     public TMP_Text currentAmmoText;
     public TMP_Text totalAmmoText;
+    public AudioClip headshotSound;
 
     public ItemRarityBlueprint[] rarityDataPistols;
     public ItemRarityBlueprint[] rarityDataSubfusils;
@@ -29,6 +30,10 @@ public class GameManager : MonoBehaviour
     public ItemRarityBlueprint[] rarityPackArmor;
 
     public GranadeBlueprint[] granadeTypes;
+
+    public EnemyBlueprint[] enemyTypes;
+
+    public GameObject[] spawnableItems;
 
     public int playersLeft;
     public TMP_Text playersLeftText;

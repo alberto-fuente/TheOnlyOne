@@ -27,6 +27,9 @@ MonoBehaviour:
   throwForce: 30
   damage: 0
   explosionEffect: {fileID: 8364442452020887054, guid: 95fedb81e69d6894ea8e6cd1f0ccdb31, type: 3}
+  icePilar: {fileID: 5842201837764393965, guid: 91305b1dbeb92984882028d53fbcea97, type: 3}
+  icePilarFragmented: {fileID: 5459377548283964892, guid: 0ace67c79ebfa2b49b281951baf28462, type: 3}
   throwSound: {fileID: 8300000, guid: 5715752c0257f794686d6d5d47461ea2, type: 3}
   counterSound: {fileID: 8300000, guid: d6d9abc29ecbe0b4683dc2c77bbf33a3, type: 3}
   explodeSound: {fileID: 8300000, guid: 9dac65bfa4a3f684897805c82aa51798, type: 3}
+  freezelessSound: {fileID: 8300000, guid: 44399cb42b433594bb1495a248d6ee6f, type: 3}

@@ -278,7 +278,6 @@ MonoBehaviour:
   isPointed: 0
   isEquiped: 0
   slotId: 0
-  distanceToPlayer: 0
   originalY: 0
 --- !u!95 &2377728429118372900
 Animator:

@@ -9,9 +9,10 @@ TagManager:
   - FxTemporaire
   - ignore
   - Enemy
-  - AmmoPack
   - Grab
   - Crate
+  - Head
+  - Pack
   layers:
   - Default
   - TransparentFX

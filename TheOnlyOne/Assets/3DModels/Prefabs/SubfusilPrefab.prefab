@@ -100,7 +100,6 @@ MonoBehaviour:
   isPointed: 0
   isEquiped: 0
   slotId: 0
-  distanceToPlayer: 0
   originalY: 0
 --- !u!54 &8105444438195534269
 Rigidbody:
