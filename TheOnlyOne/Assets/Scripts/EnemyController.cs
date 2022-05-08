@@ -10,12 +10,14 @@ public class EnemyController : MonoBehaviour
     public HealthSystem healthSystem;
     public HealthBarFade healthBar;
     private float hurtDelay=1f;
+    private float bigHurtDelay = 2.5f;
     private Animator animatorController;
     public EnemyBlueprint enemyData;
     public GameObject enemyPrefab;
     Rigidbody[] rigidbodies;
     private const int MINITEMSDROP=2;
     private const int MAXITEMSDROP = 5;
+    public PhysicMaterial physicMaterial;
     private void Awake()
     {
         gameManager = FindObjectOfType<GameManager>();
@@ -34,12 +36,13 @@ public class EnemyController : MonoBehaviour
 
     private void Start()
     {
-        animatorController = enemyIA.animatorController;
+        animatorController = enemyPrefab.GetComponentInChildren<Animator>();
         rigidbodies = enemyPrefab.transform.GetComponentsInChildren<Rigidbody>();
         foreach(Rigidbody rb in rigidbodies)
         {
             EnemyHitBox hitBox= rb.gameObject.AddComponent<EnemyHitBox>();
             hitBox.healthSystem = healthSystem;
+            rb.GetComponent<Collider>().material = physicMaterial;
 
         }
         setRigidBodyState(false);
@@ -57,18 +60,21 @@ public class EnemyController : MonoBehaviour
     }
     private void HitAnimate(object sender, HealthArgs damage)
     {
-        int prob = UnityEngine.Random.Range(0, 100);
-        if (prob<30)//30%chance
+        int hitChance = UnityEngine.Random.Range(0, 100);
+        if (hitChance < damage.Amount*100/ Math.Max((healthSystem.CurrentHealth + healthSystem.CurrentShield),1))//cuanto mas daño haga o menos vida tenga, más probabilidad de hacer la animacion (se suma 1 para evitar dividir por 0)
         {
-            if (damage.Amount > 60)
+            if (damage.Amount > 145)
             {
-                animatorController.Play("HipHit");
+                animatorController.Play("BigHit");
+                StartCoroutine(HurtCoroutine(bigHurtDelay));
             }
             else
             {
+                animatorController.SetInteger("HitIndex", UnityEngine.Random.Range(0, 3));
                 animatorController.SetTrigger("Hit");
+                StartCoroutine(HurtCoroutine(hurtDelay));
             }
-            StartCoroutine(HurtCoroutine(hurtDelay));
+            
         }
     }
     IEnumerator HurtCoroutine(float delay)

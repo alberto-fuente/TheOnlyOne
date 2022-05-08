@@ -2,12 +2,16 @@ using UnityEngine;
 
 public class MoveCamera : MonoBehaviour {
 
-    public Transform cameraPos;
+    public Transform origin;
+    public Transform goal;
 
-    void Update() {
-
-        if(cameraPos!=null)
-        transform.position = cameraPos.position;
+    void LateUpdate() {
+        if (!origin)
+        {
+            origin = gameObject.transform;
+        }
+            
+        origin.position = goal.position;
     }
     
 }

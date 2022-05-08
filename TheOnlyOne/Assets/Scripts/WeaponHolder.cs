@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WeaponHolder : MonoBehaviour
 {
-    private List<List<PickableItem>> inventory;
+    private List<List<GrabbableItem>> inventory;
     public Camera playerCam;
     public GameManager gameManager;
     [SerializeField] private AudioClip pickSound;
@@ -23,7 +23,7 @@ public class WeaponHolder : MonoBehaviour
 
     private void Start()
     {
-        inventory = new List<List<PickableItem>>();
+        inventory = new List<List<GrabbableItem>>();
         currentIndex = 0;
     }
 
@@ -85,7 +85,7 @@ public class WeaponHolder : MonoBehaviour
     {
         return inventory.Count;
     }
-    public PickableItem GetCurrentItem()
+    public GrabbableItem GetCurrentItem()
     {
         if (!isEmpty()) return inventory[currentIndex][0];
         return null;
@@ -116,11 +116,11 @@ public class WeaponHolder : MonoBehaviour
     }
     public void RefreshInventory()
     {
-        foreach (List<PickableItem> itemSlot in inventory)
+        foreach (List<GrabbableItem> itemSlot in inventory)
         {
-            foreach (PickableItem item in itemSlot)
+            foreach (GrabbableItem item in itemSlot)
             {
-                item.disableItem();
+                item.DisableItem();
             }
         }
         if (InventorySize() > 0)
@@ -130,13 +130,13 @@ public class WeaponHolder : MonoBehaviour
         //gameManager.IsSafeToReload = true;
  
     }
-    void Pick(PickableItem itemToPick)
+    void Pick(GrabbableItem itemToPick)
     {
         bool newItem = true;
 
         GetComponent<AudioSource>().PlayOneShot(pickSound, 0.3f);
 
-        foreach (List<PickableItem> itemSlot in inventory)
+        foreach (List<GrabbableItem> itemSlot in inventory)
         {
             if (itemSlot[0].itemID.Equals(itemToPick.itemID) && (itemToPick.typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE)))
             {
@@ -154,7 +154,7 @@ public class WeaponHolder : MonoBehaviour
                 else
                 Drop(inventory[currentIndex]);
             }
-            List<PickableItem> itemSlot = new List<PickableItem>();
+            List<GrabbableItem> itemSlot = new List<GrabbableItem>();
             inventory.Add(itemSlot);
             itemSlot.Add(itemToPick);
         }
@@ -168,7 +168,7 @@ public class WeaponHolder : MonoBehaviour
         RefreshInventory();
     }
 
-    public void Drop(PickableItem item)
+    public void Drop(GrabbableItem item)
     {
         //gameManager.IsSafeToReload = false;
         inventory[currentIndex].Remove(item);
@@ -188,9 +188,9 @@ public class WeaponHolder : MonoBehaviour
         RefreshInventory();
     }
 
-    public void Drop(List<PickableItem> itemGroup)
+    public void Drop(List<GrabbableItem> itemGroup)
     {
-        foreach (PickableItem item in itemGroup)
+        foreach (GrabbableItem item in itemGroup)
         {
             Drop(item);
         }

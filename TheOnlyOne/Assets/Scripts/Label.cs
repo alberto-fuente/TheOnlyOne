@@ -1,20 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Label : MonoBehaviour
 {
-    private Transform cameraTransform;
+    //visible
+    private GameObject Canvas;
+    private Outline itemOutline;
+    //info
     public TMP_Text itemName;
-   [SerializeField] private Image background;
-    [SerializeField] private Color backColor = new Color(7f, 0f, 126f, 10f);
-    void Start()
+    public TMP_Text itemType;
+    public Image icon;
+    public TMP_Text stat;
+    public Image background;
+    public Color color;
+
+    public bool isPointed;
+    private void Start()
     {
-        background = GetComponent<Image>();
-        background.color = backColor;
+        Canvas = transform.GetChild(0).gameObject;
+        background.color = color;
+
+        itemOutline = GetComponentInParent<Outline>();
+        itemOutline.OutlineColor = color;
+    }
+    private void Update()
+    {
+        CheckVisible();
+    }
+    private void CheckVisible()
+    {
+        Canvas.SetActive(isPointed);
+        itemOutline.enabled = isPointed;
 
     }
-
 }

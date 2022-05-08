@@ -2,32 +2,56 @@ using UnityEngine;
 
 public class Pack : MonoBehaviour
 {
-    public string packName;//cambiarlo por un enum con los tipos de packs que hay
+    public GameUtils.TypeOfPack type;
     private GameManager gameManager;
-    private ItemRarityBlueprint packData;
+    private ItemRarityBlueprint rarityData;
     private HealthSystem healthSystem;
+    public Label label;
+    private GameObject prefab;
+    private AudioSource audioSource;
 
-    private void Start()
+    private void Awake()
     {
         gameManager = FindObjectOfType<GameManager>();
+        audioSource = GetComponent<AudioSource>();
         GenerateAmmoPack();
+        //label
+        string statText = "";
+        switch (type)
+        {
+            case GameUtils.TypeOfPack.AMMO:
+                statText = "x" + rarityData.multiplier;
+                break;
+            case GameUtils.TypeOfPack.HEALTH:
+                statText = "+" + GameUtils.MAXHEALTH / GameUtils.numberOfRarities * rarityData.multiplier;
+                break;
+            case GameUtils.TypeOfPack.ARMOR:
+                statText = "+" + GameUtils.MAXSHIELD / GameUtils.numberOfRarities * rarityData.multiplier;
+                break;
+        }
+        prefab = GetComponentInChildren<Collider>().gameObject;
+        gameManager.GenerateLabel(prefab.transform,prefab.transform.position+new Vector3(0,0.3f,0), rarityData.name, rarityData.rarity, rarityData.labelIcon, statText, rarityData.color);
+    }
+    private void Start()
+    {
+        label = GetComponentInChildren<Label>();
     }
     private void GenerateAmmoPack()
     {
-        switch (packName)
+        switch (type)
         {
-            case "Ammo":
-                packData = GetRarityPack(gameManager.rarityPackAmmo);
+            case GameUtils.TypeOfPack.AMMO:
+                rarityData = GetRarityPack(gameManager.rarityPackAmmo);
                 break;
-            case "Health":
-                packData = GetRarityPack(gameManager.rarityPackHealth);
+            case GameUtils.TypeOfPack.HEALTH:
+                rarityData = GetRarityPack(gameManager.rarityPackHealth);
                 break;
-            case "Armor":
-                packData = GetRarityPack(gameManager.rarityPackArmor);
+            case GameUtils.TypeOfPack.ARMOR:
+                rarityData = GetRarityPack(gameManager.rarityPackArmor);
                 break;
         }
 
-        Instantiate(packData.prefab, transform);
+        Instantiate(rarityData.prefab, transform);
     }
     ItemRarityBlueprint GetRarityPack(ItemRarityBlueprint[] collection)
     {
@@ -45,45 +69,44 @@ public class Pack : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Collect(other, packName);
+            Collect(other, type);
         }
     }
-    public void Collect(Collider collector, string packName)
+    public void Collect(Collider collector, GameUtils.TypeOfPack type)
     {
-        switch (packName)
+        switch (type)
         {
-            case "Ammo":
-
+            case GameUtils.TypeOfPack.AMMO:
                 ItemHolder itemHolder = collector.gameObject.GetComponentInParent<PlayerController>().itemHolder;
                 foreach (InventorySlot slot in itemHolder.inventory)
                 {
                     if (slot.FirstItem() != null && slot.FirstItem().typeOfItem == GameUtils.TypeOfItem.GUN)
                     {
                         Weapon weapon = slot.FirstItem().gameObject.GetComponent<Weapon>();
-                        weapon.totalAmmo += weapon.weaponData.maxClipAmmo * (int)packData.multiplier;
+                        weapon.totalAmmo += weapon.weaponData.maxClipAmmo * (int)rarityData.multiplier;
                     }
                 }
                 break;
-            case "Health":
+            case GameUtils.TypeOfPack.HEALTH:
                 healthSystem = collector.gameObject.GetComponentInParent<HealthSystem>();
                 /*
                     * Common: +25
                     * Rare: +50
-                    * Common: +75
-                    * Common: +100
+                    * Epic: +75
+                    * Legendary: +100
                     */
-                healthSystem.HealHealth(healthSystem.MaxHealth / 4 * (int)packData.multiplier);
-                Debug.Log(healthSystem.MaxHealth / 4 * (int)packData.multiplier);
+                healthSystem.HealHealth(healthSystem.MaxHealth / 4 * (int)rarityData.multiplier);
+                Debug.Log(healthSystem.MaxHealth / 4 * (int)rarityData.multiplier);
                 break;
-            case "Armor":
+            case GameUtils.TypeOfPack.ARMOR:
                 healthSystem = collector.gameObject.GetComponentInParent<HealthSystem>();
                 /*
-                    * Common: +15
-                    * Rare: +30
-                    * Common: +45
-                    * Common: +60
+                    * Common: +25
+                    * Rare: +50
+                    * Epic: +75
+                    * Legendary: +100
                     */
-                healthSystem.HealShield(healthSystem.MaxShield / 4 * packData.multiplier);
+                healthSystem.HealShield(healthSystem.MaxShield / 4 * rarityData.multiplier);
                 break;
         }
 

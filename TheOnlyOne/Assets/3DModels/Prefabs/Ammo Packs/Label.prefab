@@ -320,7 +320,6 @@ GameObject:
   - component: {fileID: 2439248519534518390}
   - component: {fileID: 2439248519534518385}
   - component: {fileID: 2439248519534518384}
-  - component: {fileID: 2439248519534518389}
   - component: {fileID: 5229231300839218050}
   m_Layer: 13
   m_Name: Label
@@ -394,7 +393,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &2439248519534518390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -450,21 +449,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2439248519534518389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2439248519534518386}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d201fb198e29b594d969c10ab02bc23a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemName: {fileID: 2439248518225836096}
-  background: {fileID: 2439248519534518384}
-  backColor: {r: 0.9622642, g: 0.64438397, b: 0, a: 0}
 --- !u!114 &5229231300839218050
 MonoBehaviour:
   m_ObjectHideFlags: 0

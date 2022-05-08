@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Crate : MonoBehaviour
 {
     private GameManager gameManager;
-   //[SerializeField] private Transform plate;
+    //[SerializeField] private Transform plate;
     public Transform[] spawnPoints;
 
     //Visual
@@ -13,7 +11,7 @@ public class Crate : MonoBehaviour
     private AudioSource audioSource;
     public AudioClip openSound;
     public ParticleSystem smoke;
-    public Color closedColor=new Color(11,191,188)*10;
+    public Color closedColor = new Color(11, 191, 188) * 10;
     public Color openedColor = new Color(191, 11, 11) * 10;
     // Start is called before the first frame update
     public bool canBeOpened;
@@ -22,43 +20,38 @@ public class Crate : MonoBehaviour
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
-        labelCanvas = transform.GetComponentInChildren<Canvas>();
-        labelCanvas.enabled = false;
+        labelCanvas = GetComponentInChildren<Canvas>();
         GetComponent<Renderer>().material.SetColor("_EmissionColor", closedColor);
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
-        
-
     }
 
     // Update is called once per frame
     void Update()
     {
+        CheckLabelVisible();
+    }
+    public void Open()
+    {
+        foreach (Transform point in spawnPoints)
+        {
+            Instantiate(gameManager.spawnableItems[Random.Range(0, gameManager.spawnableItems.Length)], point.position, point.rotation);
+        }
+        GetComponent<Renderer>().material.SetColor("_EmissionColor", openedColor);
+        animator.Play("Open");
+        audioSource.PlayOneShot(openSound);
+        smoke.Play();
+        hasBeenOpened = true;
+    }
+    private void CheckLabelVisible()
+    {
         if (!hasBeenOpened)
         {
-            if (canBeOpened)//el jugador la está mirando
-            {
-                labelCanvas.enabled = true;
-                if (Input.GetKeyDown(KeyCode.E) && canBeOpened)
-                {
-                    foreach (Transform point in spawnPoints)
-                    {
-                        Instantiate(gameManager.spawnableItems[Random.Range(0, gameManager.spawnableItems.Length)], point.position, point.rotation, point);
-                    }
-                    GetComponent<Renderer>().material.SetColor("_EmissionColor", openedColor);
-                    animator.Play("Open");
-                    audioSource.PlayOneShot(openSound);
-                    smoke.Play();
-                    hasBeenOpened = true;
-                    labelCanvas.enabled = false;
-
-                }
-            }
-            else
-            {
-                labelCanvas.enabled = false;
-            }
+            labelCanvas.enabled = canBeOpened;
         }
-        
+        else
+        {
+            labelCanvas.enabled = false;
+        }
     }
 }

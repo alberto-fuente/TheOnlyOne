@@ -13,14 +13,13 @@ MonoBehaviour:
   m_Name: Pistol
   m_EditorClassIdentifier: 
   weaponID: 0
-  weaponName: Gun
-  enemyPrefab: {fileID: 8247633700974616963, guid: 478f80f5199dba346914a60c2c3c25a6, type: 3}
+  weaponName: pistola
   crosshair: {fileID: 21300000, guid: 0bb68d41cd332d746a2ea8c8c6bebc01, type: 3}
-  anim: {fileID: 0}
+  crosshairSizeAim: 1
   maxClipAmmo: 10
   range: 90
   fireRate: 0.33
-  reloadTime: 1.5
+  reloadTime: 2.6
   aimSpeed: 20
   autoShoot: 0
   damage: 15
@@ -38,10 +37,9 @@ MonoBehaviour:
   vRotationRecoilSpeed: 24.5
   vPositionReturnSpeed: 23.3
   vRotationReturnSpeed: 26.04
-  shootSound: {fileID: 8300000, guid: 1c9c2fdead5c1c54aadf99151b744469, type: 3}
-  reloadSound: {fileID: 8300000, guid: edd711667fcd1db4988c376b8b1f577e, type: 3}
+  shootSound: {fileID: 8300000, guid: b9aff0239bf4d494b8ce74f8d18ae381, type: 3}
+  reloadSound: {fileID: 8300000, guid: 54905b366072f6b4aabb54251dd9106b, type: 3}
   pitch: 1
   pitchRand: 0.05
-  bulletDecal: {fileID: 8843144634977441555, guid: fbd92e76c83f9f14c83f5a19ec1e74be, type: 3}
   mainFOV: 80
-  aimFOV: 50
+  aimFOV: 40

@@ -1,7 +1,6 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class ItemHolder : MonoBehaviour
 {
@@ -26,22 +25,31 @@ public class ItemHolder : MonoBehaviour
     [SerializeField] private bool isChanging;
     private float changeDirection;
 
-    private PickableItem itemRef=null;
+    private GrabbableItem itemRef = null;
     private Crate crateRef = null;
     private Pack packRef = null;
     public bool IsChanging { get => isChanging; private set => isChanging = value; }
+    LayerMask layerMask; //evitar que el raycast colisione con un arma equipada
 
+    GameObject arms;
+    private Animator armsAnimator;
     private void Start()
     {
         activeSlotIndex = 0;
         if (OnNewItemSwitched != null) OnNewItemSwitched(this, new InventoryEventArgs(activeSlotIndex));
+        arms = GetComponentInChildren<SkinnedMeshRenderer>().gameObject;
+        armsAnimator = transform.Find("Arms").GetComponent<Animator>();
     }
-
+    private void Awake()
+    {
+        layerMask = ~(1 << 7);
+    }
     private void Update()
     {
         ListenDropInput();
         ListenPickInput();
         ListenChangeInput();
+        CheckArmsVisible();
     }
     public ItemHolder()
     {
@@ -50,11 +58,11 @@ public class ItemHolder : MonoBehaviour
             inventory.Add(new InventorySlot(i));
         }
     }
-    private InventorySlot FindAvailableSlot(PickableItem item)
+    private InventorySlot FindAvailableSlot(GrabbableItem item)
     {
         foreach (InventorySlot slot in inventory)
         {
-            if (slot.IsStackable(item)||slot.IsEmpty())
+            if (slot.IsStackable(item) || slot.IsEmpty())
             {
                 if (activeSlot().IsEmpty())
                 {
@@ -74,7 +82,7 @@ public class ItemHolder : MonoBehaviour
         return activeSlot();
 
     }
-    public void PickItem(PickableItem item)
+    public void PickItem(GrabbableItem item)
     {
         GetComponent<AudioSource>().PlayOneShot(pickSound, 0.3f);
         InventorySlot slot = FindAvailableSlot(item);
@@ -83,21 +91,20 @@ public class ItemHolder : MonoBehaviour
         item.transform.SetParent(transform);
         item.transform.localPosition = Vector3.zero;
         item.transform.localRotation = Quaternion.Euler(Vector3.zero);
-        item.isEquiped = true;
-        item.GetComponent<Rigidbody>().isKinematic = true;
+        //item.isEquiped = true;
+        item.GetComponentInChildren<Rigidbody>().isKinematic = true;
         item.CheckEquiped();
         if (OnItemAdded != null) OnItemAdded(this, new InventoryEventArgs(item, slot.Id));
-        item.disableItem();
+        item.DisableItem();
         RefreshInventory();
     }
-    public void DropItem(PickableItem item)
+    public void DropItem(GrabbableItem item)
     {
         //gameManager.IsSafeToReload = false;
         if (activeSlot().RemoveItem(item))
         {
-            
             item.isEquiped = false;
-            item.GetComponent<Rigidbody>().isKinematic = false;
+            item.GetComponentInChildren<Rigidbody>().isKinematic = false;
             item.transform.parent = null;
             item.CheckEquiped();
 
@@ -105,68 +112,81 @@ public class ItemHolder : MonoBehaviour
             {
                 item.gameObject.GetComponent<Granade>().granadeIdleCollider.enabled = true;
             }
-            else {
+            else
+            {
                 GetComponent<AudioSource>().PlayOneShot(dropSound, 0.3f);
                 item.itemRigidBody.AddForce((playerCam.transform.forward + playerCam.transform.up) * dropForce, ForceMode.Impulse);
             }
             float random = UnityEngine.Random.Range(-1f, 1f);
             item.itemRigidBody.AddTorque(new Vector3(random, random, random) * 10);
-            if (OnItemRemoved != null) OnItemRemoved(this, new InventoryEventArgs(item,activeSlotIndex));
-            
+            if (OnItemRemoved != null) OnItemRemoved(this, new InventoryEventArgs(item, activeSlotIndex));
+
             RefreshInventory();
         }
     }
     private void ListenPickInput()
     {
+        if (itemRef) itemRef.label.isPointed = false;
+        if (packRef) packRef.label.isPointed = false;
+        if (crateRef) crateRef.canBeOpened = false;
         RaycastHit hit;
-        if (Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit))
+        if (Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, interactRange, layerMask))
         {
             if (hit.transform.CompareTag("Grab"))
             {
-                itemRef = hit.transform.gameObject.GetComponent<PickableItem>();
-                if (!itemRef.isEquiped && GetDistanceToObject(itemRef.transform) <= interactRange)
-                    itemRef.isPointed = true;
+                itemRef = hit.transform.gameObject.GetComponentInParent<GrabbableItem>();
+                if (!itemRef.isEquiped)
+                    itemRef.label.isPointed = true;
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    PickItem(hit.transform.GetComponent<PickableItem>());
+                    PickItem(itemRef);
+                }
+            }
+            else if (hit.transform.CompareTag("Pack"))
+            {
+                packRef = hit.transform.gameObject.GetComponent<Pack>();
+                packRef.label.isPointed = true;
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    packRef.Collect(FindObjectOfType<PlayerController>().GetComponentInChildren<Collider>(), packRef.type);
                 }
             }
             else if (hit.transform.CompareTag("Crate"))
             {
                 crateRef = hit.transform.gameObject.GetComponent<Crate>();
-                if (!crateRef.hasBeenOpened && GetDistanceToObject(crateRef.transform) <= interactRange)
+                if (!crateRef.hasBeenOpened)
+                {
                     crateRef.canBeOpened = true;
-            }
-            else if (hit.transform.CompareTag("Pack"))
-            {
-                packRef = hit.transform.gameObject.GetComponent<Pack>();
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    packRef.Collect(FindObjectOfType<PlayerController>().GetComponentInChildren<Collider>(), packRef.packName);
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        crateRef.Open();
+                    }
                 }
-            }
-            else
-            {
-                if (itemRef != null)
+
+
+                /*else
                 {
-                    itemRef.isPointed = false;
-                }
-                if (crateRef != null)
-                {
-                    crateRef.canBeOpened = false;
-                }
+                    if (itemRef != null)
+                    {
+                        itemRef.isPointed = false;
+                    }
+                    if (crateRef != null)
+                    {
+                        crateRef.canBeOpened = false;
+                    }
+                }*/
             }
         }
     }
-    private float GetDistanceToObject(Transform obj)
+    /*private float GetDistanceToObject(Transform obj)
     {
         return Vector3.Distance(transform.position, obj.position);
-    }
+    }*/
     private void ListenDropInput()
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-             DropItem(GetCurrentItem());
+            DropItem(GetCurrentItem());
         }
     }
 
@@ -181,20 +201,22 @@ public class ItemHolder : MonoBehaviour
 
     public int SlotsOccupied()
     {
-    int emptySlots = 0;
-    foreach (InventorySlot slot in inventory) {
+        int emptySlots = 0;
+        foreach (InventorySlot slot in inventory)
+        {
 
-    if (slot.IsEmpty()){ 
-        emptySlots++;
-    } 
-    }
+            if (slot.IsEmpty())
+            {
+                emptySlots++;
+            }
+        }
         return SLOTS - emptySlots;
     }
     public bool isEmpty()
     {
         return SlotsOccupied() <= 0;
     }
-    public PickableItem GetCurrentItem()
+    public GrabbableItem GetCurrentItem()
     {
         return activeSlot().FirstItem();
     }
@@ -207,10 +229,22 @@ public class ItemHolder : MonoBehaviour
         //gameManager.IsSafeToReload = false;
         if (OnOldItemSwitched != null) OnOldItemSwitched(this, new InventoryEventArgs(activeSlotIndex));
         IsChanging = true;
-        if (!activeSlot().IsEmpty()) GetCurrentItem().disableItem();
+        if (!activeSlot().IsEmpty())
+        {
+            int x = activeSlot().Count();
+            if (x > 1)//mas de una granada
+            {
+                for (int i = 0; i < x; i++)
+                {
+                    activeSlot().GetItemAt(i).DisableItem();
+                }
+            }
+            else
+                GetCurrentItem().DisableItem();
+        }
         int nextDirection = changeDirection < 0 ? 1 : -1;
-        activeSlotIndex = (activeSlotIndex + nextDirection)% SLOTS;
-        if (activeSlotIndex < 0) activeSlotIndex = SLOTS-1;
+        activeSlotIndex = (activeSlotIndex + nextDirection) % SLOTS;
+        if (activeSlotIndex < 0) activeSlotIndex = SLOTS - 1;
         RefreshInventory();
         IsChanging = false;
         if (OnNewItemSwitched != null) OnNewItemSwitched(this, new InventoryEventArgs(activeSlotIndex));
@@ -218,11 +252,29 @@ public class ItemHolder : MonoBehaviour
     }
     public void RefreshInventory()
     {
-        PickableItem activeItem = activeSlot().FirstItem();
-        if (activeItem!=null) activeItem.EnableItem();
+        GrabbableItem activeItem = activeSlot().FirstItem();
+        if (activeItem != null && !activeItem.isActiveAndEnabled)
+        {
+            activeItem.EnableItem();
+            activeItem.isEquiped = true;
+        }
         //gameManager.IsSafeToReload = true;
     }
-  
+    private void CheckArmsVisible()
+    {
+        if (activeSlot().IsEmpty())
+        {
+            if (!arms.activeInHierarchy)
+            {
+                arms.SetActive(true);
+                armsAnimator.Play("ArmsUp");
+            }
+        }
+        else
+        {
+            arms.SetActive(false);
+        }
+    }
 }
 
 

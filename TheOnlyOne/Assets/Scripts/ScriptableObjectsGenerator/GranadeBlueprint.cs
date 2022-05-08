@@ -7,11 +7,10 @@ using UnityEngine;
 public class GranadeBlueprint : ScriptableObject
 {
     [Header("Attributes")]
-    public string granadeName;
+    public string name;
+    public string granadeType;
     public GameObject prefab;
-    public Animator anim;
-    public Material offMaterial;
-    public Material onMaterial;
+    public Material Material;
     public float Minprobabilty;
     public float Maxprobabilty;
     public Material freezeMaterial;
@@ -32,6 +31,12 @@ public class GranadeBlueprint : ScriptableObject
     public AudioClip counterSound;
     public AudioClip explodeSound;
     public AudioClip freezelessSound;
+    [Space]
+    [Header("Visual")]
+    public Sprite labelIcon;
+    public Color color;
+    public Sprite inventoryIcon;
+
 
 
 }

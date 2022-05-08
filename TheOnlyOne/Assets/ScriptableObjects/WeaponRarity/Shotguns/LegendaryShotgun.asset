@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4867a44d2e10b28439cf1df59e8bf2f4, type: 3}
+  m_Name: LegendaryShotgun
+  m_EditorClassIdentifier: 
+  name: LegendaryShotgun
+  rarity: legendario
+  prefab: {fileID: 298024056520846305, guid: 150c14a29d1f808498951a5823e485d8, type: 3}
+  multiplier: 4
+  Minprobabilty: 95
+  Maxprobabilty: 99
+  labelIcon: {fileID: 21300000, guid: 533fbdd9a3a1b104ab1f77aef524f09f, type: 3}
+  color: {r: 1, g: 0.81960785, b: 0, a: 1}
+  inventoryIcon: {fileID: 21300000, guid: 6058e2a50ae34af4584c484d326e4d18, type: 3}

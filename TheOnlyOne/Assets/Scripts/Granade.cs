@@ -1,28 +1,48 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class Granade : MonoBehaviour
 {
     public GranadeBlueprint granadeData;
-    public GameObject mesh;
-    public PickableItem item;
+    public GameObject prefab;
+    public GrabbableItem item;
     public GameManager gameManager;
+    public ItemHolder itemHolder;
+    public Transform shotPoint;
     Rigidbody granadeRigidbody;
     public Collider granadeIdleCollider;
     private TrailRenderer trail;
     public AudioSource audioSource;
-    float countdown;
-    bool hasExploded;
-    bool hasBeenthrown;
+    public Animator animator;
+    public float countdown;
+    public bool hasExploded;
+    public bool hasBeenthrown;
+    public bool isAming;
+    Transform anchor;
     //Freeze
-
     private void Awake()
     {
         gameManager = FindObjectOfType<GameManager>();
-        granadeData=GenerateGranade(gameManager.granadeTypes);
+        itemHolder = FindObjectOfType<ItemHolder>();
+        granadeData = GenerateGranade(gameManager.granadeTypes);
+        anchor = transform.Find("Anchor");
+        //label
+        string statText = "";
+        if (granadeData.granadeType.Equals("daño explosivo"))
+        {
+            int totalDamage = granadeData.damage * 10;//se multiplica por 10 porque hay de media 10 colliders en los enemigos
+            statText = totalDamage.ToString();
+        }
+        else if (granadeData.granadeType.Equals("congelación"))
+        {
+            statText = granadeData.effectDuration.ToString();
+        }
+        prefab = Instantiate(granadeData.prefab, anchor);
+        gameManager.GenerateLabel(prefab.transform, prefab.transform.position+ new Vector3(0.07f, 0.35f, -0.37f), granadeData.name, granadeData.granadeType, granadeData.labelIcon, statText, granadeData.color);
+        animator = GetComponentInChildren<Animator>();
+        granadeIdleCollider = GetComponentInChildren<BoxCollider>();
+        granadeRigidbody = GetComponent<Rigidbody>();
     }
 
     private GranadeBlueprint GenerateGranade(GranadeBlueprint[] collection)
@@ -35,90 +55,98 @@ public class Granade : MonoBehaviour
                 return collection[j];
             }
         }
-        return collection[0];//si hay algún error genera un arma común
+        return collection[0];//si hay algún error genera la primera
     }
 
     void Start()
     {
-        granadeRigidbody = GetComponent<Rigidbody>();
-        item = GetComponent<PickableItem>();
+
+        item = GetComponent<GrabbableItem>();
         audioSource = GetComponent<AudioSource>();
         countdown = granadeData.delay;
-        mesh=Instantiate(granadeData.prefab, transform);
-        trail = mesh.transform.GetChild(0).GetComponent<TrailRenderer>();
+        trail = prefab.GetComponentInChildren<TrailRenderer>();
         trail.enabled = false;
     }
 
 
     void Update()
     {
+
         if (hasBeenthrown)
         {
             countdown -= Time.deltaTime;
-            mesh.GetComponentInChildren<Renderer>().material = granadeData.onMaterial;
         }
-        
-        if (countdown <= 0f&&!hasExploded)
+        else
+        {
+            ListenAimInput();
+        }
+
+        if (countdown <= 0f && !hasExploded)
         {
             Explode();
-
         }
-            
+
     }
 
     private void Explode()
     {
         hasExploded = true;
-        Destroy(Instantiate(granadeData.explosionEffect, transform.localPosition, Quaternion.identity),granadeData.effectDuration);
+        Destroy(Instantiate(granadeData.explosionEffect, prefab.transform.position, Quaternion.identity), granadeData.effectDuration);
         audioSource.PlayOneShot(granadeData.explodeSound);
-        Collider[] colliders= Physics.OverlapSphere(transform.position, granadeData.radius);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, granadeData.radius);
         EnemyIA enemyIA = null;
         foreach (Collider nearObject in colliders)
         {
-            if (granadeData.granadeName.Equals("Explode"))
+            if (granadeData.granadeType.Equals("daño explosivo"))
             {
                 Rigidbody objectRigidBody = nearObject.GetComponent<Rigidbody>();
-                if (objectRigidBody != null)
+                if (objectRigidBody)
                 {
                     objectRigidBody.AddExplosionForce(granadeData.explosionForce, transform.position, granadeData.radius);
 
                 }
                 HealthSystem healthSystem = nearObject.gameObject.GetComponentInParent<HealthSystem>();
-                if (healthSystem != null)
+                if (healthSystem)
                 {
                     healthSystem.Damage(granadeData.damage);
                 }
             }
-            else if (granadeData.granadeName.Equals("Freeze"))
+            else if (granadeData.granadeType.Equals("congelación"))
             {
-                if (nearObject.gameObject.GetComponentInParent<EnemyIA>()!= enemyIA) {//si no lo he detectado ya (para cuando hay varios enemigos a congelar)
+                if (nearObject.gameObject.GetComponentInParent<EnemyIA>() != enemyIA)
+                {//si no lo he detectado ya (para cuando hay varios enemigos a congelar)
                     enemyIA = nearObject.gameObject.GetComponentInParent<EnemyIA>();//lo marca para congelarlo
                     if (enemyIA)
                     {
                         EnemyIA enemyRef = enemyIA;
                         GameObject icePilarRef = Instantiate(granadeData.icePilar, enemyIA.gameObject.transform.position, Quaternion.Euler(-90f, 0, 0));
                         enemyIA.isFrozen = true;
-                        StartCoroutine(freezeCoroutine(enemyRef, icePilarRef));
+                        StartCoroutine(freezeCoroutine(enemyRef, enemyRef.transform, icePilarRef));
                     }
                 }
             }
-           
+
         }
-        mesh.GetComponent<MeshRenderer>().enabled = false;
+        prefab.GetComponentInChildren<MeshRenderer>().enabled = false;
         trail.enabled = false;
-        Destroy(gameObject,15);
+        Destroy(gameObject, 15);
     }
-    private IEnumerator freezeCoroutine(EnemyIA enemyRef,GameObject icePilarRef)
+    private IEnumerator freezeCoroutine(EnemyIA enemyRef, Transform point, GameObject icePilarRef)
     {
         yield return new WaitForSeconds(granadeData.effectDuration);
         audioSource.PlayOneShot(granadeData.freezelessSound);
         enemyRef.isFrozen = false;
-        GameObject fragments = Instantiate(granadeData.icePilarFragmented, icePilarRef.transform.position, enemyRef.gameObject.transform.rotation);
-        Destroy(icePilarRef);
-        Destroy(fragments, 3);
+        GameObject fragments = Instantiate(granadeData.icePilarFragmented, point.position, point.rotation);
+        if (point)
+        {
+            Destroy(icePilarRef);
+            Destroy(fragments, 3);
+        }
     }
-    public void Throw(Vector3 position,Vector3 direction)
-    {
+
+    public void Throw(Vector3 position, Vector3 direction)
+    { 
+        animator.SetTrigger("Throw");
         audioSource.PlayOneShot(granadeData.throwSound);
         audioSource.PlayOneShot(granadeData.counterSound);
         granadeIdleCollider.enabled = false;
@@ -126,7 +154,27 @@ public class Granade : MonoBehaviour
         item.enabled = false;
         gameObject.transform.position = position;
         granadeRigidbody.AddForce(direction * granadeData.throwForce, ForceMode.Impulse);
-        hasBeenthrown = true;
+
+    }
+    private void ListenAimInput()
+    {
+        if (Input.GetMouseButton(1))
+        {
+            animator.SetBool("Aiming", true);
+        }
+        else
+        {
+            animator.SetBool("Aiming", false);
+        }
+    }
+  
+}
+    /*private bool currentItemIsThroweable()
+    {
+        currentItem = weaponHolder.GetCurrentItem();
+        if (currentItem != null && weaponHolder.GetCurrentItem().typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE))
+            return true;
+        return false;
     }
 }
 /*public class Granade : MonoBehaviour

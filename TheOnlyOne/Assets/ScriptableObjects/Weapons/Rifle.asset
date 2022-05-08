@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: Rifle
   m_EditorClassIdentifier: 
   weaponID: 2
-  weaponName: Rifle
-  enemyPrefab: {fileID: 3734686458158196455, guid: fac4502128029fc41ba8e5c7bc500855, type: 3}
+  weaponName: fusil de asalto
   crosshair: {fileID: 21300000, guid: 72ed2f2022c632e4ba6448e308a9dea9, type: 3}
-  anim: {fileID: 0}
+  crosshairSizeAim: 1.2
   maxClipAmmo: 35
   range: 100
   fireRate: 0.1
@@ -38,10 +37,9 @@ MonoBehaviour:
   vRotationRecoilSpeed: 1.1
   vPositionReturnSpeed: 15
   vRotationReturnSpeed: 15
-  shootSound: {fileID: 8300000, guid: 2d90940e80be4be4d964372eb04a6b49, type: 3}
-  reloadSound: {fileID: 8300000, guid: 46f92a6242d5a94499ed223ee454fb87, type: 3}
+  shootSound: {fileID: 8300000, guid: 688063760bc3c284993c21053d63d6a3, type: 3}
+  reloadSound: {fileID: 8300000, guid: 8e124f78ce148234ead9e6dda47cf622, type: 3}
   pitch: 0.92
   pitchRand: 0.1
-  bulletDecal: {fileID: 8843144634977441555, guid: fbd92e76c83f9f14c83f5a19ec1e74be, type: 3}
   mainFOV: 80
   aimFOV: 40

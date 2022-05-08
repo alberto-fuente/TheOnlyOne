@@ -29,7 +29,6 @@ public class HeadShot : MonoBehaviour
             Destroy(ScatteredHead = Instantiate(ScatteredHead, OriginalHead.transform.position, OriginalHead.transform.rotation),10);
             Destroy(Instantiate(explosionVFX, OriginalHead.transform.position, OriginalHead.transform.rotation),10);
             audioSource.PlayOneShot(explodeSound);
-            //GetComponent<Rigidbody>().AddExplosionForce(100, OriginalHead.transform.position,7);
             Collider[] colliders = Physics.OverlapSphere(transform.position, 0.5f);
             foreach (Collider coll in colliders)
             {
@@ -41,8 +40,7 @@ public class HeadShot : MonoBehaviour
                     Rigidbody rb = coll.GetComponent<Rigidbody>();
                     if (rb)
                     {
-                        rb.AddForce(new Vector3(0, 50, 0), ForceMode.VelocityChange);
-
+                        rb.AddForce(new Vector3(0, 55, 0), ForceMode.VelocityChange);
                     }
                 }
             }

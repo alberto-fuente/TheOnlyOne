@@ -44,8 +44,8 @@ Material:
     - _Glossiness: 0.5
     - _Metallic: 0
     m_Colors:
-    - Color_5dec470256374b138796dab40b599929: {r: 8.658824, g: 10.541177, b: 11.984314, a: 0}
-    - Color_84d56afb2b544fd181f32db5144e2bdb: {r: 0, g: 726.83923, b: 1024, a: 0}
+    - Color_5dec470256374b138796dab40b599929: {r: 2.164706, g: 2.6352942, b: 2.9960785, a: 0}
+    - Color_84d56afb2b544fd181f32db5144e2bdb: {r: 0, g: 17.066668, b: 23.968628, a: 0}
     - Vector2_ae05c698c60d415f9d77fbd4dfc74a38: {r: -1.1, g: 0, b: 0, a: 0}
     - Vector2_ffae4625feca4647af480565645ef7ad: {r: -1.1, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}

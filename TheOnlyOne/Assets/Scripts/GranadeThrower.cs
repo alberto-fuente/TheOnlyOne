@@ -9,7 +9,7 @@ public class GranadeThrower : MonoBehaviour
     public ProjectPath projectPath;
     public Transform shotPoint;
 
-    private PickableItem currentItem;
+    private GrabbableItem currentItem;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,7 +20,7 @@ public class GranadeThrower : MonoBehaviour
     void Update()
     {
         ListenThrowInput();
-        ListenAimInput();
+        //ListenAimInput();
     }
     private void FixedUpdate()
     {
@@ -47,9 +47,10 @@ public class GranadeThrower : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0)&&currentItemIsThroweable())
         {
+            currentItem.GetComponent<Granade>().hasBeenthrown = true;
             weaponHolder.DropItem(currentItem);
             currentItem.GetComponent<Granade>().Throw(shotPoint.position,shotPoint.forward);
-            projectPath.StopSimulateProjection();
+            //projectPath.StopSimulateProjection();
         }
     }
     private bool currentItemIsThroweable()

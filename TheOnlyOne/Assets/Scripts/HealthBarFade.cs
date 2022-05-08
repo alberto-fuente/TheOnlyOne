@@ -14,8 +14,8 @@ public class HealthBarFade : MonoBehaviour
     public Image healthDamaged;
     public Image shieldDamaged;
 
-    private const float DAMAGED_BAR_SHRINK_TIMER_MAX = 0.6f;
-    private const float SHRINKSPEED = 1.3f;
+    private const float DAMAGED_BAR_SHRINK_TIMER_MAX = 0.3f;
+    private const float SHRINKSPEED = 1.5f;
     private float damagedBarShrinkTimer;
 
     public TMP_Text healthText;

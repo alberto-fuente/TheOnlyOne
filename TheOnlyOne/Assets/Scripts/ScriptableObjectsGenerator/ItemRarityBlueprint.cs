@@ -5,9 +5,14 @@ using UnityEngine;
 public class ItemRarityBlueprint : ScriptableObject
 {
     public string name;
+    public string rarity;
     public GameObject prefab;
     public int multiplier;
     public float Minprobabilty;
     public float Maxprobabilty;
-
+    [Space]
+    [Header("Visual")]
+    public Sprite labelIcon;
+    public Color color;
+    public Sprite inventoryIcon;
 }

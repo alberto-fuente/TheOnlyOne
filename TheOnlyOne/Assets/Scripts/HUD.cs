@@ -8,6 +8,7 @@ using TMPro;
 public class HUD : MonoBehaviour
 {
     public ItemHolder itemHolder;
+    private const float SCALEFACTOR = 1.3f;
     
     // Start is called before the first frame update
     void Start()
@@ -22,15 +23,14 @@ public class HUD : MonoBehaviour
     {
         Transform inventoryPanel = transform.Find("InventoryPanel");
 
-        inventoryPanel.GetChild(e.SlotId).localScale = new Vector3(1.73511267f, 1.50905013f, 0.853804648f);
-        inventoryPanel.GetChild(e.SlotId).GetChild(0).GetComponent<Image>().color = new Color(0f,255f,238f);
+        inventoryPanel.GetChild(e.SlotId).localScale *= SCALEFACTOR;
+
     }
     private void InventoryScript_OldItemSwitched(object sender, InventoryEventArgs e)
     {
         Transform inventoryPanel = transform.Find("InventoryPanel");
 
-        inventoryPanel.GetChild(e.SlotId).localScale = new Vector3(1.60050941f, 1.39198422f, 0.78757f);
-        inventoryPanel.GetChild(e.SlotId).GetChild(0).GetComponent<Image>().color = Color.white;
+        inventoryPanel.GetChild(e.SlotId).localScale /= SCALEFACTOR;
     }
 
     private void InventoryScript_ItemAdded(object sender, InventoryEventArgs e)
@@ -39,12 +39,22 @@ public class HUD : MonoBehaviour
 
         Transform imageTransform = inventoryPanel.GetChild(e.SlotId).GetChild(0).GetChild(0);
         Transform textTransform = inventoryPanel.GetChild(e.SlotId).GetChild(0).GetChild(1);
-        Image image = imageTransform.GetComponent<Image>();
+        Image icon = imageTransform.GetComponent<Image>();
         TMP_Text txtCount = textTransform.GetComponent<TMP_Text>();
+        //background color
+        Color color = Color.white;//default
+        if (e.Item.typeOfItem.Equals(GameUtils.TypeOfItem.GUN))
+        {
+            color = e.Item.gameObject.GetComponent<Weapon>().rarityData.color;
+        }
+        else if (e.Item.typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE))
+        {
+            color = e.Item.gameObject.GetComponent<Granade>().granadeData.color;
+        }
+        inventoryPanel.GetChild(e.SlotId).GetChild(0).GetComponent<Image>().color = color;
 
-        image.enabled = true;
-        image.sprite = e.Item.Icon;
-
+        icon.enabled = true;
+        icon.sprite = e.Item.Icon;
         int itemCount = e.Item.Slot.Count();
         if (itemCount > 1)
             txtCount.text = itemCount.ToString();
@@ -60,13 +70,14 @@ public class HUD : MonoBehaviour
 
         Image image = imageTransform.GetComponent<Image>();
         TMP_Text txtCount = textTransform.GetComponent<TMP_Text>();
-
+        //color background
         int itemCount = e.Item.Slot.Count();
         switch (itemCount){
             case 0:
                 image.enabled = false;
                 image.sprite = null;
                 txtCount.text = "";
+                inventoryPanel.GetChild(e.SlotId).GetChild(0).GetComponent<Image>().color = Color.white;//Reset
                 break;
             case 1:
                 txtCount.text = "";

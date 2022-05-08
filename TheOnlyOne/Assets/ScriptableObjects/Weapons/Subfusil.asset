@@ -13,17 +13,16 @@ MonoBehaviour:
   m_Name: Subfusil
   m_EditorClassIdentifier: 
   weaponID: 1
-  weaponName: Subfusil
-  enemyPrefab: {fileID: 1839468706238409700, guid: ef48321c44ddc3344831a4ed4ef2dc51, type: 3}
+  weaponName: subfusil
   crosshair: {fileID: 21300000, guid: aaf9082de97fc454d982a7f81acae66c, type: 3}
-  anim: {fileID: 0}
+  crosshairSizeAim: 1
   maxClipAmmo: 25
   range: 50
   fireRate: 0.08
-  reloadTime: 1.5
+  reloadTime: 1.7
   aimSpeed: 30
   autoShoot: 1
-  damage: 7
+  damage: 8
   swayIntensity: 10
   swaySpeed: 5
   recoilRotation: {x: -2, y: 1.2, z: 0.5}
@@ -38,10 +37,9 @@ MonoBehaviour:
   vRotationRecoilSpeed: 10
   vPositionReturnSpeed: 15
   vRotationReturnSpeed: 15
-  shootSound: {fileID: 8300000, guid: 2d90940e80be4be4d964372eb04a6b49, type: 3}
-  reloadSound: {fileID: 8300000, guid: 46f92a6242d5a94499ed223ee454fb87, type: 3}
+  shootSound: {fileID: 8300000, guid: b9aff0239bf4d494b8ce74f8d18ae381, type: 3}
+  reloadSound: {fileID: 8300000, guid: 462b4a7844b9c3d48b66bd2637937c12, type: 3}
   pitch: 1.5
   pitchRand: 0.1
-  bulletDecal: {fileID: 8843144634977441555, guid: fbd92e76c83f9f14c83f5a19ec1e74be, type: 3}
   mainFOV: 80
   aimFOV: 50

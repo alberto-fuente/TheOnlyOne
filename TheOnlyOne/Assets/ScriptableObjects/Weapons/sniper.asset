@@ -13,35 +13,33 @@ MonoBehaviour:
   m_Name: sniper
   m_EditorClassIdentifier: 
   weaponID: 3
-  weaponName: 
-  enemyPrefab: {fileID: 0}
-  crosshair: {fileID: 0}
-  anim: {fileID: 0}
-  maxClipAmmo: 0
-  range: 0
-  fireRate: 0
-  reloadTime: 0
-  aimSpeed: 0
+  weaponName: francotirador
+  crosshair: {fileID: 21300000, guid: 3fadf977527a0ed4fac721a6a7bceb6e, type: 3}
+  crosshairSizeAim: 2
+  maxClipAmmo: 5
+  range: 500
+  fireRate: 1.5
+  reloadTime: 2.6
+  aimSpeed: 10
   autoShoot: 0
-  damage: 0
-  swayIntensity: 0
-  swaySpeed: 0
-  recoilRotation: {x: 0, y: 0, z: 0}
-  aimRecoilRotation: {x: 0, y: 0, z: 0}
-  recoilSpeed: 0
-  returnSpeed: 0
-  vRecoilRotation: {x: 0, y: 0, z: 0}
-  vRecoilKickBack: {x: 0, y: 0, z: 0}
-  vRecoilRotationAim: {x: 0, y: 0, z: 0}
-  vRecoilKickBackAim: {x: 0, y: 0, z: 0}
-  vPositionRecoilSpeed: 0
-  vRotationRecoilSpeed: 0
-  vPositionReturnSpeed: 0
-  vRotationReturnSpeed: 0
-  shootSound: {fileID: 0}
-  reloadSound: {fileID: 0}
-  pitch: 0
-  pitchRand: 0
-  bulletDecal: {fileID: 0}
-  mainFOV: 0
-  aimFOV: 0
+  damage: 50
+  swayIntensity: 0.42
+  swaySpeed: 0.69
+  recoilRotation: {x: 0.15, y: 0.33, z: 0.22}
+  aimRecoilRotation: {x: 0.12, y: 0.29, z: 0.18}
+  recoilSpeed: 0.3
+  returnSpeed: 0.51
+  vRecoilRotation: {x: 7, y: 1, z: 1}
+  vRecoilKickBack: {x: 0.1, y: 0.1, z: -0.4}
+  vRecoilRotationAim: {x: 2, y: 0.1, z: 0.1}
+  vRecoilKickBackAim: {x: 0, y: 0, z: -0.03}
+  vPositionRecoilSpeed: 42.1
+  vRotationRecoilSpeed: 46.69
+  vPositionReturnSpeed: 7
+  vRotationReturnSpeed: 4
+  shootSound: {fileID: 8300000, guid: 18fa41d7f8addbf4fa318584232caa2b, type: 3}
+  reloadSound: {fileID: 8300000, guid: 92681f68ab2d90445a3c1a415c873b1a, type: 3}
+  pitch: 1
+  pitchRand: 0.1
+  mainFOV: 80
+  aimFOV: 30

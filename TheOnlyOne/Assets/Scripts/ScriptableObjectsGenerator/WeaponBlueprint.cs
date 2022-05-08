@@ -8,9 +8,8 @@ public class WeaponBlueprint : ScriptableObject
     [Header("Attributes")]
     public int weaponID;
     public string weaponName;
-    public GameObject enemyPrefab;
     public Sprite crosshair;
-    public Animator anim;
+    public float crosshairSizeAim=1;
     [Space]
     [Header("Stats")]
     public int maxClipAmmo;
@@ -51,7 +50,6 @@ public class WeaponBlueprint : ScriptableObject
     public AudioClip reloadSound;
     public float pitch;
     public float pitchRand;
-    public GameObject bulletDecal;
     [Range(0, 100)] public float mainFOV;
     [Range(0, 100)] public float aimFOV;
 

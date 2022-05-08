@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class InventoryEventArgs : EventArgs
 {
-    public PickableItem Item;
+    public GrabbableItem Item;
 
     public int SlotId;
     public InventoryEventArgs(int slotId)
     {
         SlotId = slotId;
     }
-    public InventoryEventArgs(PickableItem item,int slotId)
+    public InventoryEventArgs(GrabbableItem item,int slotId)
     {
         Item = item;
         SlotId = slotId;

@@ -25,11 +25,12 @@ public class EnemyIA : MonoBehaviour
     public bool isHurted;
     bool entityInSightRange;
 
-    [Range(0, 360)]
-    private float sightAngle = 60;
-
     bool entityInAttackRange;
 
+    //Scan for enemies
+    Transform[] children;//se cambia de layer a todos los hijos del enemigo durante el escaneo para que no se detecte a sí mismo
+    int enemyLayer;
+    int temporaryIgnoreLayer;
 
     public GameObject target;
     HealthSystem targetHealthSystem;
@@ -40,6 +41,9 @@ public class EnemyIA : MonoBehaviour
     public bool destinationSet;
     [SerializeField] State state;
     public NavMeshAgent agent;
+
+    private const float WALKSPEED= 2.7f;
+    private const float CHASESPEED= 3.1f;
     //temporal
     private AudioSource audioSource;
 
@@ -51,13 +55,15 @@ public class EnemyIA : MonoBehaviour
     }
     private void Start()
     {
-
+        enemyLayer = LayerMask.NameToLayer("Enemy");
+        temporaryIgnoreLayer = LayerMask.NameToLayer("Default");
         enemyController = GetComponent<EnemyController>();
         animatorController = enemyController.enemyPrefab.GetComponentInChildren<Animator>();
         wanderPosition = GetWanderPosition(transform.position);
         audioSource = GetComponent<AudioSource>();
         scanInterval = 1f / scanFrecuency;
         player = GameObject.FindGameObjectWithTag("Player");
+        children = gameObject.GetComponentsInChildren<Transform>();
     }
     private void Update()
     {
@@ -96,6 +102,7 @@ public class EnemyIA : MonoBehaviour
                     case State.Wander:
                         animatorController.SetInteger("State", 1);//Walk
                         agent.isStopped = false;
+                        agent.speed = WALKSPEED;
                         float destination = 1f;
                         if (!destinationSet || Vector3.Distance(transform.position, wanderPosition) < destination)
                         {
@@ -107,6 +114,7 @@ public class EnemyIA : MonoBehaviour
                     case State.ChaseTarget:
                         animatorController.SetInteger("State", 2);//Run
                         agent.isStopped = false;
+                        agent.speed = CHASESPEED;
                         if (target != null)
                         {
                             agent.SetDestination(target.transform.position);
@@ -169,22 +177,26 @@ public class EnemyIA : MonoBehaviour
         {
             agent.isStopped = true;
             //perseguir al jugador
-            entityInSightRange = true;
-            target = player;
+            //entityInSightRange = true;
+            //target = player;
         }
     }
 
     private GameObject FindTarget(float range)
     {
-        int enemyLayer = 14;
-        int temporaryIgnoreLayer = 0;
 
         int numberOfEntitiesInRange;
-
-        enemyController.enemyPrefab.layer = temporaryIgnoreLayer;//evitar colisionar consigo mismo
+        
+        foreach (Transform child in children) { 
+            child.gameObject.layer = temporaryIgnoreLayer;
+        }
+        //enemyController.enemyPrefab.layer = temporaryIgnoreLayer;//evitar colisionar consigo mismo
         numberOfEntitiesInRange = Physics.OverlapSphereNonAlloc(transform.position, range, entitiesInRange, whatIsEntity);
-        enemyController.enemyPrefab.layer = enemyLayer;
-
+        //enemyController.enemyPrefab.layer = enemyLayer;
+        foreach (Transform child in children)
+        {
+            child.gameObject.layer = enemyLayer;
+        }
         Collider closestTarget = null;
         if (numberOfEntitiesInRange > 0)
         {

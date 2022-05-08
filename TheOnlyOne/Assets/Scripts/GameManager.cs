@@ -9,13 +9,10 @@ public class GameManager : MonoBehaviour
 {
     public Image hudCrosshair;
     [SerializeField] private Sprite defaultCrosshair;
-    public int totalTargets;
-    public int remainingTargets;
     public ItemHolder weaponHolder;
     public GameObject ammoPanel;
     public float gameTimer = 0f;
     public float fpsRate;
-    public Text timerText;
     public Text fpsText;
     public TMP_Text currentAmmoText;
     public TMP_Text totalAmmoText;
@@ -24,6 +21,8 @@ public class GameManager : MonoBehaviour
     public ItemRarityBlueprint[] rarityDataPistols;
     public ItemRarityBlueprint[] rarityDataSubfusils;
     public ItemRarityBlueprint[] rarityDataRifles;
+    public ItemRarityBlueprint[] rarityDataSnipers;
+    public ItemRarityBlueprint[] rarityDataShotguns;
 
     public ItemRarityBlueprint[] rarityPackAmmo;
     public ItemRarityBlueprint[] rarityPackHealth;
@@ -34,6 +33,9 @@ public class GameManager : MonoBehaviour
     public EnemyBlueprint[] enemyTypes;
 
     public GameObject[] spawnableItems;
+
+    //Label
+    public GameObject Label;
 
     public int playersLeft;
     public TMP_Text playersLeftText;
@@ -48,22 +50,21 @@ public class GameManager : MonoBehaviour
     {
         hudCrosshair.enabled=false;
         weaponHolder = FindObjectOfType<ItemHolder>();
-        totalTargets = GameObject.FindGameObjectsWithTag("Target").Length;
-        remainingTargets = totalTargets;
+
         Physics.IgnoreLayerCollision(10, 11);//player and bullet
         Physics.IgnoreLayerCollision(7, 11);
     }
     
     private void FixedUpdate()
     {
-        if (CurrentPhysicsScene.IsValid())
+       /* if (CurrentPhysicsScene.IsValid())
         {
             CurrentPhysicsScene.Simulate(Time.fixedDeltaTime);
-        }
+        }*/
     }
     // Update is called once per frame
     void Update()
-    {
+    { 
         playersLeft = FindObjectsOfType<HealthSystem>().Length;
         playersLeftText.text = playersLeft.ToString();
         if (hudCrosshair.sprite == null) hudCrosshair.sprite=defaultCrosshair;
@@ -71,13 +72,6 @@ public class GameManager : MonoBehaviour
         fpsText.text = fpsRate.ToString("F2");
        // CurrentScene = SceneManager.GetActiveScene();
        // CurrentPhysicsScene = CurrentScene.GetPhysicsScene();
-
-        timerText.text = gameTimer.ToString("F2");
-
-        if (remainingTargets < totalTargets && remainingTargets!=0)
-        {
-            gameTimer += Time.deltaTime;
-        }
 
         if (weaponHolder.GetCurrentItem()!=null&&weaponHolder.GetCurrentItem().typeOfItem.Equals(GameUtils.TypeOfItem.GUN))
         {
@@ -94,5 +88,15 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene(0);
         }
+    }
+    public void GenerateLabel(Transform parent, Vector3 position, string name, string type, Sprite icon, string stat, Color color)
+    {
+        GameObject label= Instantiate(Label, position, Quaternion.identity,parent);
+        Label labelInfo = label.GetComponent<Label>();
+        labelInfo.itemName.text = name;
+        labelInfo.itemType.text = type;
+        labelInfo.icon.sprite = icon;
+        labelInfo.stat.text = stat;
+        labelInfo.color = color;
     }
 }
