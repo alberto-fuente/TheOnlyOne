@@ -215,6 +215,10 @@ PrefabInstance:
       propertyPath: field of view
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 5473280200223537831, guid: b0449920215cb1247b047b669d2e75bf, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 523383
+      objectReference: {fileID: 0}
     - target: {fileID: 7118529760454294267, guid: b0449920215cb1247b047b669d2e75bf, type: 3}
       propertyPath: m_Layer
       value: 12
@@ -258,23 +262,6 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 2883035275764192682, guid: b0449920215cb1247b047b669d2e75bf, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b0449920215cb1247b047b669d2e75bf, type: 3}
---- !u!1 &6208025254749359607 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 956067495202857239, guid: b0449920215cb1247b047b669d2e75bf, type: 3}
-  m_PrefabInstance: {fileID: 6585375642993323232}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2154436019337994547
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6208025254749359607}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b2f831a2f1a26447911b7481f236b92, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &7661140632278712866
 PrefabInstance:
   m_ObjectHideFlags: 0

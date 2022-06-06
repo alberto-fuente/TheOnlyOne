@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponID: 0
   weaponName: pistola
-  crosshair: {fileID: 21300000, guid: 0bb68d41cd332d746a2ea8c8c6bebc01, type: 3}
-  crosshairSizeAim: 1
+  crosshair: {fileID: 21300000, guid: e1bce1c4841bdb94580e25fe1ab3f6fc, type: 3}
+  crosshairSizeAim: 0.1
   maxClipAmmo: 10
   range: 90
   fireRate: 0.33

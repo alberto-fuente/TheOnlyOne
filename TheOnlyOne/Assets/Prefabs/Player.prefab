@@ -185,25 +185,27 @@ MonoBehaviour:
   sprintItemHolderRotation: {x: 0, y: 0, z: 0}
   headBobAmplitude: 0.01
   orientation: {fileID: 9079290935151952618}
+  armsAnimator: {fileID: 0}
+  wholeAnimator: {fileID: 0}
   isAiming: 0
   moveSpeed: 0
   idleSpeed: 0
   walkSpeed: 165
-  crouchSpeed: 75
+  crouchSpeed: 10
   runSpeed: 350
   accel: 5
   isSprinting: 0
   isGrounded: 0
   isCrouching: 0
   isJumping: 0
-  isSliding: 0
+  isOnPad: 0
   rbDrag: 10
   mesh: {fileID: 9079290933643883199}
   standScale: {x: 1, y: 1, z: 1}
   crouchScale: {x: 1, y: 0.5, z: 1}
   cameraRot: {fileID: 0}
   crouchedCamPos: {x: 0, y: 0, z: 0}
-  jumpForce: 20
+  jumpForce: 33
   readyToJump: 1
   jumpCooldown: 0.5
   slideForce: 20
@@ -214,7 +216,10 @@ MonoBehaviour:
   groundDistance: 0.1
   Ground:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 65600
+  JumpPad:
+    serializedVersion: 2
+    m_Bits: 131072
 --- !u!114 &9079290935105068157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -303,6 +308,7 @@ MonoBehaviour:
   itemHolder: {fileID: 0}
   healthSystem: {fileID: 1781496563}
   hurtPanel: {fileID: 0}
+  toxicFilter: {fileID: 0}
 --- !u!1 &9079290935151952619
 GameObject:
   m_ObjectHideFlags: 0

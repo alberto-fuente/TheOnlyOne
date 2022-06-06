@@ -14,15 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponID: 1
   weaponName: subfusil
-  crosshair: {fileID: 21300000, guid: aaf9082de97fc454d982a7f81acae66c, type: 3}
-  crosshairSizeAim: 1
+  crosshair: {fileID: 21300000, guid: a0e5349be5959ca44be9a86f8019717c, type: 3}
+  crosshairSizeAim: 0.085
   maxClipAmmo: 25
   range: 50
   fireRate: 0.08
   reloadTime: 1.7
   aimSpeed: 30
   autoShoot: 1
-  damage: 8
+  damage: 6
   swayIntensity: 10
   swaySpeed: 5
   recoilRotation: {x: -2, y: 1.2, z: 0.5}

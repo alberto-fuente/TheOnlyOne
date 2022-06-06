@@ -22,7 +22,12 @@ public static class GameUtils
         HEALTH,
         ARMOR
     }
-
+    public enum SceneIndex
+    {
+        MANAGER=0,
+        MENU_SCREEN=1,
+        GAME=2
+    }
     /*public enum Rarity
     {
         COMMON,

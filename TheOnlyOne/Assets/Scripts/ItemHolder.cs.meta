@@ -3,7 +3,13 @@ guid: 9d686276ff8ea87448b15741a472897f
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - playerCam: {instanceID: 0}
+  - gameManager: {instanceID: 0}
+  - audioSource: {instanceID: 0}
+  - pickSound: {fileID: 8300000, guid: 5914c0a751da20546b248ee4cdc3b477, type: 3}
+  - dropSound: {fileID: 8300000, guid: e252e36c37145a7479b42d8b811b60fe, type: 3}
+  - switchSound: {fileID: 8300000, guid: 929b02ee3106f0b458be62a096697ebf, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 7832611119664763850}
   - component: {fileID: 7832611119664763853}
   - component: {fileID: 63647880638770764}
+  - component: {fileID: 3227383359297236017}
+  - component: {fileID: 4573329639834742485}
   m_Layer: 14
   m_Name: enemy
   m_TagString: Enemy
@@ -68,13 +70,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd34ee53337abe244a0634e198d9d21e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sightRange: 0
+  attackRange: 0
   wanderPosition: {x: 0, y: 0, z: 0}
   whatIsEntity:
     serializedVersion: 2
     m_Bits: 18432
   whatIsObstacle:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 65600
   scanFrecuency: 30
   scanInterval: 0
   scanTimer: 0
@@ -130,12 +134,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7832611119664763857}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 005f8f9301675094288a4b583ee4ae9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthSystem: {fileID: 0}
+  healthSystem: {fileID: 7832611119664763850}
+  isPlayer: 0
   healthFill: {fileID: 7832611119371630141}
   shieldFill: {fileID: 7832611119063989122}
   healthDamaged: {fileID: 7832611118528790470}
@@ -143,6 +148,20 @@ MonoBehaviour:
   healthText: {fileID: 0}
   shieldText: {fileID: 0}
   popUpText: {fileID: 7714602989348379259, guid: 5005fe99315499741a8244f479fa7b6a, type: 3}
+  damageCanvas: {fileID: 0}
+  damageshowTime: 0
+  damageFadeSpeed: 0
+  healCanvas: {fileID: 0}
+  healshowTime: 0
+  healFadeSpeed: 0
+  armorCanvas: {fileID: 0}
+  armorshowTime: 0
+  armorFadeSpeed: 0
+  healSound: {fileID: 0}
+  armorSound: {fileID: 0}
+  armorBrokenSound: {fileID: 0}
+  hitSound: {fileID: 0}
+  killPanel: {fileID: 902396743801683498, guid: 0190e4b278854d3459f1be286f730e2b, type: 3}
 --- !u!82 &63647880638770764
 AudioSource:
   m_ObjectHideFlags: 0
@@ -154,7 +173,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -239,6 +258,35 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!54 &3227383359297236017
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7832611119664763857}
+  serializedVersion: 2
+  m_Mass: 100
+  m_Drag: 1000
+  m_AngularDrag: 1000
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 3
+--- !u!65 &4573329639834742485
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7832611119664763857}
+  m_Material: {fileID: 13400000, guid: a7d0916fccee0cc4f925c249e54bf311, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0667877, y: 0.20671844, z: 1}
+  m_Center: {x: -0.0012359619, y: 0.14215088, z: 0}
 --- !u!1001 &1570937098751852121
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -246,18 +294,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7832611119664763854}
     m_Modifications:
-    - target: {fileID: 8754453037248103899, guid: 6500771838f084342984ae96855e43f9, type: 3}
-      propertyPath: m_Color.g
-      value: 0.51779604
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754453037248103901, guid: 6500771838f084342984ae96855e43f9, type: 3}
-      propertyPath: m_Name
-      value: ShieldFill
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754453037543306844, guid: 6500771838f084342984ae96855e43f9, type: 3}
-      propertyPath: m_PresetInfoIsWorld
-      value: 1
-      objectReference: {fileID: 0}
+    - target: {fileID: 7973122364385895820, guid: 6500771838f084342984ae96855e43f9, type: 3}
+      propertyPath: healthSystem
+      value: 
+      objectReference: {fileID: 7832611119664763850}
     - target: {fileID: 8754453037543306846, guid: 6500771838f084342984ae96855e43f9, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -346,61 +386,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: HealthBar
       objectReference: {fileID: 0}
-    - target: {fileID: 8754453038296303719, guid: 6500771838f084342984ae96855e43f9, type: 3}
-      propertyPath: m_Name
-      value: HealthFill
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754453038435421676, guid: 6500771838f084342984ae96855e43f9, type: 3}
-      propertyPath: m_Color.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754453038435421676, guid: 6500771838f084342984ae96855e43f9, type: 3}
-      propertyPath: m_Color.b
-      value: 0.1981132
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754453038435421676, guid: 6500771838f084342984ae96855e43f9, type: 3}
-      propertyPath: m_Color.g
-      value: 0.1981132
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754453038435421676, guid: 6500771838f084342984ae96855e43f9, type: 3}
-      propertyPath: m_Color.r
-      value: 0.1981132
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754453038435421678, guid: 6500771838f084342984ae96855e43f9, type: 3}
-      propertyPath: m_Name
-      value: Background
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754453038788914716, guid: 6500771838f084342984ae96855e43f9, type: 3}
-      propertyPath: m_Color.b
-      value: 0.036117785
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754453038788914716, guid: 6500771838f084342984ae96855e43f9, type: 3}
-      propertyPath: m_Color.g
-      value: 0.030704875
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754453038788914716, guid: 6500771838f084342984ae96855e43f9, type: 3}
-      propertyPath: m_Color.r
-      value: 0.4339623
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754453038788914718, guid: 6500771838f084342984ae96855e43f9, type: 3}
-      propertyPath: m_Name
-      value: ShieldDamaged
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754453038862221712, guid: 6500771838f084342984ae96855e43f9, type: 3}
-      propertyPath: m_Name
-      value: HealthDamaged
-      objectReference: {fileID: 0}
-    - target: {fileID: 8754453039279850492, guid: 6500771838f084342984ae96855e43f9, type: 3}
-      propertyPath: m_Name
-      value: Frame
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6500771838f084342984ae96855e43f9, type: 3}
---- !u!1 &7832611118769866758 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8754453037543306847, guid: 6500771838f084342984ae96855e43f9, type: 3}
-  m_PrefabInstance: {fileID: 1570937098751852121}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &7832611118769866759 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8754453037543306846, guid: 6500771838f084342984ae96855e43f9, type: 3}
@@ -450,23 +437,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7973122364385895820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7832611118769866758}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 005f8f9301675094288a4b583ee4ae9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthSystem: {fileID: 7832611119664763850}
-  healthFill: {fileID: 7832611119371630141}
-  shieldFill: {fileID: 7832611119063989122}
-  healthDamaged: {fileID: 7832611118528790470}
-  shieldDamaged: {fileID: 7832611117800886341}
-  healthText: {fileID: 0}
-  shieldText: {fileID: 0}
-  popUpText: {fileID: 7714602989348379259, guid: 5005fe99315499741a8244f479fa7b6a, type: 3}

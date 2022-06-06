@@ -20,11 +20,19 @@ public class Granade : MonoBehaviour
     public bool hasBeenthrown;
     public bool isAming;
     Transform anchor;
+    public CameraShake playerCamera;
+    public Camera aimCamera;
     //Freeze
+    private void OnEnable()
+    {
+        //animator.Play("GranadeUp");
+    }
     private void Awake()
     {
         gameManager = FindObjectOfType<GameManager>();
         itemHolder = FindObjectOfType<ItemHolder>();
+        playerCamera = FindObjectOfType<CameraShake>();
+        aimCamera = GameObject.Find("/CameraHolder/CameraRecoil/MainCamera").GetComponent<Camera>();
         granadeData = GenerateGranade(gameManager.granadeTypes);
         anchor = transform.Find("Anchor");
         //label
@@ -71,7 +79,7 @@ public class Granade : MonoBehaviour
 
     void Update()
     {
-
+        Sway();
         if (hasBeenthrown)
         {
             countdown -= Time.deltaTime;
@@ -91,14 +99,18 @@ public class Granade : MonoBehaviour
     private void Explode()
     {
         hasExploded = true;
-        Destroy(Instantiate(granadeData.explosionEffect, prefab.transform.position, Quaternion.identity), granadeData.effectDuration);
+        RaycastHit hit;
+        Physics.Raycast(transform.position,-transform.up, out hit);
+        Destroy(Instantiate(granadeData.explosionEffect, hit.point, Quaternion.identity), granadeData.effectDuration);
         audioSource.PlayOneShot(granadeData.explodeSound);
         Collider[] colliders = Physics.OverlapSphere(transform.position, granadeData.radius);
         EnemyIA enemyIA = null;
+        playerCamera.ShakeCamera(granadeData.shakeDuration, granadeData.shakeMagnitude);
         foreach (Collider nearObject in colliders)
         {
             if (granadeData.granadeType.Equals("daño explosivo"))
             {
+                
                 Rigidbody objectRigidBody = nearObject.GetComponent<Rigidbody>();
                 if (objectRigidBody)
                 {
@@ -108,7 +120,7 @@ public class Granade : MonoBehaviour
                 HealthSystem healthSystem = nearObject.gameObject.GetComponentInParent<HealthSystem>();
                 if (healthSystem)
                 {
-                    healthSystem.Damage(granadeData.damage);
+                    healthSystem.Damage(granadeData.damage,true,transform);
                 }
             }
             else if (granadeData.granadeType.Equals("congelación"))
@@ -161,13 +173,25 @@ public class Granade : MonoBehaviour
         if (Input.GetMouseButton(1))
         {
             animator.SetBool("Aiming", true);
+            aimCamera.fieldOfView = granadeData.aimFOV;
         }
         else
         {
             animator.SetBool("Aiming", false);
+            aimCamera.fieldOfView = granadeData.mainFOV;
         }
     }
-  
+    public void Sway()
+    {
+        float mouseX = Input.GetAxis("Mouse X");
+        float mouseY = Input.GetAxis("Mouse Y");
+
+        Quaternion xSway = Quaternion.AngleAxis(granadeData.swayIntensity * -mouseX, Vector3.up);//horizontal sway
+        Quaternion ySway = Quaternion.AngleAxis(granadeData.swayIntensity * mouseY, Vector3.right);//vertical sway
+        Quaternion target_rotation = xSway * ySway;
+
+        transform.localRotation = Quaternion.Slerp(transform.localRotation, target_rotation, Time.deltaTime * granadeData.swaySpeed);
+    }
 }
     /*private bool currentItemIsThroweable()
     {

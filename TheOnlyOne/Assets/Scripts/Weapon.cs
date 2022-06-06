@@ -10,6 +10,7 @@ public class Weapon : MonoBehaviour
     public Transform cameraHolder;
     public Camera weaponCam;
     public Camera playerCam;
+    public PlayerLook playerLook;
     public AudioSource audioSource;
     private Recoil recoilScript;
     private VisualRecoil viusalRecoilScript;
@@ -32,6 +33,7 @@ public class Weapon : MonoBehaviour
     private void Awake()
     {
         gameManager = FindObjectOfType<GameManager>();
+        playerLook = FindObjectOfType<PlayerLook>();
         cameraHolder = GameObject.Find("/CameraHolder").transform;
         playerCam = GameObject.Find("/CameraHolder/CameraRecoil/MainCamera").GetComponent<Camera>();
         weaponCam = GameObject.Find("/CameraHolder/CameraRecoil/WeaponCamera").GetComponent<Camera>();
@@ -47,7 +49,7 @@ public class Weapon : MonoBehaviour
         GenerateWeapon();
         float damagePerSecond= weaponData.damage*rarityData.multiplier / weaponData.fireRate;
         prefab = GetComponentInChildren<Collider>().gameObject;
-        gameManager.GenerateLabel(prefab.transform,prefab.transform.position+new Vector3(0,0.5f,0.5f),weaponData.weaponName,rarityData.rarity,rarityData.labelIcon,((int)damagePerSecond).ToString(),rarityData.color);
+        gameManager.GenerateLabel(prefab.transform,prefab.transform.position+new Vector3(0.07f, 0.63f, 0.28f), weaponData.weaponName,rarityData.rarity,rarityData.labelIcon,((int)damagePerSecond).ToString(),rarityData.color);
         muzzleFlash = GetComponentInChildren<ParticleSystem>();
        /* Transform[] weaponChildren = GetComponentsInChildren<Transform>();
         foreach (Transform child in weaponChildren)
@@ -121,14 +123,19 @@ public class Weapon : MonoBehaviour
     private void FixedUpdate()
     {
         anchor.rotation = cameraHolder.rotation;
+
     }
     void Update()
     {
         nextTimeToFire += Time.deltaTime;
-        Sway();
-        ListenReloadInput();
-        ListenAimInput();
-        ListenShootInput();
+        if (weaponChanger.isActiveAndEnabled)
+        {
+            ListenAimInput();
+            ListenReloadInput();
+            ListenShootInput();
+            Sway();
+        }
+
 
     }
     public void ListenReloadInput()
@@ -245,12 +252,12 @@ public class Weapon : MonoBehaviour
             if (hitBox.CompareTag("Head"))//Headshot
             {
                 hitBox.healthSystem.waslastHitHead = true;
-                hitBox.OnHit(weaponData.damage * rarityData.multiplier * HEADSHOTMULTIPLIER);
+                hitBox.OnHit(weaponData.damage * rarityData.multiplier * HEADSHOTMULTIPLIER,transform);
                 audioSource.PlayOneShot(gameManager.headshotSound, 0.2f);
             }
             else
             {
-                hitBox.OnHit(weaponData.damage * rarityData.multiplier);
+                hitBox.OnHit(weaponData.damage * rarityData.multiplier, transform);
             }
             return true;
         }
@@ -263,21 +270,27 @@ public class Weapon : MonoBehaviour
         {
 
             anchor.position = Vector3.Lerp(anchor.position, aimState.position, Time.deltaTime * weaponData.aimSpeed);
-           // anchor.rotation = Quaternion.Slerp(anchor.rotation, aimState.rotation, Time.deltaTime * weaponData.aimSpeed);
-            playerCam.fieldOfView = Mathf.Lerp(playerCam.fieldOfView, weaponData.aimFOV, weaponData.aimSpeed * Time.deltaTime);
-            gameManager.hudCrosshair.transform.localScale = new Vector3(weaponData.crosshairSizeAim, weaponData.crosshairSizeAim, weaponData.crosshairSizeAim);
+            // anchor.rotation = Quaternion.Slerp(anchor.rotation, aimState.rotation, Time.deltaTime * weaponData.aimSpeed);
+            playerCam.fieldOfView = Mathf.Lerp(playerCam.fieldOfView, weaponData.aimFOV, weaponData.aimSpeed* Time.deltaTime);
+            //playerCam.fieldOfView = weaponData.aimFOV;
+            //playerCam.fieldOfView = Mathf.SmoothStep(playerCam.fieldOfView, weaponData.aimFOV, weaponData.aimSpeed * Time.deltaTime);
+            gameManager.hudCrosshair.rectTransform.localScale = new Vector3(weaponData.crosshairSizeAim, weaponData.crosshairSizeAim, weaponData.crosshairSizeAim);
+            playerLook.sensMult = 0.8f;//reduce sensitivity when aiming with sniper
         }
         else
         {
 
             anchor.position = Vector3.Lerp(anchor.position, hipState.position, Time.deltaTime * weaponData.aimSpeed);
-          //  anchor.rotation = Quaternion.Slerp(anchor.rotation, hipState.rotation, Time.deltaTime * weaponData.aimSpeed);
+            //  anchor.rotation = Quaternion.Slerp(anchor.rotation, hipState.rotation, Time.deltaTime * weaponData.aimSpeed);
             playerCam.fieldOfView = Mathf.Lerp(playerCam.fieldOfView, weaponData.mainFOV, weaponData.aimSpeed * Time.deltaTime);
-            gameManager.hudCrosshair.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+            //playerCam.fieldOfView = playerCam.fieldOfView;
+            //playerCam.fieldOfView = Mathf.SmoothStep(playerCam.fieldOfView, weaponData.mainFOV, weaponData.aimSpeed * Time.deltaTime);
+           gameManager.hudCrosshair.transform.localScale = new Vector3(0.03f, 0.03f, 0.03f);
+           playerLook.sensMult = 2;
+
 
         }
     }
-
     public void Sway()
     {
         float mouseX = Input.GetAxis("Mouse X");
@@ -289,5 +302,4 @@ public class Weapon : MonoBehaviour
 
         transform.localRotation = Quaternion.Slerp(transform.localRotation, target_rotation, Time.deltaTime * weaponData.swaySpeed);
     }
-
 }

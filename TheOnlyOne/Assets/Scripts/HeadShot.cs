@@ -22,12 +22,12 @@ public class HeadShot : MonoBehaviour
     // Update is called once per frame
     public void DoHeadShot(object sender, EventArgs e)
     {
-        if (hitbox.healthSystem.waslastHitHead &&!hasExploded)
+        if (hitbox.healthSystem.waslastHitHead && !hasExploded)
         {
             hasExploded = true;
             OriginalHead.SetActive(false);
-            Destroy(ScatteredHead = Instantiate(ScatteredHead, OriginalHead.transform.position, OriginalHead.transform.rotation),10);
-            Destroy(Instantiate(explosionVFX, OriginalHead.transform.position, OriginalHead.transform.rotation),10);
+            Destroy(ScatteredHead = Instantiate(ScatteredHead, OriginalHead.transform.position, OriginalHead.transform.rotation), 10);
+            Destroy(Instantiate(explosionVFX, OriginalHead.transform.position, OriginalHead.transform.rotation), 10);
             audioSource.PlayOneShot(explodeSound);
             Collider[] colliders = Physics.OverlapSphere(transform.position, 0.5f);
             foreach (Collider coll in colliders)
@@ -36,7 +36,8 @@ public class HeadShot : MonoBehaviour
                 {
                     continue;
                 }
-                else { 
+                else
+                {
                     Rigidbody rb = coll.GetComponent<Rigidbody>();
                     if (rb)
                     {
@@ -46,12 +47,5 @@ public class HeadShot : MonoBehaviour
             }
         }
     }
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(transform.position, 0.3f);
-        //Physics.OverlapSphere(OriginalHead.transform.position, 0.5f);
-    }
-
 }
 

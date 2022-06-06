@@ -23,6 +23,10 @@ public class GranadeBlueprint : ScriptableObject
     public float throwForce;
     public int damage;
     [Space]
+    [Header("Sway")]
+    public int swayIntensity;
+    public int swaySpeed;
+    [Space]
     [Header("VFX")]
     public GameObject explosionEffect;
     public GameObject icePilar;
@@ -31,6 +35,10 @@ public class GranadeBlueprint : ScriptableObject
     public AudioClip counterSound;
     public AudioClip explodeSound;
     public AudioClip freezelessSound;
+    public float shakeDuration;
+    public float shakeMagnitude;
+    [Range(0, 100)] public float mainFOV;
+    [Range(0, 100)] public float aimFOV;
     [Space]
     [Header("Visual")]
     public Sprite labelIcon;

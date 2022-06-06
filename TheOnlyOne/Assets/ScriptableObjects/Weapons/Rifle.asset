@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponID: 2
   weaponName: fusil de asalto
-  crosshair: {fileID: 21300000, guid: 72ed2f2022c632e4ba6448e308a9dea9, type: 3}
-  crosshairSizeAim: 1.2
+  crosshair: {fileID: 21300000, guid: aff738817e1ccf0448548ef0efb78627, type: 3}
+  crosshairSizeAim: 0.1
   maxClipAmmo: 35
   range: 100
   fireRate: 0.1
@@ -42,4 +42,4 @@ MonoBehaviour:
   pitch: 0.92
   pitchRand: 0.1
   mainFOV: 80
-  aimFOV: 40
+  aimFOV: 30

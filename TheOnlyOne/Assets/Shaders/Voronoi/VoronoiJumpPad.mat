@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: VoronoiJumpPad
+  m_Shader: {fileID: -6465566751694194690, guid: c9134c19b22d3fb408c4a296cefca0fc, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_0f78719bc2df404ab6908832652d24da: -4.64
+    - Vector1_371b05f1f09046d5b4821b7abde45b05: 0.53
+    - Vector1_77ba27a5cf474fe299f25df5b5ea544a: -0.53
+    - Vector1_86e1b0a733e945b48c914f8c15e15b41: -0.34
+    - Vector1_874cbca26c51417fbaaa7d951da05cca: 14.4
+    - Vector1_d3f8e12b738c43c68ffd7f381681bb46: -11.12
+    m_Colors:
+    - Color_79b0317fb4724ef6a046a4defdd71f35: {r: 0, g: 0, b: 0, a: 0}
+    - Color_babbb5337da74f59b19a8922b15a1b7e: {r: 0.34896928, g: 0.8509804, b: 0, a: 1}
+    - Vector2_a9e437ae5e934ea29cc5c17529a3f187: {r: -1, g: 0, b: 0, a: 0}
+    - Vector2_d70990352cbd4e08bd140d19910846c3: {r: 0, g: 1, b: 0, a: 0}
+  m_BuildTextureStacks: []

@@ -26,7 +26,6 @@ public class Recoil : MonoBehaviour
         currentRot = Vector3.Slerp(currentRot, targetRot, currentWeapon.weaponData.recoilSpeed * Time.fixedDeltaTime);
         //aplica la rotación
         transform.localRotation = Quaternion.Euler(currentRot);
-       
     }
     //método llamado en el script weapon
     public void RecoilFire(Vector3 recoil)

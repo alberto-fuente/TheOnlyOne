@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.7398894, b: 1, a: 1}
+  m_Color: {r: 0, g: 0.51779604, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 8754453037543306844}
   - component: {fileID: 8754453037543306845}
   - component: {fileID: 8754453037543306842}
+  - component: {fileID: 7973122364385895820}
   m_Layer: 0
   m_Name: HealthBar
   m_TagString: Untagged
@@ -102,7 +103,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8754453037543306847}
-  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.00000010430813}
+  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.3499999, y: 1.35, z: 1.3499999}
   m_Children:
@@ -193,6 +194,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ee205d3cbb324247aadc64d453ecca3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7973122364385895820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8754453037543306847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 005f8f9301675094288a4b583ee4ae9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthSystem: {fileID: 0}
+  isPlayer: 0
+  healthFill: {fileID: 8754453038296303716}
+  shieldFill: {fileID: 8754453037248103899}
+  healthDamaged: {fileID: 8754453038862221727}
+  shieldDamaged: {fileID: 8754453038788914716}
+  healthText: {fileID: 0}
+  shieldText: {fileID: 0}
+  popUpText: {fileID: 7714602989348379259, guid: 5005fe99315499741a8244f479fa7b6a, type: 3}
+  damageCanvas: {fileID: 0}
+  damageshowTime: 0
+  damageFadeSpeed: 0
+  healCanvas: {fileID: 0}
+  healshowTime: 0
+  healFadeSpeed: 0
+  armorCanvas: {fileID: 0}
+  armorshowTime: 0
+  armorFadeSpeed: 0
+  healSound: {fileID: 0}
+  armorSound: {fileID: 0}
+  armorBrokenSound: {fileID: 0}
 --- !u!1 &8754453038296303719
 GameObject:
   m_ObjectHideFlags: 0
@@ -326,7 +360,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.31764707, g: 0.31764707, b: 0.31764707, a: 0.84313726}
+  m_Color: {r: 0.1981132, g: 0.1981132, b: 0.1981132, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -401,7 +435,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6698113, g: 0.08530616, b: 0.095743716, a: 1}
+  m_Color: {r: 0.4339623, g: 0.030704875, b: 0.036117785, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

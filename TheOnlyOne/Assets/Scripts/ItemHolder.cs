@@ -14,8 +14,10 @@ public class ItemHolder : MonoBehaviour
 
     public Camera playerCam;
     public GameManager gameManager;
+    public AudioSource audioSource;
     [SerializeField] private AudioClip pickSound;
     [SerializeField] private AudioClip dropSound;
+    [SerializeField] private AudioClip switchSound;
 
     public int activeSlotIndex;
     public int slotsOc;
@@ -39,6 +41,7 @@ public class ItemHolder : MonoBehaviour
         if (OnNewItemSwitched != null) OnNewItemSwitched(this, new InventoryEventArgs(activeSlotIndex));
         arms = GetComponentInChildren<SkinnedMeshRenderer>().gameObject;
         armsAnimator = transform.Find("Arms").GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
     private void Awake()
     {
@@ -84,7 +87,7 @@ public class ItemHolder : MonoBehaviour
     }
     public void PickItem(GrabbableItem item)
     {
-        GetComponent<AudioSource>().PlayOneShot(pickSound, 0.3f);
+        audioSource.PlayOneShot(pickSound, 1f);
         InventorySlot slot = FindAvailableSlot(item);
         slot.AddItem(item);
         //attach
@@ -114,7 +117,7 @@ public class ItemHolder : MonoBehaviour
             }
             else
             {
-                GetComponent<AudioSource>().PlayOneShot(dropSound, 0.3f);
+                audioSource.PlayOneShot(dropSound, 0.3f);
                 item.itemRigidBody.AddForce((playerCam.transform.forward + playerCam.transform.up) * dropForce, ForceMode.Impulse);
             }
             float random = UnityEngine.Random.Range(-1f, 1f);
@@ -227,6 +230,7 @@ public class ItemHolder : MonoBehaviour
     void switchItem(float changeDirection)
     {
         //gameManager.IsSafeToReload = false;
+        audioSource.PlayOneShot(switchSound, 0.3f);
         if (OnOldItemSwitched != null) OnOldItemSwitched(this, new InventoryEventArgs(activeSlotIndex));
         IsChanging = true;
         if (!activeSlot().IsEmpty())

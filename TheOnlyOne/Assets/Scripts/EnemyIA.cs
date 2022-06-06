@@ -4,6 +4,8 @@ using UnityEngine.AI;
 public class EnemyIA : MonoBehaviour
 {
     private EnemyController enemyController;
+    public float sightRange;
+    public float attackRange;
     private enum State
     {
         Wander,
@@ -12,6 +14,7 @@ public class EnemyIA : MonoBehaviour
     }
     public Vector3 wanderPosition;
     public LayerMask whatIsEntity, whatIsObstacle;
+    private GameManager gameManager;
 
     public int scanFrecuency = 30;
     public float scanInterval;
@@ -59,11 +62,13 @@ public class EnemyIA : MonoBehaviour
         temporaryIgnoreLayer = LayerMask.NameToLayer("Default");
         enemyController = GetComponent<EnemyController>();
         animatorController = enemyController.enemyPrefab.GetComponentInChildren<Animator>();
-        wanderPosition = GetWanderPosition(transform.position);
+        sightRange = enemyController.enemyData.sightRange;
+        attackRange = enemyController.enemyData.attackRange;
         audioSource = GetComponent<AudioSource>();
         scanInterval = 1f / scanFrecuency;
         player = GameObject.FindGameObjectWithTag("Player");
         children = gameObject.GetComponentsInChildren<Transform>();
+        wanderPosition = GetWanderPosition(transform.position);
     }
     private void Update()
     {
@@ -81,11 +86,11 @@ public class EnemyIA : MonoBehaviour
             {
                 scanTimer += scanInterval;
                 //if(target==null)
-                target = FindTarget(enemyController.enemyData.sightRange);
+                target = FindTarget(sightRange);
                 if (target != null)
                 {
                     entityInSightRange = true;
-                    entityInAttackRange = Vector3.Distance(transform.position, target.transform.position) < enemyController.enemyData.attackRange;
+                    entityInAttackRange = Vector3.Distance(transform.position, target.transform.position) < attackRange;
                 }
             }
 
@@ -145,7 +150,7 @@ public class EnemyIA : MonoBehaviour
                                 {
 
                                     animatorController.SetTrigger("Shoot");
-                                    targetHealthSystem.Damage(Random.Range(enemyController.enemyData.minDamage, enemyController.enemyData.maxDamage));
+                                    targetHealthSystem.Damage(Random.Range(enemyController.enemyData.minDamage, enemyController.enemyData.maxDamage),false,transform);
                                     audioSource.PlayOneShot(enemyController.enemyData.shootSound, 0.2f);
 
 
@@ -222,14 +227,13 @@ public class EnemyIA : MonoBehaviour
     }
     private Vector3 GetWanderPosition(Vector3 currentPosition)
     {
-        Vector3 randomDirection = new Vector3(UnityEngine.Random.Range(-1f, 1f), 0, UnityEngine.Random.Range(-1f, 1f)).normalized;
-        Vector3 newDestination = currentPosition + randomDirection * Random.Range(10f, 70f);
-        return newDestination;
-        /* if (Physics.Raycast(newDestination, -transform.up, 2f, whatIsGround))
-         {
-             destinationSet = true;
-             return newDestination; 
-         }*/
+        Vector3 randomDirection = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized;
+        Vector3 newDestination = currentPosition + randomDirection * Random.Range(10f, 50f);
+        /*if ((Mathf.Pow(newDestination.x, 2) + Mathf.Pow(newDestination.z, 2) > Mathf.Pow(gameManager.SafeRadius, 2)))//fuera de la zona segura
+        {
+            return currentPosition;
+        }*/
+        return newDestination;//dentro de la zona segura
     }
 
 }

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "847497221495",
+    "firebase_url": "https://theonlyone-8a6b5-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "theonlyone-8a6b5",
+    "storage_bucket": "theonlyone-8a6b5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:847497221495:android:0710965769e8b07477fd72",
+        "android_client_info": {
+          "package_name": "com.AlbertoFuente.TheOnlyOne"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "847497221495-8nfr3406ee3er27uqnl85jfkucbgscfp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTuHFfrz-t6w1md-CQ_j5IVN664WaST2k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "847497221495-8nfr3406ee3er27uqnl85jfkucbgscfp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

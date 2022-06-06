@@ -8,12 +8,10 @@ public class Pack : MonoBehaviour
     private HealthSystem healthSystem;
     public Label label;
     private GameObject prefab;
-    private AudioSource audioSource;
-
+    [SerializeField] private AudioClip pickPack;
     private void Awake()
     {
         gameManager = FindObjectOfType<GameManager>();
-        audioSource = GetComponent<AudioSource>();
         GenerateAmmoPack();
         //label
         string statText = "";
@@ -74,6 +72,7 @@ public class Pack : MonoBehaviour
     }
     public void Collect(Collider collector, GameUtils.TypeOfPack type)
     {
+        FindObjectOfType<GameManager>().GetComponent<AudioSource>().PlayOneShot(pickPack);
         switch (type)
         {
             case GameUtils.TypeOfPack.AMMO:
@@ -96,7 +95,6 @@ public class Pack : MonoBehaviour
                     * Legendary: +100
                     */
                 healthSystem.HealHealth(healthSystem.MaxHealth / 4 * (int)rarityData.multiplier);
-                Debug.Log(healthSystem.MaxHealth / 4 * (int)rarityData.multiplier);
                 break;
             case GameUtils.TypeOfPack.ARMOR:
                 healthSystem = collector.gameObject.GetComponentInParent<HealthSystem>();

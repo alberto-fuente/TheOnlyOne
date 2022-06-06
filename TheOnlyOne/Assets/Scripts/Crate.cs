@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Crate : MonoBehaviour
 {
@@ -11,9 +12,9 @@ public class Crate : MonoBehaviour
     private AudioSource audioSource;
     public AudioClip openSound;
     public ParticleSystem smoke;
-    public Color closedColor = new Color(11, 191, 188) * 10;
-    public Color openedColor = new Color(191, 11, 11) * 10;
-    // Start is called before the first frame update
+    private Renderer[] crateRenderers;
+    public Color closedColor = new Color(27, 175, 191);
+    public Color openedColor = new Color(191, 27, 18);
     public bool canBeOpened;
     public bool hasBeenOpened;
     private Canvas labelCanvas;
@@ -21,11 +22,19 @@ public class Crate : MonoBehaviour
     {
         gameManager = FindObjectOfType<GameManager>();
         labelCanvas = GetComponentInChildren<Canvas>();
-        GetComponent<Renderer>().material.SetColor("_EmissionColor", closedColor);
+        crateRenderers = GetRenderers();
+        foreach (Renderer renderer in crateRenderers)
+        {
+            renderer.material.SetColor("_EmissionColor", closedColor);
+        }
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
     }
-
+    private Renderer[] GetRenderers()
+    {
+        Renderer[] meshes=GetComponentsInChildren<Renderer>();
+        return meshes;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -33,15 +42,27 @@ public class Crate : MonoBehaviour
     }
     public void Open()
     {
-        foreach (Transform point in spawnPoints)
+        StartCoroutine(spawnItems());
+        foreach (Renderer renderer in crateRenderers)
         {
-            Instantiate(gameManager.spawnableItems[Random.Range(0, gameManager.spawnableItems.Length)], point.position, point.rotation);
+            renderer.material.SetColor("_EmissionColor", openedColor);
         }
-        GetComponent<Renderer>().material.SetColor("_EmissionColor", openedColor);
         animator.Play("Open");
         audioSource.PlayOneShot(openSound);
         smoke.Play();
         hasBeenOpened = true;
+    }
+    IEnumerator spawnItems()
+    {
+        yield return new WaitForSeconds(2f);
+        foreach (Transform point in spawnPoints)
+        {
+            yield return new WaitForSeconds(.12f);
+            GameObject item=Instantiate(gameManager.spawnableItems[Random.Range(0, gameManager.spawnableItems.Length)], point.position+new Vector3(0f,0,0), point.rotation);
+           //item.GetComponentInChildren<Rigidbody>()?.AddForce(point.up*5,ForceMode.VelocityChange);
+
+        }
+
     }
     private void CheckLabelVisible()
     {

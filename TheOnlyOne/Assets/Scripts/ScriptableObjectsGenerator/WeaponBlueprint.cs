@@ -23,8 +23,8 @@ public class WeaponBlueprint : ScriptableObject
     public int damage;
     [Space]
     [Header("Sway")]
-    public float swayIntensity;
-    public float swaySpeed;
+    public int swayIntensity;
+    public int swaySpeed;
     [Space]
     [Header("ShootRecoil")]
     public Vector3 recoilRotation;

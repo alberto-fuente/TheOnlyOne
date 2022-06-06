@@ -39,6 +39,6 @@ Material:
     - _Fresnel: 0.3
     - _Refraction: 0.03
     m_Colors:
-    - Color_09cba9edcfcd4d8ba6a731c136d3a9a4: {r: 3.579622, g: 7.206344, b: 8.996155, a: 0}
-    - _IceTiling: {r: 1, g: 1, b: 0, a: 0}
+    - Color_09cba9edcfcd4d8ba6a731c136d3a9a4: {r: 1.0666667, g: 2.5254903, b: 2.9960785, a: 0}
+    - _IceTiling: {r: 1, g: 1, b: 0, a: 1}
   m_BuildTextureStacks: []

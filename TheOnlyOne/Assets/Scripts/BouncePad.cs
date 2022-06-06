@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BouncePad : MonoBehaviour
 {
+    [Range(100,10000)]
     [SerializeField] private int bounceForce;
     private void OnCollisionEnter(Collision collision)
     {
@@ -12,7 +13,7 @@ public class BouncePad : MonoBehaviour
         Vector3 dir = collision.contacts[0].normal;
         if (rb != null)
         {
-            rb.AddForce(dir * bounceForce, ForceMode.Impulse);
+            rb.AddForce(dir * bounceForce);
         }
     }
 }

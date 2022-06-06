@@ -5,8 +5,8 @@ using UnityEngine;
 public class EnemyHitBox : MonoBehaviour
 {
     public HealthSystem healthSystem;
-    public void OnHit(int damage)
+    public void OnHit(int damage,Transform tranform)
     {
-        healthSystem.Damage(damage);
+        healthSystem.Damage(damage,true, tranform);
     }
 }

@@ -7,7 +7,7 @@ public class HealthSystem : MonoBehaviour
     public event EventHandler<HealthArgs> OnHealthHealed;
     public event EventHandler<HealthArgs> OnShieldHealed;
     public event EventHandler<HealthArgs> OnShieldDestroyed;
-    public event EventHandler OnDead;
+    public event EventHandler<HealthArgs> OnDead;
 
     [SerializeField] const int MAXHEALTH = 100;
     [SerializeField] const int MAXSHIELD = 100;
@@ -39,7 +39,7 @@ public class HealthSystem : MonoBehaviour
         if (CurrentShield > MaxShield) CurrentShield = MaxShield;
         if (OnShieldHealed != null) OnShieldHealed(this, new HealthArgs(amount));
     }
-    public void Damage(int amount)
+    public void Damage(int amount,bool byPlayer,Transform sourceTransform)
     {
         var dif = CurrentShield - amount;
         CurrentShield = dif;
@@ -50,19 +50,22 @@ public class HealthSystem : MonoBehaviour
             CurrentHealth -= Mathf.Abs(dif);
         }
 
-        if (OnDamaged != null) OnDamaged(this, new HealthArgs(amount));
+        if (OnDamaged != null)
+        {
+            OnDamaged(this, new HealthArgs(amount,byPlayer, sourceTransform));//enemy sensors increase if hit by player
+        }
 
         if (CurrentHealth < 0)
         {
             CurrentHealth = 0;
-            if (!isDead) Die();
+            if (!isDead) Die(byPlayer);
         }
         
     }
-    public void Die()
+    public void Die(bool byPlayer)
     {
         isDead = true;
-        if (OnDead != null) OnDead(this, EventArgs.Empty);
+        if (OnDead != null) OnDead(this, new HealthArgs(byPlayer));
     }
     public float GetHealthNormalized()
     {

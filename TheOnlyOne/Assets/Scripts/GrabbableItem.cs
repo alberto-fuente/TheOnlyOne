@@ -46,24 +46,6 @@ public class GrabbableItem : MonoBehaviour
 
     void Update()
     {
-
-        //Si está equipado, lo renderiza la WeaponCam
-        if (equipFlag != isEquiped)//pàra que solo se compruebe cuando se equipa o desequipa
-        {
-            equipFlag = isEquiped;
-            if (typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE))
-            {
-                SetLayerRecursively(gameObject, isEquiped ? LayerMask.NameToLayer("Throw") : LayerMask.NameToLayer("Pick"));
-            }
-            else if (typeOfItem.Equals(GameUtils.TypeOfItem.GUN))
-            {
-                SetLayerRecursively(gameObject, isEquiped ? LayerMask.NameToLayer("Weapon") : LayerMask.NameToLayer("Pick"));
-            }
-
-        }
-    }
-    private void LateUpdate()
-    {
         CheckEquiped();
     }
 
@@ -116,6 +98,19 @@ public class GrabbableItem : MonoBehaviour
             }
         }
 
+        //Si está equipado, lo renderiza la WeaponCam
+        if (equipFlag != isEquiped)//para que solo se compruebe cuando se equipa o desequipa
+        {
+            equipFlag = isEquiped;
+            if (typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE))
+            {
+                SetLayerRecursively(gameObject, isEquiped ? LayerMask.NameToLayer("Throw") : LayerMask.NameToLayer("Pick"));
+            }
+            else if (typeOfItem.Equals(GameUtils.TypeOfItem.GUN))
+            {
+                SetLayerRecursively(gameObject, isEquiped ? LayerMask.NameToLayer("Weapon") : LayerMask.NameToLayer("Pick"));
+            }
 
+        }
     }
 }

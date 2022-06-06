@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponID: 4
   weaponName: escopeta
-  crosshair: {fileID: 21300000, guid: e81c1b06f224c284fb7b35c2bac9542f, type: 3}
-  crosshairSizeAim: 1.5
+  crosshair: {fileID: 21300000, guid: 91db39b791baf9e45aaa7f56337ce175, type: 3}
+  crosshairSizeAim: 0.13
   maxClipAmmo: 1
   range: 15
   fireRate: 1.2

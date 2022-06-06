@@ -62,6 +62,8 @@ public class WallRun : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            playerMove.armsAnimator.Play("Jump");
+            playerMove.wholeAnimator.Play("Jump");
             Vector3 wallRunDirection =Vector3.zero;
             if (isWallLeft)
             {

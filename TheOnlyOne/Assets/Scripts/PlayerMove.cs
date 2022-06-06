@@ -6,7 +6,7 @@ public class PlayerMove : MonoBehaviour
 {
     private ItemHolder weaponChanger;
     private Vector3 weaponChangerOrigin;
-    [SerializeField] private Camera camera;
+    [SerializeField] private Camera cam;
     [SerializeField] private float normalFov;
     [SerializeField] private float slideFov;
 
@@ -21,6 +21,8 @@ public class PlayerMove : MonoBehaviour
     float headBobAimDividerY;
     Vector3 targetBobPosition;
     [SerializeField] Transform orientation;
+    public Animator armsAnimator;
+    public Animator wholeAnimator;
     //input
     float horizontalMove;
     float verticalMove;
@@ -29,9 +31,11 @@ public class PlayerMove : MonoBehaviour
     public float moveSpeed;
     public float idleSpeed = 0;
     public float walkSpeed=150;
-    public float crouchSpeed = 75;
+    public float crouchSpeed = 10;
     public float runSpeed=200;
     public float accel = 10f;
+    public float defaultJumpForce = 30;
+    public float bounceJumpForce = 130;
 
     // public float maxSpeed=100f;
 
@@ -39,7 +43,8 @@ public class PlayerMove : MonoBehaviour
     public bool isGrounded;
     public bool isCrouching;
     public bool isJumping;
-    public bool isSliding;
+    //public bool isSliding;
+    public bool isOnPad;
 
     //RigidBody
     public float rbDrag=10f; 
@@ -56,7 +61,7 @@ public class PlayerMove : MonoBehaviour
     public bool readyToJump=true;
     public float jumpCooldown=0.6f;
     //slide
-    public float slideForce = 600;
+    public float slideForce = 100;
     //Drag
     public float defaultDrag = 10f;
     public float airDrag = 2f;
@@ -66,6 +71,7 @@ public class PlayerMove : MonoBehaviour
     public Transform groundCheck;
     public float groundDistance = 0.1f;
     public LayerMask Ground;
+    public LayerMask JumpPad;
 
 
     void Start()
@@ -84,11 +90,11 @@ public class PlayerMove : MonoBehaviour
         ControlSpeed();
         ControlHeadBob();
         //jump
-        if (isJumping && isGrounded && readyToJump) Jump();
+        if (isJumping && (isGrounded||isOnPad) && readyToJump) Jump();
         
 
     }
-    void FixedUpdate()
+        void FixedUpdate()
     {
         MovePlayer();
         Crouch(isCrouching);
@@ -116,8 +122,10 @@ public class PlayerMove : MonoBehaviour
         isCrouching = Input.GetKey(KeyCode.LeftControl);
         isSprinting = Input.GetKey(KeyCode.LeftShift);
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, Ground);
+        isOnPad = Physics.CheckSphere(groundCheck.position, groundDistance, JumpPad);
 
-  
+
+
     }
 
     void ControlHeadBob()
@@ -145,12 +153,12 @@ public class PlayerMove : MonoBehaviour
         {
             Vector3.Lerp(cameraRot.position, crouchedCamPos, Time.deltaTime);
             mesh.localScale = crouchScale;
-            if (moveSpeed > walkSpeed/2 && !isSliding){
+            /*if (moveSpeed > walkSpeed/2 && !isSliding){
                 isSliding = true;
                 rb.AddForce(transform.forward * slideForce, ForceMode.VelocityChange);
               //  camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, slideFov, 20 * Time.deltaTime);
             }
-            if (moveSpeed == 0) isSliding = false;
+            if (moveSpeed == 0) isSliding = false;*/
             
             //moveSpeed = crouchSpeed;
            // coll.center.Set(0, -0.4f, 0);
@@ -158,7 +166,7 @@ public class PlayerMove : MonoBehaviour
         }
         else
         {
-            isSliding = false;
+            //isSliding = false;
            // camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, normalFov, 20 * Time.deltaTime);
             Vector3.Lerp(crouchedCamPos,cameraRot.position, Time.deltaTime);
             mesh.localScale = standScale;
@@ -182,7 +190,10 @@ public class PlayerMove : MonoBehaviour
     }
     public void Jump()
     {
+        armsAnimator.Play("Jump");
+        wholeAnimator.Play("Jump");
         rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+        jumpForce = isOnPad ? bounceJumpForce : defaultJumpForce;
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         readyToJump = false;
         Invoke("ResetJump", jumpCooldown);
@@ -197,9 +208,9 @@ public class PlayerMove : MonoBehaviour
         float multiplier;
         if (isGrounded)
         {
-            if (isSliding)
-                multiplier = 0f;
-            else if(isCrouching)
+            //if (isSliding)
+            //    multiplier = 0f;
+            if(isCrouching)
                 multiplier = 0.7f;
             else
                 multiplier = 1f;
@@ -211,7 +222,7 @@ public class PlayerMove : MonoBehaviour
     void ControlDrag()
     {
         if (isGrounded) {
-            if (isSliding)
+            if (isCrouching)
                 rb.drag = slideDrag;
             else
             rb.drag = defaultDrag;
@@ -242,6 +253,5 @@ public class PlayerMove : MonoBehaviour
 
         moveSpeed = Mathf.Lerp(moveSpeed, desiredSpeed / aimDivider, accel * Time.deltaTime);
     }
-   
-
+  
 }

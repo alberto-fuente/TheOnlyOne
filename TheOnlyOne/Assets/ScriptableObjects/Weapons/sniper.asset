@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponID: 3
   weaponName: francotirador
-  crosshair: {fileID: 21300000, guid: 3fadf977527a0ed4fac721a6a7bceb6e, type: 3}
-  crosshairSizeAim: 2
+  crosshair: {fileID: 21300000, guid: 449bc7445fe8af140bbe2d84695f7d4c, type: 3}
+  crosshairSizeAim: 0.2
   maxClipAmmo: 5
   range: 500
   fireRate: 1.5
@@ -23,8 +23,8 @@ MonoBehaviour:
   aimSpeed: 10
   autoShoot: 0
   damage: 50
-  swayIntensity: 0.42
-  swaySpeed: 0.69
+  swayIntensity: 10
+  swaySpeed: 5
   recoilRotation: {x: 0.15, y: 0.33, z: 0.22}
   aimRecoilRotation: {x: 0.12, y: 0.29, z: 0.18}
   recoilSpeed: 0.3
