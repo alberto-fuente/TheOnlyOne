@@ -1,4 +1,4 @@
-# TFG-Game
+# The Only One
 
 Este videojuego se llama "The Only One" y será un "shooter" en el que el jugador controlará al personaje protagonista en primera persona (FPS).
 
