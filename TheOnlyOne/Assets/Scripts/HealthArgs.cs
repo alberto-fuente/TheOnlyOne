@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HealthArgs : EventArgs
@@ -8,24 +6,24 @@ public class HealthArgs : EventArgs
     public int Amount;
     public bool ByPlayer;
     public Transform SourceTransform;
-    public HealthArgs(int amount)
+    public HealthArgs(int _amount)
     {
-        Amount = amount;
+        Amount = _amount;
     }
-    public HealthArgs(bool byPlayer)
+    public HealthArgs(bool _byPlayer)
     {
-        ByPlayer = byPlayer;
+        ByPlayer = _byPlayer;
     }
-    public HealthArgs(int amount,bool byPlayer)
+    public HealthArgs(int _amount,bool _byPlayer)
     {
-        Amount = amount;
-        ByPlayer = byPlayer;
+        Amount = _amount;
+        ByPlayer = _byPlayer;
     }
-    public HealthArgs(int amount, bool byPlayer, Transform sourceTransform)
+    public HealthArgs(int _amount, bool _byPlayer, Transform _sourceTransform)
     {
-        Amount = amount;
-        ByPlayer = byPlayer;
-        SourceTransform = sourceTransform;
+        Amount = _amount;
+        ByPlayer = _byPlayer;
+        SourceTransform = _sourceTransform;
     }
 }
 

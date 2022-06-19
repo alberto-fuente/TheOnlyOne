@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6fcb972c67060e4fa23c8364640ff8e, type: 3}
   m_Name: FreezeGranade
   m_EditorClassIdentifier: 
+  id: 1
   name: granada de hielo
   granadeType: "congelaci\xF3n"
   prefab: {fileID: 9205368523358960027, guid: be78f2b02addf6742af9d6986e2a722e, type: 3}
   Material: {fileID: 0}
-  Minprobabilty: 61
+  Minprobabilty: 50
   Maxprobabilty: 99
   freezeMaterial: {fileID: 2100000, guid: cd72c3118d360374181eda5147330094, type: 2}
   effectDuration: 8

@@ -1,16 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
+using System.Collections;
 using TMPro;
+using UnityEngine;
 public class FirebaseManager : MonoBehaviour
 {
     // Firebase variables
     [Header("Firebase")]
     public DependencyStatus dependencyStatus;
-    public static FirebaseAuth auth;
+    public static FirebaseAuth Auth;
     public static FirebaseUser User;
     public static DatabaseReference DBReference;
 
@@ -29,14 +28,11 @@ public class FirebaseManager : MonoBehaviour
     public TMP_InputField passwordRegisterVerifyField;
     public TMP_Text warningRegisterText;
 
-    // User Data variables
-    [Header("UserData")]
-    public TMP_InputField usernameField;
-    public TMP_InputField xpfield;
-
-    //Canvas
+    //Screens
+   [Header("Canvas")]
     public GameObject loginCanvas;
     public GameObject registerCanvas;
+
     private void Start()
     {
         // Check that all of the necessary dependencies for Firebase are present on the system
@@ -50,43 +46,29 @@ public class FirebaseManager : MonoBehaviour
             }
             else
             {
-                Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);
+                Debug.LogError("No se pudieron resolver todas las dependencias de Firebase: " + dependencyStatus);
 
             }
         });
     }
+    //Initialize DataBase
     private void InitializeFirebase()
     {
-        Debug.Log("Setting up Firebase Auth");
         // Set the authentication instance object
-        auth = FirebaseAuth.DefaultInstance;
+        Auth = FirebaseAuth.DefaultInstance;
         DBReference = FirebaseDatabase.DefaultInstance.RootReference;
     }
-    // Function for the login button
-    public void LoginButton()
-    {
-        // Call the login coroutine passing the email and password
-        StartCoroutine(Login(emailLoginField.text, passwordLoginField.text));
-    }
-    // Function for the register button
-
+    // Logic for the register button
     public void RegisterButton()
     {
         // Call the register coroutine passing the email,password,and username
         StartCoroutine(Register(emailRegisterField.text, passwordRegisterField.text, usernameRegisterField.text));
     }
-    //Function for the sign out button
-    public void SignOutButton()
+    // Logic for the login button
+    public void LoginButton()
     {
-        auth.SignOut();
-        loginCanvas.SetActive(true);
-        ClearRegisterFeilds();
-        ClearLoginFeilds();
-    }
-    public void ClearLoginFeilds()
-    {
-        emailLoginField.text = "";
-        passwordLoginField.text = "";
+        // Call the login coroutine passing the email and password
+        StartCoroutine(Login(emailLoginField.text, passwordLoginField.text));
     }
     public void ClearRegisterFeilds()
     {
@@ -95,116 +77,67 @@ public class FirebaseManager : MonoBehaviour
         passwordRegisterField.text = "";
         passwordRegisterVerifyField.text = "";
     }
-    private IEnumerator Login(string _email, string _password)
+    public void ClearLoginFeilds()
     {
-        // Call the Firebase auth signin function passing the email and password.
-        var LoginTask = auth.SignInWithEmailAndPasswordAsync(_email, _password);
-        // Wait until the task completes
-        yield return new WaitUntil(predicate: () => LoginTask.IsCompleted);
-        if (LoginTask.Exception != null)
-        {
-
-            // If there are errors handle then
-            Debug.LogWarning(message: $"Failed to register task with{LoginTask.Exception}");
-            FirebaseException firebaseEx = LoginTask.Exception.GetBaseException() as FirebaseException;
-            AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
-
-            string message = "Login Failed!";
-            switch (errorCode)
-            {
-                case AuthError.MissingEmail:
-                    message = "Missing Email";
-                    break;
-                case AuthError.MissingPassword:
-                    message = "Missing Password";
-                    break;
-                case AuthError.WrongPassword:
-                    message = "Wrong Password";
-                    break;
-                case AuthError.InvalidEmail:
-                    message = "Invalid Email";
-                    break;
-                case AuthError.UserNotFound:
-                    message = "Account does not exist";
-                    break;
-            }
-            warningLoginText.text = message;
-        }
-        else
-        {
-            // User is now logged in
-            // Now get the result
-            User= LoginTask.Result;
-            Debug.LogFormat("User signed in successfully:{0}({1})", User.DisplayName, User.Email);
-            warningLoginText.text = "";
-            confirmLoginText.text="Bienvenido, "+ User.DisplayName;
-            //ir a la pantalla del menu
-            yield return new WaitForSeconds(1);
-            SceneDirector.instance.LoadScene(1);
-            confirmLoginText.text = "";
-        }
-
+        emailLoginField.text = "";
+        passwordLoginField.text = "";
     }
-    public void CreatePlayerRow(string userID,string username,int xp)
+    //Creates row in database with two fields
+    public void CreatePlayerRow(string userID, string username, int xp)
     {
         DBReference.Child("players").Child(userID).Child("username").SetValueAsync(username);
         DBReference.Child("players").Child(userID).Child("xp").SetValueAsync(xp);
     }
+    //Register Corroutine
     private IEnumerator Register(string _email, string _password, string _username)
     {
         if (_username == "")
         {
-            //If the username field is blank show a warning
-            warningRegisterText.text = "Missing Username";
+            warningRegisterText.text = "Introduce un nombre de usuario";
         }
         else if (passwordRegisterField.text != passwordRegisterVerifyField.text)
         {
-            //If the password does not match show a warning
-            warningRegisterText.text = "Password Does Not Match!";
+            warningRegisterText.text = "Las contraseñas no coinciden";
         }
         else
         {
             //Call the Firebase auth signin function passing the email and password
-            var RegisterTask = auth.CreateUserWithEmailAndPasswordAsync(_email, _password);
+            var RegisterTask = Auth.CreateUserWithEmailAndPasswordAsync(_email, _password);
             //Wait until the task completes
             yield return new WaitUntil(predicate: () => RegisterTask.IsCompleted);
 
             if (RegisterTask.Exception != null)
             {
-                //If there are errors handle them
-                Debug.LogWarning(message: $"Failed to register task with {RegisterTask.Exception}");
+                Debug.LogWarning(message: $"Tarea de registro fallida con {RegisterTask.Exception}");
                 FirebaseException firebaseEx = RegisterTask.Exception.GetBaseException() as FirebaseException;
                 AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
-
-                string message = "Register Failed!";
+                warningLoginText.text = "";
+                string message = "Registro fallido";
                 switch (errorCode)
                 {
                     case AuthError.MissingEmail:
-                        message = "Missing Email";
+                        message = "Introduce un correo";
                         break;
                     case AuthError.MissingPassword:
-                        message = "Missing Password";
+                        message = "Introduce una contraseña";
                         break;
                     case AuthError.WeakPassword:
-                        message = "Weak Password";
+                        message = "Contraseña demasiado débil";
                         break;
                     case AuthError.EmailAlreadyInUse:
-                        message = "Email Already In Use";
+                        message = "El correo ya está en uso";
                         break;
                 }
                 warningRegisterText.text = message;
             }
             else
             {
-                //User has now been created
-                //Now get the result
+                //User registered successfully!
                 User = RegisterTask.Result;
-
                 if (User != null)
                 {
                     //Create a user profile and set the username
                     UserProfile profile = new UserProfile { DisplayName = _username };
-
                     //Call the Firebase auth update user profile function passing the profile with the username
                     var ProfileTask = User.UpdateUserProfileAsync(profile);
                     //Wait until the task completes
@@ -212,16 +145,14 @@ public class FirebaseManager : MonoBehaviour
 
                     if (ProfileTask.Exception != null)
                     {
-                        //If there are errors handle them
                         Debug.LogWarning(message: $"Failed to register task with {ProfileTask.Exception}");
                         FirebaseException firebaseEx = ProfileTask.Exception.GetBaseException() as FirebaseException;
                         AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
-                        warningRegisterText.text = "Username Set Failed!";
+                        warningRegisterText.text = "Registro fallido";
                     }
                     else
                     {
-                        //Username is now set
-                        //Now return to login screen
+                        // User has been registered in successfully!
                         CreatePlayerRow(User.UserId, User.DisplayName, 0);
                         registerCanvas.SetActive(false);
                         loginCanvas.SetActive(true);
@@ -231,6 +162,54 @@ public class FirebaseManager : MonoBehaviour
             }
         }
     }
+    //Login Corroutine
+    private IEnumerator Login(string _email, string _password)
+    {
+        // Call the Firebase auth signin function passing the email and password.
+        var LoginTask = Auth.SignInWithEmailAndPasswordAsync(_email, _password);
+        // Wait until the task completes
+        yield return new WaitUntil(predicate: () => LoginTask.IsCompleted);
+        if (LoginTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Tarea de inicio de sesión fallida con {LoginTask.Exception}");
+            FirebaseException firebaseExcetion = LoginTask.Exception.GetBaseException() as FirebaseException;
+            AuthError errorCode = (AuthError)firebaseExcetion.ErrorCode;
+            warningLoginText.text = "";
+            string message = "Inicio de sesión fallido";
+            switch (errorCode)
+            {
+                case AuthError.MissingEmail:
+                    message = "Introduce el correo";
+                    break;
+                case AuthError.MissingPassword:
+                    message = "Introduce la contraseña";
+                    break;
+                case AuthError.WrongPassword:
+                    message = "Contraseña incorrecta";
+                    break;
+                case AuthError.InvalidEmail:
+                    message = "Correo no válido";
+                    break;
+                case AuthError.UserNotFound:
+                    message = "La cuenta no existe";
+                    break;
+            }
+            warningLoginText.text = message;
+        }
+        else
+        {
+            // User has logged in successfully!
+            User = LoginTask.Result;
+            warningLoginText.text = "";
+            confirmLoginText.text = "Hola, " + User.DisplayName;
 
+            yield return new WaitForSeconds(1.5f);
+            ClearRegisterFeilds();
+            ClearLoginFeilds();
+            confirmLoginText.text = "";
+            //Go to Main Menu Screen 
+            SceneDirector.instance.LoadScene(1);
+
+        }
+    }
 }
-        

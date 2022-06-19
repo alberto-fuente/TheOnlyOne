@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,7 +22,8 @@ public class DamageIndicatorSystem : MonoBehaviour
     }
     private void OnDisable()
     {
-        
+        CreateIndicator -= Create;
+        CheckIfObjectInSight -= InSight;
     }
     void Create(Transform target)
     {
@@ -33,7 +33,7 @@ public class DamageIndicatorSystem : MonoBehaviour
             return;
         }
         DamageIndicator newIndicator = Instantiate(indicatorPrefab, holder);
-        newIndicator.Register(target, player, new Action(() => { Indicators.Remove(target); }));
+        newIndicator.Appear(target, player, new Action(() => { Indicators.Remove(target); }));
 
         Indicators.Add(target, newIndicator);
     }

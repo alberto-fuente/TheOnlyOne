@@ -1,95 +1,115 @@
 using UnityEngine;
 
-
 public class GrabbableItem : MonoBehaviour
 {
     [Header("Item Components")]
-    public string itemName;
-    public Rigidbody itemRigidBody;
-    public Collider itemCollider;
-    public GameObject prefab;
-    public Sprite Icon;
-    public Label label;
-    public bool isStackable;
-    public string itemID;
-    public ItemHolder weaponHolder;
+    [SerializeField] private int itemID;
+    private Sprite icon;
+    private Label label;
     public GameUtils.TypeOfItem typeOfItem;
-    public GameObject armMesh;//hide arms when not picked
-    public bool isEquiped;
-    private bool equipFlag;
+
+    [Header("References")]
     private GameManager gameManager;
+    private Rigidbody itemRigidBody;
+    private Collider itemCollider;
+    private GameObject armMesh;
+
+    [Header("State")]
+    private bool isStackable;
+    private bool isEquiped;
+    private bool equipFlag;
+
+    [Header("Inventory")]
     private InventorySlot slot;
+
+    public int ItemID { get => itemID; set => itemID = value; }
+    public bool IsStackable { get => isStackable; set => isStackable = value; }
+    public bool IsEquiped { get => isEquiped; set => isEquiped = value; }
     public InventorySlot Slot { get => slot; set => slot = value; }
-    public int slotId;
+    public Rigidbody ItemRigidBody { get => itemRigidBody; set => itemRigidBody = value; }
+    public Sprite Icon { get => icon; set => icon = value; }
+    public Label Label { get => label; set => label = value; }
 
     void Start()
     {
-
-        gameManager = FindObjectOfType<GameManager>();
-        //originalY = transform.position.y;
-        weaponHolder = FindObjectOfType<ItemHolder>();
-        label = GetComponentInChildren<Label>();
-        itemRigidBody = GetComponentInChildren<Rigidbody>();
+        gameManager = GameManager.Instance;
+        ItemRigidBody = GetComponentInChildren<Rigidbody>();
         itemCollider = GetComponentInChildren<Collider>();
-        if (typeOfItem == GameUtils.TypeOfItem.THROWEABLE)
+        Label = GetComponentInChildren<Label>();
+        armMesh = GetComponentInChildren<SkinnedMeshRenderer>().gameObject;
+
+        if (typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE))
         {
-            itemID = GetComponent<Granade>().granadeData.name;
-            Icon = GetComponent<Granade>().granadeData.inventoryIcon;
+            ItemID = GetComponent<Granade>().GranadeData.id;
+            Icon = GetComponent<Granade>().GranadeData.inventoryIcon;
+            IsStackable = true;
         }
-        else if (typeOfItem == GameUtils.TypeOfItem.GUN)
+        else if (typeOfItem.Equals(GameUtils.TypeOfItem.GUN))
         {
             Icon = GetComponent<Weapon>().rarityData.inventoryIcon;
+            IsStackable = false;
         }
-        armMesh = GetComponentInChildren<SkinnedMeshRenderer>().gameObject;
-        //itemRigidBody.isKinematic = true;
     }
-
-    void Update()
+    private void Update()
+    {
+        CheckItemLayer();
+    }
+    private void LateUpdate()
     {
         CheckEquiped();
     }
-
-    public static void SetLayerRecursively(GameObject gameObject, int layer)
+    //changes item's layer depending on whether it is equipped
+    public static void SetLayerRecursively(GameObject _gameObject, int _layer)
     {
-        foreach (Transform transform in gameObject.GetComponentsInChildren<Transform>(true))
+        foreach (Transform transform in _gameObject.GetComponentsInChildren<Transform>(true))
         {
             if (transform.name.Equals("Label")) break;
-            transform.gameObject.layer = layer;
+            transform.gameObject.layer = _layer;
         }
     }
     public void EnableItem()
     {
-        gameManager.hudCrosshair.enabled = true;
+        gameManager.HUDCrosshair.enabled = true;
         gameObject.SetActive(true);
-
-
         //animacion de sacar objeto
     }
     public void DisableItem()
     {
-        gameManager.hudCrosshair.enabled = false;
-        gameObject.SetActive(false);
+        gameManager.HUDCrosshair.enabled = false;
         gameObject.GetComponentInChildren<Animator>().enabled = false;
+        gameObject.SetActive(false);
+
         //animacion de guardar objeto
+    }
+    private void CheckItemLayer()
+    {
+        //if it is equiped, it is rendered by weaponCam (change layer)
+        if (equipFlag != IsEquiped)//just check it when is equiped/unequiped
+        {
+            equipFlag = IsEquiped;
+            if (typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE))
+            {
+                SetLayerRecursively(gameObject, IsEquiped ? LayerMask.NameToLayer("Throw") : LayerMask.NameToLayer("Pick"));
+            }
+            else if (typeOfItem.Equals(GameUtils.TypeOfItem.GUN))
+            {
+                SetLayerRecursively(gameObject, IsEquiped ? LayerMask.NameToLayer("Weapon") : LayerMask.NameToLayer("Pick"));
+            }
+        }
     }
     public void CheckEquiped()
     {
-        itemRigidBody.isKinematic = isEquiped;
-        itemCollider.isTrigger = isEquiped;
+        ItemRigidBody.isKinematic = IsEquiped;
+        itemCollider.isTrigger = IsEquiped;
+        //show arms if equiped
+        armMesh.SetActive(IsEquiped);
 
-        armMesh.SetActive(isEquiped);
-        if (typeOfItem.Equals(GameUtils.TypeOfItem.GUN))
+        if (typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE))
         {
-            gameObject.GetComponent<Weapon>().enabled = isEquiped;
-            gameObject.GetComponent<VisualRecoil>().enabled = isEquiped;
-            gameObject.GetComponentInChildren<Animator>().enabled = isEquiped;
-        }
-        else if (typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE))
-        {
-            if (!gameObject.GetComponent<Granade>().hasBeenthrown)
+            if (!gameObject.GetComponent<Granade>().HasBeenthrown)
             {
-                gameObject.GetComponent<Granade>().enabled = isEquiped;
-                gameObject.GetComponentInChildren<Animator>().enabled = isEquiped;
+                gameObject.GetComponent<Granade>().enabled = IsEquiped;
+                gameObject.GetComponentInChildren<Animator>().enabled = IsEquiped;
             }
             else
             {
@@ -97,20 +117,13 @@ public class GrabbableItem : MonoBehaviour
                 gameObject.GetComponentInChildren<Animator>().enabled = true;
             }
         }
-
-        //Si está equipado, lo renderiza la WeaponCam
-        if (equipFlag != isEquiped)//para que solo se compruebe cuando se equipa o desequipa
+        else if (typeOfItem.Equals(GameUtils.TypeOfItem.GUN))
         {
-            equipFlag = isEquiped;
-            if (typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE))
-            {
-                SetLayerRecursively(gameObject, isEquiped ? LayerMask.NameToLayer("Throw") : LayerMask.NameToLayer("Pick"));
-            }
-            else if (typeOfItem.Equals(GameUtils.TypeOfItem.GUN))
-            {
-                SetLayerRecursively(gameObject, isEquiped ? LayerMask.NameToLayer("Weapon") : LayerMask.NameToLayer("Pick"));
-            }
-
+            gameObject.GetComponent<Weapon>().enabled = IsEquiped;
+            gameObject.GetComponent<VisualRecoil>().enabled = IsEquiped;
+            gameObject.GetComponentInChildren<Animator>().enabled = IsEquiped;
         }
+
+
     }
 }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 504990509356418919}
   - component: {fileID: 3186363704291033789}
   - component: {fileID: 1705052563834276014}
-  m_Layer: 17
+  m_Layer: 16
   m_Name: build3Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -218,15 +218,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1956867054151404033, guid: 00dbf059a2673444b90c4720d1fc00a6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.0075285668
+      value: 0.0075
       objectReference: {fileID: 0}
     - target: {fileID: 1956867054151404033, guid: 00dbf059a2673444b90c4720d1fc00a6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.03330816
+      value: -0.0333
       objectReference: {fileID: 0}
     - target: {fileID: 1956867054151404033, guid: 00dbf059a2673444b90c4720d1fc00a6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.02
+      value: 0.0265
       objectReference: {fileID: 0}
     - target: {fileID: 1956867054151404033, guid: 00dbf059a2673444b90c4720d1fc00a6, type: 3}
       propertyPath: m_LocalRotation.w

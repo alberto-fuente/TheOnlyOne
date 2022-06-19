@@ -4,10 +4,11 @@ using UnityEngine.UI;
 
 public class Label : MonoBehaviour
 {
-    //visible
+    [Header("UI components")]
     private GameObject Canvas;
     private Outline itemOutline;
-    //info
+
+    [Header("Properties")]
     public TMP_Text itemName;
     public TMP_Text itemType;
     public Image icon;
@@ -15,7 +16,9 @@ public class Label : MonoBehaviour
     public Image background;
     public Color color;
 
-    public bool isPointed;
+    private bool isPointed;
+    public bool IsPointed { get => isPointed; set => isPointed = value; }
+
     private void Start()
     {
         Canvas = transform.GetChild(0).gameObject;
@@ -30,8 +33,8 @@ public class Label : MonoBehaviour
     }
     private void CheckVisible()
     {
-        Canvas.SetActive(isPointed);
-        itemOutline.enabled = isPointed;
+        Canvas.SetActive(IsPointed);
+        itemOutline.enabled = IsPointed;
 
     }
 }

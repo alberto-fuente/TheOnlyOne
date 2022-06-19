@@ -5,59 +5,32 @@ using UnityEngine;
 
 public class GranadeThrower : MonoBehaviour
 {
-    ItemHolder weaponHolder;
-    public ProjectPath projectPath;
-    public Transform shotPoint;
-
+    [Header("References")]
+    private PlayerInventory weaponHolder;
+    public Transform shootPoint;
     private GrabbableItem currentItem;
-    // Start is called before the first frame update
     void Start()
     {
-        weaponHolder = FindObjectOfType<ItemHolder>();
+        weaponHolder = FindObjectOfType<PlayerInventory>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         ListenThrowInput();
-        //ListenAimInput();
-    }
-    private void FixedUpdate()
-    {
-       
-    }
-
-    private void ListenAimInput()
-    {
-        if (currentItemIsThroweable())
-        {
-            if (Input.GetMouseButton(1))
-            {
-                projectPath.SimulateProjection(shotPoint);
-
-            }
-            if (Input.GetMouseButtonUp(1))
-            {
-                projectPath.StopSimulateProjection();
-            }
-        }
     }
 
     void ListenThrowInput()
     {
-        if (Input.GetMouseButtonDown(0)&&currentItemIsThroweable())
+        if (currentItemIsThroweable()&&Input.GetMouseButtonDown(0))
         {
-            currentItem.GetComponent<Granade>().hasBeenthrown = true;
-            weaponHolder.DropItem(currentItem);
-            currentItem.GetComponent<Granade>().Throw(shotPoint.position,shotPoint.forward);
-            //projectPath.StopSimulateProjection();
+            currentItem.GetComponent<Granade>().HasBeenthrown = true;
+            weaponHolder.DropItem();
+            currentItem.GetComponent<Granade>().Throw(shootPoint.position,shootPoint.forward);
         }
     }
     private bool currentItemIsThroweable()
     {
         currentItem = weaponHolder.GetCurrentItem();
-        if (currentItem != null && weaponHolder.GetCurrentItem().typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE))
-            return true;
-        return false;
+        return (currentItem != null && weaponHolder.GetCurrentItem().typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE));
     }
 }

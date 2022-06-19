@@ -207,13 +207,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthSystem: {fileID: 0}
+  killPanel: {fileID: 0}
   isPlayer: 0
   healthFill: {fileID: 8754453038296303716}
-  shieldFill: {fileID: 8754453037248103899}
+  armorFill: {fileID: 8754453037248103899}
   healthDamaged: {fileID: 8754453038862221727}
-  shieldDamaged: {fileID: 8754453038788914716}
+  armorDamaged: {fileID: 8754453038788914716}
   healthText: {fileID: 0}
-  shieldText: {fileID: 0}
+  armorText: {fileID: 0}
   popUpText: {fileID: 7714602989348379259, guid: 5005fe99315499741a8244f479fa7b6a, type: 3}
   damageCanvas: {fileID: 0}
   damageshowTime: 0
@@ -227,6 +228,7 @@ MonoBehaviour:
   healSound: {fileID: 0}
   armorSound: {fileID: 0}
   armorBrokenSound: {fileID: 0}
+  hitSound: {fileID: 0}
 --- !u!1 &8754453038296303719
 GameObject:
   m_ObjectHideFlags: 0

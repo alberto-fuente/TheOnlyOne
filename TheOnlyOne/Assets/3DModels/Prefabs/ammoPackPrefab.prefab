@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8483506709042541862}
   - component: {fileID: 2669225313109342395}
   - component: {fileID: -2409142893570782778}
-  - component: {fileID: -7050047368883931638}
   - component: {fileID: -2294500687249306473}
   - component: {fileID: 3367950740741912410}
   m_Layer: 12
@@ -49,7 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  label: {fileID: 0}
+  pickVFX: {fileID: 5024009746357069194, guid: ec3f674830402cc45bce805cf6493db7, type: 3}
   pickPack: {fileID: 8300000, guid: c4786d124bb72c94083eb9c4e7ff0479, type: 3}
 --- !u!54 &2669225313109342395
 Rigidbody:
@@ -79,19 +78,6 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.7
-  m_Center: {x: 0.0000032931573, y: -0.0000008940696, z: -0.00055903953}
---- !u!135 &-7050047368883931638
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5874444639856154749}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.8
   m_Center: {x: 0.0000032931573, y: -0.0000008940696, z: -0.00055903953}
 --- !u!114 &-2294500687249306473
 MonoBehaviour:

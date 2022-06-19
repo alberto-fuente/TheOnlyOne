@@ -7,6 +7,7 @@ using UnityEngine;
 public class GranadeBlueprint : ScriptableObject
 {
     [Header("Attributes")]
+    public int id;
     public string name;
     public string granadeType;
     public GameObject prefab;

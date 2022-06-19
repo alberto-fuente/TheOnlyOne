@@ -1,38 +1,34 @@
 using UnityEngine;
-
 public class Recoil : MonoBehaviour
 {
-    //arma actual
-    private ItemHolder weaponChanger;
+    [Header("References")]
+    private PlayerInventory playerInventory;
     private Weapon currentWeapon;
 
-    //rotaciones
-    private Vector3 currentRot;
-    private Vector3 targetRot;
+    [Header("Rotations")]
+    private Vector3 currentRotation;
+    private Vector3 targetRotation;
 
     private void Start()
     {
-        weaponChanger = FindObjectOfType<ItemHolder>();
+        playerInventory = FindObjectOfType<PlayerInventory>();
     }
     void Update()
     {
-        // Comprobamos cual es el arma actual
-        if (weaponChanger.GetCurrentItem()==null || weaponChanger.GetCurrentItem().typeOfItem != GameUtils.TypeOfItem.GUN)
+        //Check current weapon
+        if (playerInventory.GetCurrentItem()==null || playerInventory.GetCurrentItem().typeOfItem != GameUtils.TypeOfItem.GUN)
         return;
-        currentWeapon = weaponChanger.GetCurrentItem().GetComponent<Weapon>();
-
-        //Calcula la rotación para volver a reposo
-        targetRot = Vector3.Lerp(targetRot, Vector3.zero, currentWeapon.weaponData.returnSpeed * Time.deltaTime);
-        currentRot = Vector3.Slerp(currentRot, targetRot, currentWeapon.weaponData.recoilSpeed * Time.fixedDeltaTime);
-        //aplica la rotación
-        transform.localRotation = Quaternion.Euler(currentRot);
+        currentWeapon = playerInventory.GetCurrentItem().GetComponent<Weapon>();
+        //Constantly tries to rotate back to initial rotation
+        targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, currentWeapon.weaponData.returnSpeed * Time.deltaTime);
+        currentRotation = Vector3.Slerp(currentRotation, targetRotation, currentWeapon.weaponData.recoilSpeed * Time.fixedDeltaTime);
+        //applies rotation
+        transform.localRotation = Quaternion.Euler(currentRotation);
     }
-    //método llamado en el script weapon
     public void RecoilFire(Vector3 recoil)
     {
-        //recoil en los ejes x,z
-        targetRot += new Vector3(recoil.x, Random.Range(-recoil.y, recoil.y), Random.Range(-recoil.z, recoil.z));
-        
+        //add recoil in x and z axis
+        targetRotation += new Vector3(recoil.x, Random.Range(-recoil.y, recoil.y), Random.Range(-recoil.z, recoil.z));
     }
 
 }

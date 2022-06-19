@@ -2,17 +2,16 @@ using UnityEngine;
 
 public class PauseMenu : MonoBehaviour
 {
-    public GameObject pauseMenu;
+    [Header("Properties")]
     public static bool GameIsPaused = false;
-    public AudioSource audioSource;
-    public AudioClip buttonHover;
-    public AudioClip buttonPressed;
-    public GameObject expScreen;//evitar que el menu de opciones aparezca cuando se termina la partida
+
+    [Header("References")]
+    public GameObject pauseMenu;
+    public GameObject expScreen;//Avoid Pause Menu pop up when game is over
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)&&!expScreen.activeSelf)
+        if (Input.GetKeyDown(KeyCode.Escape) && !expScreen.activeSelf)
         {
-
             if (GameIsPaused)
             {
                 Resume();
@@ -21,52 +20,35 @@ public class PauseMenu : MonoBehaviour
             {
                 Pause();
             }
-
         }
     }
 
-    private void Pause()
+    public void Pause()
     {
-        pauseMenu.SetActive(true);
-        Time.timeScale = 0f;
         GameIsPaused = true;
+        Time.timeScale = 0f;
+        pauseMenu.SetActive(true);
         unhideCursor();
     }
 
     public void Resume()
     {
+        GameIsPaused = false;
         pauseMenu.SetActive(false);
         Time.timeScale = 1f;
-        GameIsPaused = false;
         hideCursor();
     }
-    public void LoadScene(int sceneIndex)
-    {
-        Time.timeScale = 1;
-        SceneDirector.instance.LoadScene(sceneIndex);
-    }
-    public void QuitGame()
-    {
-        Application.Quit();
-    }
 
-    private void hideCursor()
+    public void hideCursor()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
-    private void unhideCursor()
+    public void unhideCursor()
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
 
-    public void HoverButtonPlay()
-    {
-        audioSource.PlayOneShot(buttonHover);
-    }
-    public void PressButtonPlay()
-    {
-        audioSource.PlayOneShot(buttonPressed);
-    }
+
 }

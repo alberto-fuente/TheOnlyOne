@@ -1,12 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyHitBox : MonoBehaviour
 {
-    public HealthSystem healthSystem;
+    private HealthSystem healthSystem;
+    public HealthSystem HealthSystem { get => healthSystem; set => healthSystem = value; }
+
     public void OnHit(int damage,Transform tranform)
     {
-        healthSystem.Damage(damage,true, tranform);
+        HealthSystem.Damage(damage,true,tranform);
     }
 }

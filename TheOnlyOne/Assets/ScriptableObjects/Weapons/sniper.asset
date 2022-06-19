@@ -22,7 +22,7 @@ MonoBehaviour:
   reloadTime: 2.6
   aimSpeed: 10
   autoShoot: 0
-  damage: 50
+  damage: 40
   swayIntensity: 10
   swaySpeed: 5
   recoilRotation: {x: 0.15, y: 0.33, z: 0.22}

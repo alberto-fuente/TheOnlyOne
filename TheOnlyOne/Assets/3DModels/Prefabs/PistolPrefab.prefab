@@ -206,13 +206,13 @@ MonoBehaviour:
   cameraHolder: {fileID: 0}
   weaponCam: {fileID: 0}
   playerCam: {fileID: 0}
-  audioSource: {fileID: 0}
+  playerLook: {fileID: 0}
   currentAmmo: 0
   totalAmmo: 0
   isReloading: 0
   isAming: 0
-  prefabContainer: {fileID: 0}
-  muzzleFlash: {fileID: 0}
+  bulletHit: {fileID: 7157390985949552312, guid: a2fdaad9735aa5c489f0e524331f9d4d, type: 3}
+  impactSound: {fileID: 8300000, guid: 55a9d6269c2852745980c0e9fd797a33, type: 3}
 --- !u!114 &8870931787838259531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,19 +240,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ad62a039e86e0b41b1b827c7f66d203, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: 
-  itemRigidBody: {fileID: 0}
-  itemCollider: {fileID: 0}
-  prefab: {fileID: 0}
-  Icon: {fileID: 21300000, guid: ce165ed8965f12c40a151b5d39dc449e, type: 3}
-  isStackable: 0
-  itemID: gun
-  weaponHolder: {fileID: 0}
+  itemID: 0
   typeOfItem: 1
-  armMesh: {fileID: 0}
-  isPointed: 0
-  isEquiped: 0
-  slotId: 0
 --- !u!82 &7547929747486496289
 AudioSource:
   m_ObjectHideFlags: 0

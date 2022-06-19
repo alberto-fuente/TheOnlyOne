@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class VisualRecoil : MonoBehaviour
 {
-    [Header("Weapon Data")]
+    [Header("References")]
     [SerializeField]private Weapon weapon;
     [SerializeField] private Transform recoilPosition;
     [SerializeField] private Transform rotationPoint;

@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class InventorySlot
 {
+    //Each slot is structured as a stack of items
     private Stack<GrabbableItem> itemStack = new Stack<GrabbableItem>();
     private int id = 0;
     public int Id { get => id; }
@@ -15,41 +14,35 @@ public class InventorySlot
     {
         return itemStack.Count;
     }
-
     public bool IsEmpty()
     {
         return Count() <= 0;
     }
-
     public GrabbableItem FirstItem()
     {
         if (IsEmpty()) return null;
         return itemStack.Peek();
     }
-
-    public bool IsStackable(GrabbableItem item)
+    public bool IsStackable(GrabbableItem _item)
     {
         if (IsEmpty()) return false;
-        if (FirstItem().isStackable && item.itemID.Equals(FirstItem().itemID)) return true;
-        return false;
+        return (FirstItem().IsStackable && _item.ItemID.Equals(FirstItem().ItemID));
     }
-    public GrabbableItem GetItemAt(int index)
+    public GrabbableItem GetItemAt(int _index)
     {
         if (IsEmpty()) return null;
         GrabbableItem[] array = itemStack.ToArray();
-        return array[index];
+        return array[_index];
     }
-    public void AddItem(GrabbableItem item)
+    public void AddItem(GrabbableItem _item)
     {
-        item.Slot = this;
-        itemStack.Push(item);
+        _item.Slot = this;
+        itemStack.Push(_item);
     }
-
-    public bool RemoveItem(GrabbableItem item)
+    public bool RemoveItem()
     {
         if (IsEmpty()) return false;
         itemStack.Pop();
         return true;
-
     }
 }

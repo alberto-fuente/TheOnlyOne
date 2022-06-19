@@ -2,48 +2,46 @@ using UnityEngine;
 
 public class PlayerLook : MonoBehaviour
 {
-    #region Variables
-    [SerializeField] WallRun wallRun;
+    [Header("Refereneces")]
+    private WallRun wallRun;
     public Transform cam;
     public Transform orientation;
 
+    [Header("Properties")]
     private float xRotation;
     private float yRotation;
     public float sensitivity;
     public float sensMult;
-    #endregion
-    // Start is called before the first frame update
+
     void Start()
     {
+        wallRun = GetComponent<WallRun>();
         hideCursor();
     }
 
-    // Update is called once per frame
     void Update()
     {
         Look();
     }
     private void Look()
     {
-        //input
+        //user input
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
-
-        
+        //horizontal rotation
         yRotation += mouseX * Time.deltaTime * sensitivity * sensMult;
-        //rotacion vertical
+        //vertical rotation
         xRotation -= mouseY * Time.deltaTime * sensitivity * sensMult;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-        //rotacion horizontal
+        //apply rotation
         cam.transform.localRotation = Quaternion.Euler(xRotation, yRotation, wallRun.tilt);
-        //rotamos también la orientacion horizontalmente
-        orientation.transform.rotation= Quaternion.Euler(0, yRotation, wallRun.tilt);
-        
+        //rotate orientation accordingly
+        orientation.transform.rotation = Quaternion.Euler(0, yRotation, wallRun.tilt);
+
     }
     private void hideCursor()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
-
 }

@@ -1,41 +1,71 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using TMPro;
-using Firebase;
 using Firebase.Database;
+using TMPro;
+
 public class GameManager : MonoBehaviour
 {
-    public float minutesToPlay = 15;
-    public Image hudCrosshair;
+    private static GameManager instance;
+
+    [Header("Crosshair")]
+    public Image HUDCrosshair;
     [SerializeField] private Sprite defaultCrosshair;
-    public ItemHolder itemHolder;
-    public GameObject ammoPanel;
-    public float gameTimer = 0f;
+
+    [Header("Finish Screens")]
+    public GameObject winCanvas;
+    public GameObject loseCanvas;
+    public GameObject expCanvas;
+
+    [Header("Properties")]
+    private bool matchIsFinished;
     [SerializeField] private float safeRadius = 300;
-    public float fpsRate;
+    public float SafeRadius { get => safeRadius; set => safeRadius = value; }
+
+    [Header("Entities")]
+    public TMP_Text entitiesLeftText;
+    public TMP_Text defeatedEnemies;
+    [HideInInspector] public int beatenEnemies = 0;
+    private int entitiesLeft;
+    public int EntitiesLeft { get => entitiesLeft; set => entitiesLeft = value; }
+    public static GameManager Instance { get => instance; private set => instance = value; }
+
+    [Header("References")]
+    public PlayerInventory playerInventory;
+    public GameObject ammoPanel;
+    public GameObject Label;
+    public AudioClip headshotSound;
+    private DatabaseReference DBreference;
+
+    [Header("Ammo UI")]
     public TMP_Text fpsText;
     public TMP_Text currentAmmoText;
     public TMP_Text totalAmmoText;
-    public AudioClip headshotSound;
 
+    [Header("Weapons' rarity")]
     public ItemRarityBlueprint[] rarityDataPistols;
     public ItemRarityBlueprint[] rarityDataSubfusils;
     public ItemRarityBlueprint[] rarityDataRifles;
     public ItemRarityBlueprint[] rarityDataSnipers;
     public ItemRarityBlueprint[] rarityDataShotguns;
 
-    public ItemRarityBlueprint[] rarityPackAmmo;
-    public ItemRarityBlueprint[] rarityPackHealth;
-    public ItemRarityBlueprint[] rarityPackArmor;
+    [Header("Packs' rarity")]
+    public ItemRarityBlueprint[] rarityPacksAmmo;
+    public ItemRarityBlueprint[] rarityPacksHealth;
+    public ItemRarityBlueprint[] rarityPacksArmor;
 
+    [Header("Granades")]
     public GranadeBlueprint[] granadeTypes;
 
+    [Header("Enemies")]
     public EnemyBlueprint[] enemyTypes;
 
-    public GameObject[] spawnableItems;//crates and enemies
-    //Experience
+    [Header("Spawnable items")]
+    public GameObject[] spawnableItems;//can be spawned in crates and when enemy dies
+
+    [Header("Player XP UI")]
+    public TMP_Text playerRank;
     public TMP_Text beatenEnemiesField;
     public TMP_Text matchExpField;
     public TMP_Text enemiesExpField;
@@ -43,124 +73,87 @@ public class GameManager : MonoBehaviour
     public TMP_Text totalExpField;
 
     private int matchExp = 200;
-    [HideInInspector] public int beatenEnemies = 0;
-    public TMP_Text defeatedEnemies;
     private int expPerEnemy = 25;
-    private int victoryExp = 0;
+    private int victoryExp = 300;
     private int totalExp = 0;
-    
-    public GameObject winCanvas;
-    public GameObject loseCanvas;
-    public GameObject expCanvas;
 
-    private bool matchIsFinished;
-    //Label
-    public GameObject Label;
 
-    public int entitiesLeft;
-    public TMP_Text entitiesLeftText;
+    void Awake()
+    {
+        if (GameManager.Instance == null)
+        {
+            GameManager.Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
-    DatabaseReference DBreference;
-    //Scene currentScene;
-    PhysicsScene currentPhysicsScene;
-
-    //public Scene CurrentScene { get => currentScene; set => currentScene = value; }
-    public PhysicsScene CurrentPhysicsScene { get => currentPhysicsScene; set => currentPhysicsScene = value; }
-    public float SafeRadius { get => safeRadius; set => safeRadius = value; }
-
-    // Start is called before the first frame update
     void Start()
     {
-        hudCrosshair.enabled=false;
-        itemHolder = FindObjectOfType<ItemHolder>();
-
-        Physics.IgnoreLayerCollision(10, 11);//player and bullet
-        Physics.IgnoreLayerCollision(7, 11);
-
         DBreference = FirebaseDatabase.DefaultInstance.RootReference;
-
-
+        playerInventory = FindObjectOfType<PlayerInventory>();
+        EntitiesLeft = FindObjectsOfType<HealthSystem>().Length;
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Weapon"));
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Bullet"));
     }
-    
-    private void FixedUpdate()
-    {
-       /* if (CurrentPhysicsScene.IsValid())
-        {
-            CurrentPhysicsScene.Simulate(Time.fixedDeltaTime);
-        }*/
-    }
-    // Update is called once per frame
+
     void Update()
     {
-
-        entitiesLeft = FindObjectsOfType<HealthSystem>().Length;
-        entitiesLeftText.text = entitiesLeft.ToString();
+        entitiesLeftText.text = EntitiesLeft.ToString();
+        if (HUDCrosshair.sprite == null) HUDCrosshair.sprite = defaultCrosshair;
         CheckMatchOver();
-        if (hudCrosshair.sprite == null) hudCrosshair.sprite=defaultCrosshair;
-        fpsRate = 1f / Time.deltaTime;
-        fpsText.text = fpsRate.ToString("F2");
-       // CurrentScene = SceneManager.GetActiveScene();
-       // CurrentPhysicsScene = CurrentScene.GetPhysicsScene();
-
-        if (itemHolder.GetCurrentItem()!=null&&itemHolder.GetCurrentItem().typeOfItem.Equals(GameUtils.TypeOfItem.GUN))
+        CheckWeaponEquiped();
+    }
+    private void CheckWeaponEquiped()
+    {
+        if (playerInventory.GetCurrentItem() != null && playerInventory.GetCurrentItem().typeOfItem.Equals(GameUtils.TypeOfItem.GUN))
         {
             ammoPanel.SetActive(true);
-            Weapon weapon = itemHolder.GetCurrentItem().GetComponent<Weapon>();
-            int ammo = weapon.currentAmmo;
+            Weapon weapon = playerInventory.GetCurrentItem().GetComponent<Weapon>();
+            int currentAmmo = weapon.currentAmmo;
             int totalAmmo = weapon.totalAmmo;
             int maxClipAmmo = weapon.weaponData.maxClipAmmo;
-            currentAmmoText.text = ammo.ToString();
+            currentAmmoText.text = currentAmmo.ToString();
             totalAmmoText.text = totalAmmo.ToString();
-            if (ammo < maxClipAmmo / 3)
-            {
-                currentAmmoText.color = Color.red;
-            }
-            else
-            {
-                currentAmmoText.color = Color.white;
-            }
+            currentAmmoText.color = currentAmmo < maxClipAmmo / 3 ? Color.red : Color.white;
 
         }
         else
         {
-            ammoPanel.SetActive(false);
+            if(ammoPanel!=null)ammoPanel.SetActive(false);
         }
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            SceneManager.LoadScene(0);
-        }
-
     }
-    public void GenerateLabel(Transform parent, Vector3 position, string name, string type, Sprite icon, string stat, Color color)
+    public void GenerateLabel(Transform _parent, Vector3 _position, string _name, string _type, Sprite icon, string _stat, Color _color)
     {
-        GameObject label= Instantiate(Label, position, Quaternion.identity,parent);
+        GameObject label = Instantiate(Label, _position, Quaternion.identity, _parent);
         Label labelInfo = label.GetComponent<Label>();
-        labelInfo.itemName.text = name;
-        labelInfo.itemType.text = type;
+        labelInfo.itemName.text = _name;
+        labelInfo.itemType.text = _type;
         labelInfo.icon.sprite = icon;
-        labelInfo.stat.text = stat;
-        labelInfo.color = color;
+        labelInfo.stat.text = _stat;
+        labelInfo.color = _color;
     }
-   
+
     private void CheckMatchOver()
     {
-
-        if (!matchIsFinished&&entitiesLeft == 1 && itemHolder.isActiveAndEnabled)
+        if (!matchIsFinished && EntitiesLeft == 1 && playerInventory.isActiveAndEnabled)//player wins
         {
             matchIsFinished = true;
             Win();
         }
-        if (!matchIsFinished && !itemHolder.isActiveAndEnabled)
+        if (!matchIsFinished && !playerInventory.isActiveAndEnabled)//player loses
         {
             matchIsFinished = true;
             Lose();
         }
     }
-    private void SetExpValues(bool hasWon)
+    private void SetExpValues(bool _hasWon)
     {
         int enemiesExp = beatenEnemies * expPerEnemy;
-        victoryExp = hasWon ? 300 : 0;
+        victoryExp = _hasWon ? 300 : 0;
         totalExp = matchExp + enemiesExp + victoryExp;
 
         matchExpField.text = "+" + matchExp.ToString();
@@ -168,48 +161,47 @@ public class GameManager : MonoBehaviour
         enemiesExpField.text = "+" + enemiesExp.ToString();
         victoryExpField.text = "+" + victoryExp.ToString();
         totalExpField.text = totalExp.ToString();
-        Debug.Log("match values updated");
         //Update database
-        StartCoroutine(UpdateUserExp(totalExp));
+        StartCoroutine(UpdateUserExpDB(totalExp));
     }
     private void Win()
     {
-        StartCoroutine(WinCorroutine());
+        StartCoroutine(EndMatchCorroutine(true));
     }
     public void Lose()
     {
-        StartCoroutine(LoseCorroutine());
+        playerRank.text = "#"+(EntitiesLeft + 1).ToString();//final rank
+        StartCoroutine(EndMatchCorroutine(false));
     }
-    
-    private IEnumerator WinCorroutine()
+
+    private IEnumerator EndMatchCorroutine(bool _hasWon)
     {
-        Debug.Log("Winner");
-        Time.timeScale = 0f;
         ShowCursor();
-        winCanvas.SetActive(true);
-        SetExpValues(true);
+        if (_hasWon)
+        {
+            winCanvas.SetActive(true);
+        }
+        else
+        {
+            loseCanvas.SetActive(true);
+        }
+
+        SetExpValues(_hasWon);
         yield return new WaitForSecondsRealtime(1);
+        expCanvas.transform.localScale = new Vector3(0, 0, 0);
         expCanvas.SetActive(true);
+        LeanTween.scale(expCanvas, new Vector3(1, 1, 1), 0.5f).setOnComplete(slowTime);
         yield return null;
     }
-    public IEnumerator LoseCorroutine()
+    private void slowTime()
     {
-        Debug.Log("Loser");
-        Time.timeScale = 0f;
-        ShowCursor();
-        loseCanvas.SetActive(true);
-        SetExpValues(false);
-        yield return new WaitForSecondsRealtime(1);
-        expCanvas.SetActive(true);
-        yield return null;
+        Time.timeScale = 0.1f;
     }
-    private IEnumerator UpdateUserExp(int xp)
+    private IEnumerator UpdateUserExpDB(int xp)
     {
-        var authentic = FirebaseManager.auth;
         var user = FirebaseManager.User;
-        int userXP=0;
+        int userXP = 0;
         int newTotalXP = 0;
-        Debug.Log("Actualizando exp");
         var DBGetTask = FirebaseManager.DBReference.Child("players").Child(user.UserId).Child("xp").GetValueAsync();
         yield return new WaitUntil(predicate: () => DBGetTask.IsCompleted);
         if (DBGetTask.Exception != null)
@@ -219,27 +211,22 @@ public class GameManager : MonoBehaviour
         else
         {
             DataSnapshot snapshot = DBGetTask.Result;
-
-            Debug.Log("la experiencia total es "+ (int)snapshot.Value);
-            userXP = (int)snapshot.Value;//experiencia existente
+            userXP = Convert.ToInt32(snapshot.Value);//saved xp
         }
 
         newTotalXP = userXP + xp;
         var DBSetTask = DBreference.Child("players").Child(user.UserId).Child("xp").SetValueAsync(newTotalXP);
-        yield return new WaitUntil(predicate: ()=>DBSetTask.IsCompleted);
+        yield return new WaitUntil(predicate: () => DBSetTask.IsCompleted);
         if (DBSetTask.Exception != null)
         {
             Debug.LogWarning(message: $"Failed to update player's xp with{DBSetTask.Exception}");
         }
     }
+
     private void ShowCursor()
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
-    public void LoadScene(int sceneIndex)
-    {
-        Time.timeScale = 1;
-        SceneDirector.instance.LoadScene(sceneIndex);
-    }
+
 }

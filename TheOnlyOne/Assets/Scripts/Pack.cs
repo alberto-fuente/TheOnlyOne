@@ -1,57 +1,53 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class Pack : MonoBehaviour
 {
-    public GameUtils.TypeOfPack type;
-    private GameManager gameManager;
+    [Header("References")]
     private ItemRarityBlueprint rarityData;
     private HealthSystem healthSystem;
-    public Label label;
+    private PlayerInventory itemHolder;
+    private GameManager gameManager;
+    [Header("Components")]
+    public GameUtils.TypeOfPack type;
+    private string statText = "";
+    private Label label;
     private GameObject prefab;
+    [SerializeField] private GameObject pickVFX;
     [SerializeField] private AudioClip pickPack;
-    private void Awake()
-    {
-        gameManager = FindObjectOfType<GameManager>();
-        GenerateAmmoPack();
-        //label
-        string statText = "";
-        switch (type)
-        {
-            case GameUtils.TypeOfPack.AMMO:
-                statText = "x" + rarityData.multiplier;
-                break;
-            case GameUtils.TypeOfPack.HEALTH:
-                statText = "+" + GameUtils.MAXHEALTH / GameUtils.numberOfRarities * rarityData.multiplier;
-                break;
-            case GameUtils.TypeOfPack.ARMOR:
-                statText = "+" + GameUtils.MAXSHIELD / GameUtils.numberOfRarities * rarityData.multiplier;
-                break;
-        }
-        prefab = GetComponentInChildren<Collider>().gameObject;
-        gameManager.GenerateLabel(prefab.transform,prefab.transform.position+new Vector3(0,0.3f,0), rarityData.name, rarityData.rarity, rarityData.labelIcon, statText, rarityData.color);
-    }
+
+    public ItemRarityBlueprint RarityData { get => rarityData; set => rarityData = value; }
+    public Label Label { get => label; set => label = value; }
+
     private void Start()
     {
-        label = GetComponentInChildren<Label>();
+        gameManager = GameManager.Instance;
+        itemHolder = FindObjectOfType<PlayerInventory>();
+        GeneratePack();
+        prefab = GetComponentInChildren<Collider>().gameObject;
+        gameManager.GenerateLabel(prefab.transform, prefab.transform.position + new Vector3(0, 0.3f, 0), RarityData.name, RarityData.rarity, RarityData.labelIcon, statText, RarityData.color);
+        Label = GetComponentInChildren<Label>();
     }
-    private void GenerateAmmoPack()
+    private void GeneratePack()
     {
         switch (type)
         {
             case GameUtils.TypeOfPack.AMMO:
-                rarityData = GetRarityPack(gameManager.rarityPackAmmo);
+                RarityData = GetRarityPack(gameManager.rarityPacksAmmo);
+                statText = "x" + RarityData.multiplier;
                 break;
             case GameUtils.TypeOfPack.HEALTH:
-                rarityData = GetRarityPack(gameManager.rarityPackHealth);
+                RarityData = GetRarityPack(gameManager.rarityPacksHealth);
+                statText = "+" + GameUtils.MAXHEALTH / GameUtils.numberOfRarities * RarityData.multiplier;
                 break;
             case GameUtils.TypeOfPack.ARMOR:
-                rarityData = GetRarityPack(gameManager.rarityPackArmor);
+                RarityData = GetRarityPack(gameManager.rarityPacksArmor);
+                statText = "+" + GameUtils.MAXSHIELD / GameUtils.numberOfRarities * RarityData.multiplier;
                 break;
         }
-
-        Instantiate(rarityData.prefab, transform);
+        Instantiate(RarityData.prefab, transform);
     }
-    ItemRarityBlueprint GetRarityPack(ItemRarityBlueprint[] collection)
+    //Choose rarity of the pack according to its probability
+    private ItemRarityBlueprint GetRarityPack(ItemRarityBlueprint[] collection)
     {
         int i = Random.Range(0, 100);
         for (int j = 0; j < collection.Length; j++)
@@ -61,28 +57,21 @@ public class Pack : MonoBehaviour
                 return collection[j];
             }
         }
-        return collection[0];//si hay algún error genera un paquete de munición común
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            Collect(other, type);
-        }
+        return collection[0];//si hay algï¿½n error genera un paquete de municiï¿½n comï¿½n
     }
     public void Collect(Collider collector, GameUtils.TypeOfPack type)
     {
-        FindObjectOfType<GameManager>().GetComponent<AudioSource>().PlayOneShot(pickPack);
+        AudioManager.Instance.PlaySound(pickPack);
         switch (type)
         {
+            //give each equiped weapon an amount of full magazines according to the rarity of the pack
             case GameUtils.TypeOfPack.AMMO:
-                ItemHolder itemHolder = collector.gameObject.GetComponentInParent<PlayerController>().itemHolder;
                 foreach (InventorySlot slot in itemHolder.inventory)
                 {
-                    if (slot.FirstItem() != null && slot.FirstItem().typeOfItem == GameUtils.TypeOfItem.GUN)
+                    if (slot.FirstItem() != null && slot.FirstItem().typeOfItem.Equals(GameUtils.TypeOfItem.GUN))
                     {
                         Weapon weapon = slot.FirstItem().gameObject.GetComponent<Weapon>();
-                        weapon.totalAmmo += weapon.weaponData.maxClipAmmo * (int)rarityData.multiplier;
+                        weapon.totalAmmo += weapon.weaponData.maxClipAmmo * RarityData.multiplier;
                     }
                 }
                 break;
@@ -93,8 +82,8 @@ public class Pack : MonoBehaviour
                     * Rare: +50
                     * Epic: +75
                     * Legendary: +100
-                    */
-                healthSystem.HealHealth(healthSystem.MaxHealth / 4 * (int)rarityData.multiplier);
+                */
+                healthSystem.HealHealth(healthSystem.MaxHealth / GameUtils.numberOfRarities * RarityData.multiplier);
                 break;
             case GameUtils.TypeOfPack.ARMOR:
                 healthSystem = collector.gameObject.GetComponentInParent<HealthSystem>();
@@ -103,11 +92,12 @@ public class Pack : MonoBehaviour
                     * Rare: +50
                     * Epic: +75
                     * Legendary: +100
-                    */
-                healthSystem.HealShield(healthSystem.MaxShield / 4 * rarityData.multiplier);
+                */
+                healthSystem.HealShield(healthSystem.MaxArmor / GameUtils.numberOfRarities * RarityData.multiplier);
                 break;
         }
-
+        GameObject vfx = Instantiate(pickVFX, gameObject.transform.position, Quaternion.identity);
+        Destroy(vfx, 2);
         Destroy(gameObject);
     }
 }

@@ -4,80 +4,89 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    public GameManager gameManager;
-    public EnemyIA enemyIA;
-    public HealthSystem healthSystem;
-    public HealthBarFade healthBar;
+    [Header("References")]
+    private GameManager gameManager;
+    private EnemyIA enemyIA;
+    private EnemyBlueprint enemyData;
+    private GameObject enemyPrefab;
+    private HealthSystem healthSystem;
+    private Animator animatorController;
+    private Rigidbody[] rigidbodies;
+    private Collider groundCollider;
+    public PhysicMaterial physicMaterial;
+
+    [Header("Properties")]
+    private const int MINITEMSDROP = 2;
+    private const int MAXITEMSDROP = 4;
     private float hurtDelay = 1f;
     private float bigHurtDelay = 2.5f;
-    private Animator animatorController;
-    public EnemyBlueprint enemyData;
-    public GameObject enemyPrefab;
-    Rigidbody[] rigidbodies;
-    private const int MINITEMSDROP = 2;
-    private const int MAXITEMSDROP = 5;
-    public PhysicMaterial physicMaterial;
-    private Collider groundCollider;
-    private void Awake()
-    {
-        gameManager = FindObjectOfType<GameManager>();
-        enemyIA = GetComponent<EnemyIA>();
-        healthSystem = GetComponent<HealthSystem>();
-        healthBar = GetComponent<HealthBarFade>();
-        groundCollider = GetComponent<Collider>();
-        enemyData = GenerateEnemy();
-        enemyPrefab = Instantiate(enemyData.enemyPrefab, transform);
-    }
+    private float awareTimeWhenHit = 8f;
+    public EnemyBlueprint EnemyData { get => enemyData; set => enemyData = value; }
+    public Animator AnimatorController { get => animatorController; set => animatorController = value; }
 
-    private EnemyBlueprint GenerateEnemy()
+    private void OnDisable()
     {
-        return gameManager.enemyTypes[(UnityEngine.Random.Range(0, gameManager.enemyTypes.Length))];
+        healthSystem.OnDamaged -= HitAnimate;
+        healthSystem.OnDamaged -= IncreaseSensors;
+        healthSystem.OnDead -= Die;
+        healthSystem.OnDead -= DropItems;
     }
-
     private void Start()
     {
-        animatorController = enemyPrefab.GetComponentInChildren<Animator>();
+        gameManager = GameManager.Instance;
+        enemyIA = GetComponent<EnemyIA>();
+        healthSystem = GetComponent<HealthSystem>();
+        groundCollider = GetComponent<Collider>();
+
+        EnemyData = GenerateEnemy();
+        enemyPrefab = Instantiate(EnemyData.enemyPrefab, transform);
+        AnimatorController = enemyPrefab.GetComponentInChildren<Animator>();
         rigidbodies = enemyPrefab.transform.GetComponentsInChildren<Rigidbody>();
         foreach (Rigidbody rb in rigidbodies)
         {
             EnemyHitBox hitBox = rb.gameObject.AddComponent<EnemyHitBox>();
-            hitBox.healthSystem = healthSystem;
+            hitBox.HealthSystem = healthSystem;
             rb.GetComponent<Collider>().material = physicMaterial;
 
         }
-        setRigidBodyState(false);
-
+        setKinematic(true);
         healthSystem.OnDamaged += HitAnimate;
         healthSystem.OnDamaged += IncreaseSensors;
         healthSystem.OnDead += Die;
-        healthSystem.OnDead += dropItems;
+        healthSystem.OnDead += DropItems;
     }
-    private void setRigidBodyState(bool state)
+    private EnemyBlueprint GenerateEnemy()
+    {
+        return gameManager.enemyTypes[UnityEngine.Random.Range(0, gameManager.enemyTypes.Length)];
+    }
+    private void setKinematic(bool state)
     {
         foreach (Rigidbody rb in rigidbodies)
         {
-            rb.isKinematic = !state;
+            rb.isKinematic = state;
         }
     }
+    //the more health it has or the more damage it recieves, the more chances there are to play hit animation
     private void HitAnimate(object sender, HealthArgs damage)
     {
         int hitChance = UnityEngine.Random.Range(0, 100);
-        if (hitChance < damage.Amount * 100 / Math.Max((healthSystem.CurrentHealth + healthSystem.CurrentShield), 1))//cuanto mas daño haga o menos vida tenga, más probabilidad de hacer la animacion (se suma 1 para evitar dividir por 0)
+        if (hitChance < damage.Amount * 100 / Math.Max((healthSystem.CurrentHealth + healthSystem.CurrentArmor), 1))
         {
             if (damage.Amount > 145)
             {
-                animatorController.Play("BigHit");
-                if(this.enabled) StartCoroutine(HurtCoroutine(bigHurtDelay));
+                AnimatorController.Play("BigHit");
+                if(enabled) StartCoroutine(HurtCoroutine(bigHurtDelay));
             }
             else
             {
-                animatorController.SetInteger("HitIndex", UnityEngine.Random.Range(0, 3));
-                animatorController.SetTrigger("Hit");
-                if (this.enabled)StartCoroutine(HurtCoroutine(hurtDelay));
+                AnimatorController.SetInteger("HitIndex", UnityEngine.Random.Range(0, 3));
+                AnimatorController.SetTrigger("Hit");
+                if (enabled)StartCoroutine(HurtCoroutine(hurtDelay));
             }
 
         }
     }
+    //if hit by player, its sight becomes larger in order to try to detect him
     private void IncreaseSensors(object sender, HealthArgs hit)
     {
         if (hit.ByPlayer)
@@ -87,9 +96,9 @@ public class EnemyController : MonoBehaviour
     }
     IEnumerator IncreaseSensorsCorroutine()
     {
-        enemyIA.sightRange = enemyData.sightRange * 2;
-        yield return new WaitForSeconds(5);
-        enemyIA.sightRange = enemyData.sightRange;
+        enemyIA.sightRange = EnemyData.sightRange * 2;
+        yield return new WaitForSeconds(awareTimeWhenHit);
+        enemyIA.sightRange = EnemyData.sightRange;
     }
     IEnumerator HurtCoroutine(float delay)
     {
@@ -97,9 +106,9 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(delay);
         enemyIA.isHurted = false;
     }
-    void dropItems(object sender, EventArgs e)
+    void DropItems(object sender, EventArgs e)
     {
-        for (int i = 0; i < UnityEngine.Random.Range(MINITEMSDROP, MAXITEMSDROP); i++)
+        for (int i = 0; i < UnityEngine.Random.Range(MINITEMSDROP, MAXITEMSDROP+1); i++)
         {
             GameObject item = gameManager.spawnableItems[UnityEngine.Random.Range(0, gameManager.spawnableItems.Length)];
             Instantiate(item, transform.position + new Vector3(UnityEngine.Random.Range(-2, 2), 3f, UnityEngine.Random.Range(-2, 2)), item.transform.rotation);
@@ -108,12 +117,12 @@ public class EnemyController : MonoBehaviour
 
     void Die(object sender, EventArgs e)
     {
+        gameManager.EntitiesLeft--;
         groundCollider.enabled = false;
+        AnimatorController.enabled = false;
         enemyIA.enabled = false;
-        animatorController.enabled = false;
-        setRigidBodyState(true);
         healthSystem.enabled = false;
-
+        setKinematic(false);
         Destroy(gameObject, 1.5f);
     }
 }

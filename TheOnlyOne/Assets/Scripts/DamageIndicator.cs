@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DamageIndicator : MonoBehaviour
 {
-    private const float timeLimit = 8.0f;
+    private const float timeLimit = 7.0f;
     private float timer = timeLimit;
 
     private CanvasGroup canvasGroup = null;
@@ -51,11 +51,11 @@ public class DamageIndicator : MonoBehaviour
     private Quaternion targetRotation = Quaternion.identity;
     private Vector3 targetPos = Vector3.zero;
 
-    public void Register(Transform target,Transform player, Action unRegister)
+    public void Appear(Transform _target,Transform _player, Action _unRegister)
     {
-        this.Target = target;
-        this.player = player;
-        this.unRegister = unRegister;
+        this.Target = _target;
+        this.player = _player;
+        this.unRegister = _unRegister;
         StartCoroutine(RotateTowardsTarget());
         StartTimer();
     }

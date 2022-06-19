@@ -5,27 +5,27 @@ public class HealthSystem : MonoBehaviour
 {
     public event EventHandler<HealthArgs> OnDamaged;
     public event EventHandler<HealthArgs> OnHealthHealed;
-    public event EventHandler<HealthArgs> OnShieldHealed;
-    public event EventHandler<HealthArgs> OnShieldDestroyed;
+    public event EventHandler<HealthArgs> OnArmorHealed;
+    public event EventHandler<HealthArgs> OnArmorDestroyed;
     public event EventHandler<HealthArgs> OnDead;
 
     [SerializeField] const int MAXHEALTH = 100;
-    [SerializeField] const int MAXSHIELD = 100;
+    [SerializeField] const int MAXARMOR = 100;
 
     int currentHealth;
-    int currentShield;
+    int currentArmor;
 
     public bool isDead;
     public bool waslastHitHead;
     public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
-    public int CurrentShield { get => currentShield; set => currentShield = value; }
+    public int CurrentArmor { get => currentArmor; set => currentArmor = value; }
     public int MaxHealth { get => MAXHEALTH; }
-    public int MaxShield { get => MAXSHIELD; }
+    public int MaxArmor { get => MAXARMOR; }
 
     private void Awake()
     {
         CurrentHealth = MaxHealth;
-        CurrentShield = MaxShield;
+        CurrentArmor = MaxArmor;
     }
     public void HealHealth(int amount)
     {
@@ -35,18 +35,18 @@ public class HealthSystem : MonoBehaviour
     }
     public void HealShield(int amount)
     {
-        CurrentShield += amount;
-        if (CurrentShield > MaxShield) CurrentShield = MaxShield;
-        if (OnShieldHealed != null) OnShieldHealed(this, new HealthArgs(amount));
+        CurrentArmor += amount;
+        if (CurrentArmor > MaxArmor) CurrentArmor = MaxArmor;
+        if (OnArmorHealed != null) OnArmorHealed(this, new HealthArgs(amount));
     }
     public void Damage(int amount,bool byPlayer,Transform sourceTransform)
     {
-        var dif = CurrentShield - amount;
-        CurrentShield = dif;
-        if (CurrentShield < 0)
+        var dif = CurrentArmor - amount;
+        CurrentArmor = dif;
+        if (CurrentArmor < 0)
         {
-            CurrentShield = 0;
-            if (OnShieldDestroyed != null) OnShieldDestroyed(this, new HealthArgs(amount));
+            CurrentArmor = 0;
+            if (OnArmorDestroyed != null) OnArmorDestroyed(this, new HealthArgs(amount));
             CurrentHealth -= Mathf.Abs(dif);
         }
 
@@ -71,8 +71,8 @@ public class HealthSystem : MonoBehaviour
     {
         return (float)CurrentHealth / MaxHealth;
     }
-    public float GetShieldNormalized()
+    public float GetArmorNormalized()
     {
-        return (float)CurrentShield / MaxShield;
+        return (float)CurrentArmor / MaxArmor;
     }
 }

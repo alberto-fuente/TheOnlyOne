@@ -1687,6 +1687,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1101847475440834193}
     m_Modifications:
+    - target: {fileID: 2786354650506019960, guid: ff85a9a7b8e48d44d91c8a74e18476df, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 1cd2c5e975e6e43409c3d3e4bb44a951, type: 2}
     - target: {fileID: 9003303328987212938, guid: ff85a9a7b8e48d44d91c8a74e18476df, type: 3}
       propertyPath: m_Name
       value: FreezeGranadeModel

@@ -831,31 +831,31 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Shoot
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Hit
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Frozen
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: HitIndex
     m_Type: 3
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -1023,7 +1023,7 @@ AnimatorStateMachine:
     m_Position: {x: 430, y: 30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5288783740225104608}
-    m_Position: {x: 900, y: 60, z: 0}
+    m_Position: {x: 900, y: 80, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -8383822659787608083}
     m_Position: {x: 740, y: 280, z: 0}
@@ -1038,17 +1038,17 @@ AnimatorStateMachine:
     m_Position: {x: -10, y: 170, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2954750820398956076}
-    m_Position: {x: 130, y: -40, z: 0}
+    m_Position: {x: 160, y: -40, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 6939915526662789498}
     m_Position: {x: 670, y: 10, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 6941379118025282377}
-    m_Position: {x: -20, y: 80, z: 0}
+    m_Position: {x: 30, y: 70, z: 0}
   m_ChildStateMachines:
   - serializedVersion: 1
     m_StateMachine: {fileID: 4614496515905991290}
-    m_Position: {x: 920, y: 150, z: 0}
+    m_Position: {x: 920, y: 180, z: 0}
   m_AnyStateTransitions:
   - {fileID: 868512057147951660}
   m_EntryTransitions: []
@@ -1057,9 +1057,9 @@ AnimatorStateMachine:
     second:
     - {fileID: 4273851483075613965}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: 720, y: -80, z: 0}
+  m_AnyStatePosition: {x: 690, y: -80, z: 0}
   m_EntryPosition: {x: 450, y: 250, z: 0}
-  m_ExitPosition: {x: 1240, y: -160, z: 0}
+  m_ExitPosition: {x: 970, y: -70, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: -5130993431890517793}
 --- !u!1101 &1740927585818641386

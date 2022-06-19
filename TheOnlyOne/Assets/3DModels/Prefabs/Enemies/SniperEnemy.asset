@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyId: 3
   enemyPrefab: {fileID: 7416182413486766635, guid: c32b9ebe37d9b3d43919a6f73222e182, type: 3}
-  minDamage: 35
-  maxDamage: 68
-  attackDelay: 2.1
+  minDamage: 30
+  maxDamage: 51
+  attackDelay: 2.2
   hitProbability: 0.3
   shootSound: {fileID: 8300000, guid: 18fa41d7f8addbf4fa318584232caa2b, type: 3}
-  sightRange: 100
-  attackRange: 80
+  sightRange: 75
+  attackRange: 70
   stopChasingRange: 200

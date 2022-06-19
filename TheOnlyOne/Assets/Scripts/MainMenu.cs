@@ -1,52 +1,91 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
+    [Header("UI References")]
+    public GameObject MainMenuScreen;
+    public GameObject OptionsMenuScreen;
+    public GameObject ScoreBoardScreen;
+    public GameObject LoginScreen;
+    public GameObject RegisterScreen;
+    public GameObject PauseMenu;
 
-    public AudioSource audioSource;
-    public AudioClip buttonHover;
-    public AudioClip buttonPressed;
-    public AudioClip MenuMusic;
+    [Header("DataBase Reference")]
+    public UpdateUserData updateUserData;
+    public FirebaseManager firebaseManager;
 
-    /*
-   public void PlayGame()
+    [Header("Pause Menu Reference")]
+    public PauseMenu pauseMenu;
+    public void HoverButton()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        AudioManager.Instance.HoverButton();
     }
-    
-    public void OptionsMenu()
+    public void PressPlayButton()
     {
+        AudioManager.Instance.PressButton();
+        SceneDirector.instance.LoadScene((int)GameUtils.SceneIndex.GAME);
+    }
+    /////////////////Main Menu/////////////////////////
+    public void PressOptionsButton(bool enter)
+    {
+        AudioManager.Instance.PressButton();
+        MainMenuScreen.SetActive(!enter);
+        OptionsMenuScreen.SetActive(enter);
+    }
+    public void PressScoreboardButton(bool enter)
+    {
+        AudioManager.Instance.PressButton();
+        updateUserData.ScoreboardButton();
+        MainMenuScreen.SetActive(!enter);
+        ScoreBoardScreen.SetActive(enter);
 
-    }*/
-    private void OnEnable()
-    {
-        SceneDirector.instance.isLoading = false;
-        SceneDirector.instance.loadingScreen.SetActive(false);
     }
-    public void LoadScene(int sceneIndex)
+    public void PressSignOutButton()
     {
-        Time.timeScale = 1;
-        SceneDirector.instance.LoadScene(sceneIndex);
+        AudioManager.Instance.PressButton();
+        updateUserData.SignOut();
+        SceneDirector.instance.LoadScene((int)GameUtils.SceneIndex.LOGIN);
     }
-    public void QuitGame()
+    public void PressExitButton()
     {
-        Application.Quit();
+        AudioManager.Instance.PressButton();
+        SceneDirector.instance.QuitGame();
     }
-    public void HoverButtonPlay()
+
+    /////////////////Login/////////////////////////
+    public void PressLoginButton()
     {
-        audioSource.PlayOneShot(buttonHover);
+        AudioManager.Instance.PressButton();
+        firebaseManager.LoginButton();
     }
-    public void PressButtonPlay()
+    public void PressRegisterButton()
     {
-        audioSource.PlayOneShot(buttonPressed);
+        AudioManager.Instance.PressButton();
+        firebaseManager.RegisterButton();
+
     }
-    public void PlaySound(AudioClip clip)
+    public void PressRegisterScreenButton(bool enter)
     {
-        audioSource.PlayOneShot(clip);
+        AudioManager.Instance.PressButton();
+        RegisterScreen.SetActive(enter);
+        LoginScreen.SetActive(!enter);
+
+    }
+    /////////////////Game/////////////////////////
+    public void PressExitGame()
+    {
+        AudioManager.Instance.PressButton();
+        SceneDirector.instance.LoadScene((int)GameUtils.SceneIndex.MAINMENU);
+    }
+    public void PressOptionsInGame(bool enter)
+    {
+        AudioManager.Instance.PressButton();
+        OptionsMenuScreen.SetActive(enter);
+        PauseMenu.SetActive(!enter);
+    }
+    public void ResumeGame()
+    {
+        AudioManager.Instance.PressButton();
+        pauseMenu.Resume();
     }
 }
-

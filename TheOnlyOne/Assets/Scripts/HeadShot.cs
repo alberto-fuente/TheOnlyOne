@@ -2,50 +2,47 @@ using UnityEngine;
 using System;
 public class HeadShot : MonoBehaviour
 {
+    [Header("Components")]
     public GameObject OriginalHead;
     public GameObject ScatteredHead;
     public GameObject explosionVFX;
-    private GameManager gameManager;
     public AudioClip explodeSound;
-    public AudioSource audioSource;
+    [Space]
     private bool hasExploded;
+
+    [Header("References")]
+    private AudioSource audioSource;
     private EnemyHitBox hitbox;
 
-    // Start is called before the first frame update
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
         hitbox = GetComponent<EnemyHitBox>();
-        hitbox.healthSystem.OnDead += DoHeadShot;
+        hitbox.HealthSystem.OnDead += DoHeadShot;
     }
 
-    // Update is called once per frame
     public void DoHeadShot(object sender, EventArgs e)
     {
-        if (hitbox.healthSystem.waslastHitHead && !hasExploded)
+        if (hitbox.HealthSystem.waslastHitHead && !hasExploded)
         {
             hasExploded = true;
             OriginalHead.SetActive(false);
             Destroy(ScatteredHead = Instantiate(ScatteredHead, OriginalHead.transform.position, OriginalHead.transform.rotation), 10);
             Destroy(Instantiate(explosionVFX, OriginalHead.transform.position, OriginalHead.transform.rotation), 10);
-            audioSource.PlayOneShot(explodeSound);
+            audioSource.PlayOneShot(explodeSound,0.2f);
             Collider[] colliders = Physics.OverlapSphere(transform.position, 0.5f);
             foreach (Collider coll in colliders)
             {
-                if (coll.gameObject.CompareTag("Grab") || coll.gameObject.CompareTag("Pack"))
+                
+                Rigidbody rigidBody = coll.GetComponent<Rigidbody>();
+                if (rigidBody != null)
                 {
-                    continue;
+                    rigidBody.AddForce(new Vector3(0, 55, 0), ForceMode.VelocityChange);
                 }
-                else
-                {
-                    Rigidbody rb = coll.GetComponent<Rigidbody>();
-                    if (rb)
-                    {
-                        rb.AddForce(new Vector3(0, 55, 0), ForceMode.VelocityChange);
-                    }
-                }
+                
             }
         }
     }
 }
+
 

@@ -13,6 +13,6 @@ public class PickableBlueprint : ScriptableObject
     public Canvas labelCanvas;
     public bool isStackable;
     public string itemID;
-    public ItemHolder weaponHolder;
+    public PlayerInventory weaponHolder;
     public GameUtils.TypeOfItem typeOfItem;
 }

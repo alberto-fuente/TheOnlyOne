@@ -17,7 +17,7 @@ MonoBehaviour:
   crosshair: {fileID: 21300000, guid: aff738817e1ccf0448548ef0efb78627, type: 3}
   crosshairSizeAim: 0.1
   maxClipAmmo: 35
-  range: 100
+  range: 200
   fireRate: 0.1
   reloadTime: 2.5
   aimSpeed: 20

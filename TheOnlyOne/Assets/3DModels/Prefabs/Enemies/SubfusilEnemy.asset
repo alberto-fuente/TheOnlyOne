@@ -19,6 +19,6 @@ MonoBehaviour:
   attackDelay: 0.05
   hitProbability: 0.15
   shootSound: {fileID: 8300000, guid: 04cb3033a3dd81d4892d5782c037639b, type: 3}
-  sightRange: 27
+  sightRange: 50
   attackRange: 15
   stopChasingRange: 40

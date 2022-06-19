@@ -1,21 +1,16 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class InventoryEventArgs : EventArgs
 {
     public GrabbableItem Item;
-
     public int SlotId;
-    public InventoryEventArgs(int slotId)
+    public InventoryEventArgs(int _slotId)
     {
-        SlotId = slotId;
+        SlotId = _slotId;
     }
-    public InventoryEventArgs(GrabbableItem item,int slotId)
+    public InventoryEventArgs(GrabbableItem _item,int _slotId)
     {
-        Item = item;
-        SlotId = slotId;
+        Item = _item;
+        SlotId = _slotId;
     }
 
 }

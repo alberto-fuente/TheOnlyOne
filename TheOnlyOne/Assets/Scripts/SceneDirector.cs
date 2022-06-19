@@ -1,21 +1,21 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class SceneDirector : MonoBehaviour
 {
+    //Singleton
     public static SceneDirector instance;
+    [Header("Components")]
     public GameObject loadingScreen;
     public GameObject loadingWheel;
-    public float wheelSpeed;
-    public bool isLoading;
-    public float minLoadTime = 2;
+    [SerializeField] private float wheelSpeed;
+    [SerializeField] private float minLoadTime = 2;
 
+    public bool isLoading;
 
     private void Awake()
-    {//Singleton
+    {
         if (instance == null)
         {
             instance = this;
@@ -38,10 +38,9 @@ public class SceneDirector : MonoBehaviour
         isLoading = true;
         loadingScreen.SetActive(true);
         StartCoroutine(SpinWheel());
-
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
-        float elapsedTime = 0;
-        
+        float elapsedTime = -minLoadTime;
+
         while (!operation.isDone)
         {
             yield return null;
@@ -51,19 +50,20 @@ public class SceneDirector : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        
         isLoading = false;
-
         loadingScreen.SetActive(false);
-
     }
-   
+    //loading wheel
     private IEnumerator SpinWheel()
     {
         while (isLoading)
         {
-            loadingWheel.transform.Rotate(0, 0, -wheelSpeed * Time.deltaTime);
+            loadingWheel.transform.Rotate(0, 0, wheelSpeed * Time.deltaTime);
             yield return null;
         }
+    }
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }

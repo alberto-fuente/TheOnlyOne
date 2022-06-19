@@ -1,68 +1,56 @@
 using System;
-using System.Collections;
 using UnityEngine;
 [RequireComponent(typeof(PlayerMove))]
 [RequireComponent(typeof(PlayerLook))]
 public class PlayerController : MonoBehaviour
 {
-    
     [Header("References")]
     public PlayerMove playerMove;
     public PlayerLook playerLook;
-    public ItemHolder itemHolder;
+    public PlayerInventory playerInventory;
     public HealthSystem healthSystem;
     public GameObject hurtPanel;
     public GameObject toxicFilter;
     private GameManager gameManager;
+    private AudioManager audioManager;
     public AudioClip toxicSound;
-    private bool canPlayToxic=true;
-    // Start is called before the first frame update
+
+    private bool canPlayToxic = true;
+
     void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
+        gameManager = GameManager.Instance;
+        audioManager = AudioManager.Instance;
         playerMove = GetComponent<PlayerMove>();
         playerLook = GetComponent<PlayerLook>();
+        playerInventory = FindObjectOfType<PlayerInventory>();
         healthSystem.OnDead += Die;
-        //inventory == FindObjectOfType(ItemHolder);
     }
     public void Die(object sender, EventArgs e)
     {
         playerLook.enabled = false;
         playerMove.enabled = false;
-        itemHolder.enabled = false;
+        playerInventory.enabled = false;
         healthSystem.enabled = false;
     }
 
-
-    // Update is called once per frame
     void Update()
     {
-        if(Mathf.Pow(transform.position.x, 2) + Mathf.Pow(transform.position.z, 2) > Mathf.Pow(gameManager.SafeRadius, 2))
+        //player out of the safe zone
+        if (Mathf.Pow(transform.position.x, 2) + Mathf.Pow(transform.position.z, 2) > Mathf.Pow(gameManager.SafeRadius, 2))
         {
             toxicFilter.SetActive(true);
             if (canPlayToxic)
             {
-                itemHolder.audioSource.PlayOneShot(toxicSound);
+                audioManager.PlaySound(toxicSound);
                 canPlayToxic = false;
             }
-
         }
         else
         {
             toxicFilter.SetActive(false);
             canPlayToxic = true;
         }
+    }
 
-         /*hurtAnimator.SetInteger("health", health);
-
-            if (hasTimePowerUp)
-            {
-                speed = 18;
-            }
-            else
-            {
-                speed = 10;
-            }*/
-        }
-    
 }

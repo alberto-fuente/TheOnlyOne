@@ -3,54 +3,47 @@ using UnityEngine.AI;
 
 public class EnemyIA : MonoBehaviour
 {
+    [Header("References")]
     private EnemyController enemyController;
+    public Animator animatorController;
+    public NavMeshAgent agent;
+    private AudioSource audioSource;
+
+    [Header("Properties")]
+    private const float WALKSPEED = 2.7f;
+    private const float CHASESPEED = 3.1f;
     public float sightRange;
     public float attackRange;
+    public int scanFrecuency = 30;
+    public float scanInterval;
+    public float scanTimer;
+    public bool targetSet;
+    public bool destinationSet;
+    private Vector3 wanderPosition;
+    Transform[] children;
+    int enemyLayer;
+    int temporaryIgnoreLayer;
+
+    [Header("States")]
+    private State state;
+    bool isAttacking;
+    public bool isHurted;
+    public bool isFrozen;
     private enum State
     {
         Wander,
         ChaseTarget,
         AttackTarget
     }
-    public Vector3 wanderPosition;
+
+    [Header("Target")]
     public LayerMask whatIsEntity, whatIsObstacle;
-    private GameManager gameManager;
-
-    public int scanFrecuency = 30;
-    public float scanInterval;
-    public float scanTimer;
-
-    public bool targetSet;
-
-    public bool isFrozen;
-
-    bool isAttacking;
-    public bool isHurted;
     bool entityInSightRange;
-
     bool entityInAttackRange;
+    private GameObject target;
+    private HealthSystem targetHealthSystem;
+    Collider[] entitiesInRange = new Collider[50];
 
-    //Scan for enemies
-    Transform[] children;//se cambia de layer a todos los hijos del enemigo durante el escaneo para que no se detecte a sí mismo
-    int enemyLayer;
-    int temporaryIgnoreLayer;
-
-    public GameObject target;
-    HealthSystem targetHealthSystem;
-
-    public Animator animatorController;
-    Collider[] entitiesInRange = new Collider[100];
-    public bool hurt;
-    public bool destinationSet;
-    [SerializeField] State state;
-    public NavMeshAgent agent;
-
-    private const float WALKSPEED= 2.7f;
-    private const float CHASESPEED= 3.1f;
-    //temporal
-    private AudioSource audioSource;
-
-    GameObject player;//Referencia al jugador para perseguirle cuendo le dispare
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -61,31 +54,21 @@ public class EnemyIA : MonoBehaviour
         enemyLayer = LayerMask.NameToLayer("Enemy");
         temporaryIgnoreLayer = LayerMask.NameToLayer("Default");
         enemyController = GetComponent<EnemyController>();
-        animatorController = enemyController.enemyPrefab.GetComponentInChildren<Animator>();
-        sightRange = enemyController.enemyData.sightRange;
-        attackRange = enemyController.enemyData.attackRange;
+        animatorController = enemyController.AnimatorController;
+        sightRange = enemyController.EnemyData.sightRange;
+        attackRange = enemyController.EnemyData.attackRange;
         audioSource = GetComponent<AudioSource>();
         scanInterval = 1f / scanFrecuency;
-        player = GameObject.FindGameObjectWithTag("Player");
-        children = gameObject.GetComponentsInChildren<Transform>();
-        wanderPosition = GetWanderPosition(transform.position);
+        children = GetComponentsInChildren<Transform>();
     }
     private void Update()
     {
-        //entityInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsEntity);
-        //entityInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsEntity);
-        //RaycastHit hit;
-        //entityInSightRange = Physics.Raycast(transform.position, transform.forward, out hit, sightRange);
-
-        //sightAngle += transform.eulerAngles.y;
-        //new Vector3(Mathf.Sin(sightAngle * Mathf.Deg2Rad), 0, Mathf.Cos(sightAngle * Mathf.Deg2Rad));
         if (!isHurted)
         {
             scanTimer -= Time.deltaTime;
             if (scanTimer < 0)
             {
                 scanTimer += scanInterval;
-                //if(target==null)
                 target = FindTarget(sightRange);
                 if (target != null)
                 {
@@ -105,7 +88,7 @@ public class EnemyIA : MonoBehaviour
                 switch (state)
                 {
                     case State.Wander:
-                        animatorController.SetInteger("State", 1);//Walk
+                        animatorController.SetInteger("State", 1);//Walk around
                         agent.isStopped = false;
                         agent.speed = WALKSPEED;
                         float destination = 1f;
@@ -114,17 +97,16 @@ public class EnemyIA : MonoBehaviour
                             wanderPosition = GetWanderPosition(transform.position);
                         }
                         destinationSet = agent.SetDestination(wanderPosition);
-
                         break;
                     case State.ChaseTarget:
-                        animatorController.SetInteger("State", 2);//Run
+                        animatorController.SetInteger("State", 2);//Chase Target
                         agent.isStopped = false;
                         agent.speed = CHASESPEED;
                         if (target != null)
                         {
                             agent.SetDestination(target.transform.position);
                             transform.LookAt(target.transform.position);
-                            if (Vector3.Distance(transform.position, target.transform.position) > enemyController.enemyData.stopChasingRange)
+                            if (Vector3.Distance(transform.position, target.transform.position) > enemyController.EnemyData.stopChasingRange)
                             {
                                 entityInSightRange = false;
                                 entityInAttackRange = false;
@@ -134,28 +116,25 @@ public class EnemyIA : MonoBehaviour
                             entityInSightRange = false;
                         break;
                     case State.AttackTarget:
-                        animatorController.SetInteger("State", 3);
+                        animatorController.SetInteger("State", 3);//Shoot Target
                         agent.isStopped = true;
                         if (target != null)
                         {
                             targetHealthSystem = target.GetComponentInParent<HealthSystem>();
-                            var lookPos = target.transform.position - transform.position;
-                            lookPos.y = 0;
-                            var rotation = Quaternion.LookRotation(lookPos);
+                            var lookPosition = target.transform.position - transform.position;
+                            lookPosition.y = 0;
+                            var rotation = Quaternion.LookRotation(lookPosition);
                             transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 2);
                             if (!isAttacking && targetHealthSystem != null)
                             {
                                 isAttacking = true;
-                                if (Random.value <= enemyController.enemyData.hitProbability)
+                                if (Random.value <= enemyController.EnemyData.hitProbability)
                                 {
-
                                     animatorController.SetTrigger("Shoot");
-                                    targetHealthSystem.Damage(Random.Range(enemyController.enemyData.minDamage, enemyController.enemyData.maxDamage),false,transform);
-                                    audioSource.PlayOneShot(enemyController.enemyData.shootSound, 0.2f);
-
-
+                                    targetHealthSystem.Damage(Random.Range(enemyController.EnemyData.minDamage, enemyController.EnemyData.maxDamage),false,transform);
+                                    audioSource.PlayOneShot(enemyController.EnemyData.shootSound, 0.2f);
                                 }
-                                Invoke(nameof(ResetAttack), enemyController.enemyData.attackDelay);
+                                Invoke(nameof(ResetAttack), enemyController.EnemyData.attackDelay);
                             }
                         }
                         else
@@ -168,9 +147,8 @@ public class EnemyIA : MonoBehaviour
                         break;
                 }
             }
-            else//congelado
+            else//frozen
             {
-                //animatorController.SetInteger("State", 0);
                 animatorController.SetBool("Frozen", true);
                 agent.isStopped = true;
             }
@@ -178,26 +156,22 @@ public class EnemyIA : MonoBehaviour
 
 
         }
-        else
+        else//hurted
         {
             agent.isStopped = true;
-            //perseguir al jugador
-            //entityInSightRange = true;
-            //target = player;
         }
     }
 
     private GameObject FindTarget(float range)
     {
-
         int numberOfEntitiesInRange;
-        
+        //enemy moves to another layer to prevent detect itself during scan
         foreach (Transform child in children) { 
             child.gameObject.layer = temporaryIgnoreLayer;
         }
-        //enemyController.enemyPrefab.layer = temporaryIgnoreLayer;//evitar colisionar consigo mismo
+        //scans
         numberOfEntitiesInRange = Physics.OverlapSphereNonAlloc(transform.position, range, entitiesInRange, whatIsEntity);
-        //enemyController.enemyPrefab.layer = enemyLayer;
+        //enemy moves back to its normal layer
         foreach (Transform child in children)
         {
             child.gameObject.layer = enemyLayer;
@@ -208,7 +182,7 @@ public class EnemyIA : MonoBehaviour
             foreach (Collider coll in entitiesInRange)
             {
                 if (coll == null) break;
-                if (coll.gameObject.layer == 11)//Player
+                if (coll.gameObject.layer == LayerMask.NameToLayer("Player"))//Prioritize attacking player rather than other bots
                 {
                     closestTarget = coll;
                     break;
@@ -229,11 +203,12 @@ public class EnemyIA : MonoBehaviour
     {
         Vector3 randomDirection = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized;
         Vector3 newDestination = currentPosition + randomDirection * Random.Range(10f, 50f);
-        /*if ((Mathf.Pow(newDestination.x, 2) + Mathf.Pow(newDestination.z, 2) > Mathf.Pow(gameManager.SafeRadius, 2)))//fuera de la zona segura
+        //Avoid the toxic zone
+        if ((Mathf.Pow(newDestination.x, 2) + Mathf.Pow(newDestination.z, 2) > Mathf.Pow(GameManager.Instance.SafeRadius, 2)))
         {
             return currentPosition;
-        }*/
-        return newDestination;//dentro de la zona segura
+        }
+        return newDestination;
     }
 
 }

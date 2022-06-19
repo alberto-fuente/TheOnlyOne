@@ -1,200 +1,183 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    private ItemHolder weaponChanger;
-    private Vector3 weaponChangerOrigin;
+    [Header("References")]
+    private PlayerInventory playerInventory;
     [SerializeField] private Camera cam;
-    [SerializeField] private float normalFov;
-    [SerializeField] private float slideFov;
-
-    public  Vector3 idleItemHolderRotation;
-    public Vector3 sprintItemHolderRotation;
-
-    private float headBobTime;
-    //private float idleTime;
-    public float headBobAmplitude=0.005f;
-    float headBobSpeed;
-    float headBobAimDividerX;
-    float headBobAimDividerY;
-    Vector3 targetBobPosition;
-    [SerializeField] Transform orientation;
+    [SerializeField] private Transform orientation;
     public Animator armsAnimator;
-    public Animator wholeAnimator;
-    //input
-    float horizontalMove;
-    float verticalMove;
+
+    [Header("Inventory Points")]
+    private Vector3 inventoryOrigin;
+    public Vector3 idleInventoryRotation;
+    public Vector3 sprintInventoryRotation;
+
+    [Header("HeadBob")]
+    private float headBobTime;
+    public float headBobAmplitude = 0.005f;
+    private float headBobSpeed;
+    private float headBobAimDividerX;
+    private float headBobAimDividerY;
+    private Vector3 targetBobPosition;
+
+    [Header("Input")]
+    private float horizontalMove;
+    private float verticalMove;
     public bool isAiming;
+
     [Header("Movement")]
-    public float moveSpeed;
+    public float currentSpeed;
     public float idleSpeed = 0;
-    public float walkSpeed=150;
-    public float crouchSpeed = 10;
-    public float runSpeed=200;
-    public float accel = 10f;
+    public float walkSpeed = 150;
+    public float crouchSpeed = 0;
+    public float runSpeed = 200;
+    public float acceleration = 10f;
     public float defaultJumpForce = 30;
-    public float bounceJumpForce = 130;
+    public float bounceJumpForce = 150;
 
-    // public float maxSpeed=100f;
-
-    public bool isSprinting;
+    [Header("States")]
+    public bool wantsToSprint;
     public bool isGrounded;
-    public bool isCrouching;
-    public bool isJumping;
-    //public bool isSliding;
+    public bool wantsToCrouch;
+    public bool wantsToJump;
     public bool isOnPad;
 
-    //RigidBody
-    public float rbDrag=10f; 
-    private Rigidbody rb;
+    [Header("Components")]
+    public float rbDrag = 10f;
+    private Rigidbody rigidBody;
     public Transform mesh;
-    //Scale and direction
+
+    [Header("Scale and direction")]
     public Vector3 standScale = new Vector3(1, 2f, 1);
-    public Vector3 crouchScale=new Vector3(1,0.7f,1);
-    Vector3 moveDirection;
-    public Transform cameraRot;
-    public Vector3 crouchedCamPos;
-    //jump
+    public Vector3 crouchScale = new Vector3(1, 0.7f, 1);
+    private Vector3 moveDirection;
+    public Transform defaultCameraPosition;
+    public Vector3 crouchedCameraPosition;
+
+    [Header("Jump")]
     public float jumpForce;
-    public bool readyToJump=true;
-    public float jumpCooldown=0.6f;
-    //slide
-    public float slideForce = 100;
-    //Drag
+    public bool readyToJump = true;
+    public float jumpCooldown = 0.6f;
+
+    [Header("Drag")]
     public float defaultDrag = 10f;
     public float airDrag = 2f;
-    public float slideDrag = 0.1f;
+    public float slideDrag = 0.2f;
 
-    //ground check
+    [Header("Ground Check")]
     public Transform groundCheck;
     public float groundDistance = 0.1f;
     public LayerMask Ground;
     public LayerMask JumpPad;
 
+    [Header("Hit Ground")]
+    [SerializeField] private GameObject hitGroundParticles;
+    [SerializeField] private AudioClip hitGroundSound;
+    [SerializeField] private AudioClip bounceSound;
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        weaponChanger = FindObjectOfType<ItemHolder>();
-        weaponChangerOrigin = weaponChanger.transform.localPosition;
-        idleItemHolderRotation = Vector3.zero;
-        sprintItemHolderRotation = new Vector3(0, -60f, 0);
-        crouchedCamPos = new Vector3(cameraRot.position.x, cameraRot.position.x-crouchScale.y, cameraRot.position.z);
+        rigidBody = GetComponent<Rigidbody>();
+        playerInventory = FindObjectOfType<PlayerInventory>();
+        inventoryOrigin = playerInventory.transform.localPosition;
+        idleInventoryRotation = Vector3.zero;
+        sprintInventoryRotation = new Vector3(0, -60f, 0);
+        crouchedCameraPosition = new Vector3(defaultCameraPosition.position.x, defaultCameraPosition.position.y - crouchScale.y, defaultCameraPosition.position.z);
     }
     private void Update()
     {
-        MyInput();
+        PlayerInput();
         ControlDrag();
         ControlSpeed();
         ControlHeadBob();
-        //jump
-        if (isJumping && (isGrounded||isOnPad) && readyToJump) Jump();
-        
-
+        if (wantsToJump && (isGrounded || isOnPad) && readyToJump) Jump();
     }
-        void FixedUpdate()
+    void FixedUpdate()
     {
         MovePlayer();
-        Crouch(isCrouching);
-       /* if (isSprinting && !isAiming)
-        {
-            weaponChanger.transform.localEulerAngles = Vector3.Lerp(sprintItemHolderRotation, idleItemHolderRotation, Time.deltaTime*20);
-        }
-        else
-        {
-            weaponChanger.transform.localEulerAngles = Vector3.Lerp(idleItemHolderRotation, sprintItemHolderRotation, Time.deltaTime*20);
-        }
-       */
+        Crouch(wantsToCrouch);
+
     }
-    public void MyInput()
+    public void PlayerInput()
     {
         //Input direccion
         horizontalMove = Input.GetAxisRaw("Horizontal");
         verticalMove = Input.GetAxisRaw("Vertical");
-        if (weaponChanger.GetCurrentItem()!=null && weaponChanger.GetCurrentItem().typeOfItem == GameUtils.TypeOfItem.GUN)
+        if (playerInventory.GetCurrentItem() != null && playerInventory.GetCurrentItem().typeOfItem == GameUtils.TypeOfItem.GUN)
         {
-            isAiming = weaponChanger.GetCurrentItem().gameObject.GetComponent<Weapon>().isAming;
+            isAiming = playerInventory.GetCurrentItem().gameObject.GetComponent<Weapon>().isAming;
         }
         else isAiming = false;
-        isJumping = Input.GetButton("Jump");
-        isCrouching = Input.GetKey(KeyCode.LeftControl);
-        isSprinting = Input.GetKey(KeyCode.LeftShift);
+        wantsToJump = Input.GetButton("Jump");
+        wantsToCrouch = Input.GetKey(KeyCode.LeftControl);
+        wantsToSprint = Input.GetKey(KeyCode.LeftShift);
+
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, Ground);
         isOnPad = Physics.CheckSphere(groundCheck.position, groundDistance, JumpPad);
-
-
 
     }
 
     void ControlHeadBob()
     {
-        //la velocidad del headBob se calcula en función de la velocidad del jugador
-        headBobSpeed = Mathf.Max(moveSpeed / 30, 1);
+        //headbob's speed goes along player's speed
+        headBobSpeed = Mathf.Max(currentSpeed / 30, 1);
         headBobAimDividerX = isAiming ? 10 : 1;
         headBobAimDividerY = isAiming ? 5 : 1;
 
-       if(isGrounded || isCrouching)
+        if (isGrounded)
         {
             headBobTime += Time.deltaTime * headBobSpeed;
-            weaponChanger.transform.localPosition = Vector3.Lerp(weaponChanger.transform.localPosition, HeadBob(headBobTime, headBobAmplitude / headBobAimDividerX * headBobSpeed, headBobAmplitude / headBobAimDividerY * headBobSpeed), Time.deltaTime * 5);
+            playerInventory.transform.localPosition = Vector3.Lerp(playerInventory.transform.localPosition, 
+                HeadBob(headBobTime, headBobAmplitude / headBobAimDividerX * headBobSpeed, 
+                headBobAmplitude / headBobAimDividerY * headBobSpeed), Time.deltaTime * 5);
         }
-        
+
     }
     Vector3 HeadBob(float timePoint, float xIntensity, float yIntensity)
     {
-        targetBobPosition = weaponChangerOrigin + new Vector3(Mathf.Cos(timePoint) * xIntensity, Mathf.Sin(timePoint * 2) * yIntensity, -headBobSpeed/90);
+        targetBobPosition = inventoryOrigin + new Vector3(Mathf.Cos(timePoint) * xIntensity, Mathf.Sin(timePoint * 2) * yIntensity, -headBobSpeed / 90);
         return targetBobPosition;
     }
     private void Crouch(bool crouch)
     {
         if (crouch)
         {
-            Vector3.Lerp(cameraRot.position, crouchedCamPos, Time.deltaTime);
+            Vector3.Lerp(defaultCameraPosition.position, crouchedCameraPosition, Time.deltaTime);
             mesh.localScale = crouchScale;
-            /*if (moveSpeed > walkSpeed/2 && !isSliding){
-                isSliding = true;
-                rb.AddForce(transform.forward * slideForce, ForceMode.VelocityChange);
-              //  camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, slideFov, 20 * Time.deltaTime);
-            }
-            if (moveSpeed == 0) isSliding = false;*/
-            
-            //moveSpeed = crouchSpeed;
-           // coll.center.Set(0, -0.4f, 0);
-
         }
         else
         {
-            //isSliding = false;
-           // camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, normalFov, 20 * Time.deltaTime);
-            Vector3.Lerp(crouchedCamPos,cameraRot.position, Time.deltaTime);
+            Vector3.Lerp(crouchedCameraPosition, defaultCameraPosition.position, Time.deltaTime);
             mesh.localScale = standScale;
-            //coll.center.Set(0,0,0);
         }
-        
+
     }
 
     void MovePlayer()
-    {  
-        //Añadir gravedad extra
-        rb.AddForce(-transform.up * Time.deltaTime * 20,ForceMode.VelocityChange);
+    {
+        //Extra gravity
+        rigidBody.AddForce(-transform.up * Time.deltaTime * 20, ForceMode.VelocityChange);
 
-        //direccion donde caminar
-        moveDirection = orientation.forward * verticalMove + orientation.right * horizontalMove;//(horizontalMove,0,verticalMove)
+        //orientation
+        moveDirection = orientation.forward * verticalMove + orientation.right * horizontalMove;
         moveDirection.Normalize();
 
-        //aplicar fuerza sobre el rigidBody del jugador para que se mueva
-        rb.AddForce(moveDirection * moveSpeed * GetMultiplier() * Time.deltaTime, ForceMode.Impulse);      
-        
+        //apply force to the player to move it
+        rigidBody.AddForce(moveDirection * currentSpeed * GetMultiplier() * Time.deltaTime, ForceMode.Impulse);
+
     }
     public void Jump()
     {
         armsAnimator.Play("Jump");
-        wholeAnimator.Play("Jump");
-        rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-        jumpForce = isOnPad ? bounceJumpForce : defaultJumpForce;
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0, rigidBody.velocity.z);
+        if (isOnPad)
+        {
+            jumpForce = bounceJumpForce;
+            AudioManager.Instance.PlaySound(bounceSound);
+        }
+        else jumpForce = defaultJumpForce;
+        rigidBody.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         readyToJump = false;
         Invoke("ResetJump", jumpCooldown);
     }
@@ -202,45 +185,43 @@ public class PlayerMove : MonoBehaviour
     {
         readyToJump = true;
     }
-    //Multiplicador
+
     public float GetMultiplier()
     {
         float multiplier;
         if (isGrounded)
         {
-            //if (isSliding)
-            //    multiplier = 0f;
-            if(isCrouching)
-                multiplier = 0.7f;
+            if (wantsToCrouch)
+                multiplier = 0.7f;//crouch
             else
-                multiplier = 1f;
+                multiplier = 1f;//default
         }
-        else multiplier=0.2f;
-
+        else multiplier = 0.2f;//air
         return multiplier;
     }
     void ControlDrag()
     {
-        if (isGrounded) {
-            if (isCrouching)
-                rb.drag = slideDrag;
+        if (isGrounded)
+        {
+            if (wantsToCrouch)
+                rigidBody.drag = slideDrag;
             else
-            rb.drag = defaultDrag;
-        } 
-        else rb.drag = airDrag;
+                rigidBody.drag = defaultDrag;
+        }
+        else rigidBody.drag = airDrag;
     }
     void ControlSpeed()
     {
-        int aimDivider = isAiming?3:1;
+        int aimDivider = isAiming ? 3 : 1;
         float desiredSpeed;
-        if (horizontalMove != 0 || verticalMove != 0)
+        if (horizontalMove != 0 || verticalMove != 0)//moving
         {
-            if (isCrouching && isGrounded)
+            if (wantsToCrouch && isGrounded)
             {
                 desiredSpeed = crouchSpeed;
             }
             else
-             if (isSprinting && isGrounded)
+             if (wantsToSprint && isGrounded&&!wantsToCrouch)
             {
                 desiredSpeed = runSpeed;
             }
@@ -251,7 +232,16 @@ public class PlayerMove : MonoBehaviour
         }
         else desiredSpeed = idleSpeed;
 
-        moveSpeed = Mathf.Lerp(moveSpeed, desiredSpeed / aimDivider, accel * Time.deltaTime);
+        currentSpeed = Mathf.Lerp(currentSpeed, desiredSpeed / aimDivider, acceleration * Time.deltaTime);
     }
-  
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.layer.Equals(LayerMask.NameToLayer("Scenary")) || collision.gameObject.layer.Equals(LayerMask.NameToLayer("Ground")))
+        {
+            Destroy(Instantiate(hitGroundParticles, collision.contacts[0].point, Quaternion.identity, gameObject.transform), 5);
+            AudioManager.Instance.PlaySound(hitGroundSound);
+        }
+
+    }
 }

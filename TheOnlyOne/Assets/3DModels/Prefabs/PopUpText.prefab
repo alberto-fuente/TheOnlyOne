@@ -110,7 +110,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 3741319167
+    rgba: 3858759679
   m_fontColor: {r: 1, g: 1, b: 1, a: 0.87058824}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -185,10 +185,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deed9595d0350e841b4a606ab987f93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shieldColor: {r: 0, g: 0, b: 1, a: 1}
-  noShieldColor: {r: 1, g: 0, b: 0, a: 1}
-  _text: {fileID: 7714602989348379261}
-  material: {fileID: 0}
 --- !u!114 &4389766232839991886
 MonoBehaviour:
   m_ObjectHideFlags: 0
