@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4867a44d2e10b28439cf1df59e8bf2f4, type: 3}
   m_Name: LegendaryArmorPack
   m_EditorClassIdentifier: 
-  name: armadura
+  itemName: armadura
   rarity: lgendario
   prefab: {fileID: 7214342114894322236, guid: 4333f1722b6b1674c88c1fb0e1146864, type: 3}
   multiplier: 4

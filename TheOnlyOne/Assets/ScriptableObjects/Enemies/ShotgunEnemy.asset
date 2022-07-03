@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a209ad32707c39141877694df9ef3042, type: 3}
+  m_Name: ShotgunEnemy
+  m_EditorClassIdentifier: 
+  enemyId: 4
+  enemyModel: {fileID: 31771042111627107, guid: 609cb2149a3073e4cbfa960a3cff4e25, type: 3}
+  minDamage: 15
+  maxDamage: 24
+  attackDelay: 1.5
+  hitProbability: 0.9
+  shootSound: {fileID: 8300000, guid: bd986d69130209147adef4f1a8917121, type: 3}
+  sightRange: 50
+  attackRange: 10
+  stopChasingRange: 40

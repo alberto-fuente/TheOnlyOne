@@ -23,23 +23,16 @@ public class PlayerInventory : MonoBehaviour
 
     [Header("References")]
     private GameObject arms;
-    private AudioManager audioManager;
     public Camera playerCam;
     private Animator armsAnimator;
     private GrabbableItem itemRef = null;
     private Crate crateRef = null;
     private Pack packRef = null;
 
-    [Header("Sounds")]
-    [SerializeField] private AudioClip pickSound;
-    [SerializeField] private AudioClip dropSound;
-    [SerializeField] private AudioClip switchSound;
-
     public bool IsChanging { get => isChanging; private set => isChanging = value; }
 
     private void Start()
     {
-        audioManager = AudioManager.Instance;
         arms = GetComponentInChildren<SkinnedMeshRenderer>().gameObject;
         armsAnimator = transform.Find("Arms").GetComponent<Animator>();
         activeSlotIndex = 0;
@@ -89,9 +82,8 @@ public class PlayerInventory : MonoBehaviour
     }
     public void PickItem(GrabbableItem _item)
     {
-        audioManager.PlaySound(pickSound);
         InventorySlot slot = FindAvailableSlot(_item);
-        slot.AddItem(_item);
+        slot.Push(_item);
         //attach item to inventory
         _item.transform.SetParent(transform);
         _item.transform.localPosition = Vector3.zero;
@@ -106,8 +98,8 @@ public class PlayerInventory : MonoBehaviour
     }
     public void DropItem()
     {
-        GrabbableItem item = ActiveSlot().FirstItem();
-        if (ActiveSlot().RemoveItem())
+        GrabbableItem item = ActiveSlot().Peek();
+        if (ActiveSlot().Pop())
         {
             item.IsEquiped = false;
             item.transform.parent = null;
@@ -118,7 +110,6 @@ public class PlayerInventory : MonoBehaviour
             }
             else
             {
-                audioManager.PlaySound(dropSound, 0.3f);
                 item.ItemRigidBody.AddForce((playerCam.transform.forward + playerCam.transform.up) * dropForce, ForceMode.Impulse);
             }
             float random = UnityEngine.Random.Range(-1f, 1f);
@@ -204,7 +195,7 @@ public class PlayerInventory : MonoBehaviour
     }
     public GrabbableItem GetCurrentItem()
     {
-        return ActiveSlot().FirstItem();
+        return ActiveSlot().Peek();
     }
     public InventorySlot ActiveSlot()
     {
@@ -212,7 +203,6 @@ public class PlayerInventory : MonoBehaviour
     }
     void SwitchItem(float changeDirection)
     {
-        audioManager.PlaySound(switchSound, 0.3f);
         if (OnOldItemSwitched != null) OnOldItemSwitched(this, new InventoryEventArgs(activeSlotIndex));
         IsChanging = true;
         if (!ActiveSlot().IsEmpty())
@@ -240,7 +230,7 @@ public class PlayerInventory : MonoBehaviour
     //enables first item of the active slot
     public void RefreshInventory()
     {
-        GrabbableItem activeItem = ActiveSlot().FirstItem();
+        GrabbableItem activeItem = ActiveSlot().Peek();
         if (activeItem != null && !activeItem.isActiveAndEnabled)
         {
             activeItem.EnableItem();

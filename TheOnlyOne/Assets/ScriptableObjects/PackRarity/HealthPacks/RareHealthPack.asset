@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4867a44d2e10b28439cf1df59e8bf2f4, type: 3}
   m_Name: RareHealthPack
   m_EditorClassIdentifier: 
-  name: "botiqu\xEDn"
+  itemName: "botiqu\xEDn"
   rarity: raro
   prefab: {fileID: 2443405433640292565, guid: 3c424bb1dd82af74f826806b33743a23, type: 3}
   multiplier: 2

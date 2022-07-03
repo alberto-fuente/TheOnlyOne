@@ -1,7 +1,7 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class HealthSystemVisuals : MonoBehaviour
 {
@@ -99,7 +99,7 @@ public class HealthSystemVisuals : MonoBehaviour
         }
 
     }
-    private void HealthSystem_OnHealthHealed(object sender, HealthArgs damage)
+    private void HealthSystem_OnHealthHealed(object sender, HealthEventArgs damage)
     {
         UISetHealth(healthSystem.GetHealthNormalized());
         healthDamaged.fillAmount = healthFill.fillAmount;
@@ -108,7 +108,7 @@ public class HealthSystemVisuals : MonoBehaviour
         StartCoroutine(switchOff("Heal", healshowTime));
     }
 
-    private void HealthSystem_OnDamaged(object sender, HealthArgs damage)
+    private void HealthSystem_OnDamaged(object sender, HealthEventArgs damage)
     {
         damagedBarShrinkTimer = DAMAGED_BAR_SHRINK_TIMER_MAX;
 
@@ -145,7 +145,7 @@ public class HealthSystemVisuals : MonoBehaviour
 
     }
 
-    private void HealthSystem_OnarmorHealed(object sender, HealthArgs amount)
+    private void HealthSystem_OnarmorHealed(object sender, HealthEventArgs amount)
     {
         armorDamaged.fillAmount = armorFill.fillAmount;
         UISetArmor(healthSystem.GetArmorNormalized());
@@ -158,7 +158,7 @@ public class HealthSystemVisuals : MonoBehaviour
         }
 
     }
-    private void HealthSystem_OnDead(object sender, HealthArgs LastHit)
+    private void HealthSystem_OnDead(object sender, HealthEventArgs LastHit)
     {
         if (LastHit.ByPlayer)
         {

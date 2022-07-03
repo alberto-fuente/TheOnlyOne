@@ -16,6 +16,8 @@ MonoBehaviour:
   weaponName: francotirador
   crosshair: {fileID: 21300000, guid: 449bc7445fe8af140bbe2d84695f7d4c, type: 3}
   crosshairSizeAim: 0.2
+  sensitivityMultiplierAim: 0.8
+  sensitivityMultiplierDefault: 2
   maxClipAmmo: 5
   range: 500
   fireRate: 1.5
@@ -23,6 +25,7 @@ MonoBehaviour:
   aimSpeed: 10
   autoShoot: 0
   damage: 40
+  headshotMultiplier: 1.5
   swayIntensity: 10
   swaySpeed: 5
   recoilRotation: {x: 0.15, y: 0.33, z: 0.22}
@@ -43,3 +46,5 @@ MonoBehaviour:
   pitchRand: 0.1
   mainFOV: 80
   aimFOV: 30
+  impactPrefab: {fileID: 689458154966620557, guid: a05894fe8134a204b861397256219277, type: 3}
+  impactSound: {fileID: 8300000, guid: 55a9d6269c2852745980c0e9fd797a33, type: 3}

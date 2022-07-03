@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4867a44d2e10b28439cf1df59e8bf2f4, type: 3}
   m_Name: LegendaryHealthPack
   m_EditorClassIdentifier: 
-  name: "botiqu\xEDn"
+  itemName: "botiqu\xEDn"
   rarity: legendario
   prefab: {fileID: 2443405433640292565, guid: 536dd9a7ce7f86f44b2162015bce6337, type: 3}
   multiplier: 4

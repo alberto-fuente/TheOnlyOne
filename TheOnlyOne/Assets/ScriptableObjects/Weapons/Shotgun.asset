@@ -16,6 +16,8 @@ MonoBehaviour:
   weaponName: escopeta
   crosshair: {fileID: 21300000, guid: 91db39b791baf9e45aaa7f56337ce175, type: 3}
   crosshairSizeAim: 0.13
+  sensitivityMultiplierAim: 1.3
+  sensitivityMultiplierDefault: 2
   maxClipAmmo: 1
   range: 15
   fireRate: 1.2
@@ -23,6 +25,7 @@ MonoBehaviour:
   aimSpeed: 35
   autoShoot: 0
   damage: 60
+  headshotMultiplier: 1.5
   swayIntensity: 10
   swaySpeed: 5
   recoilRotation: {x: -5, y: 2, z: 2}
@@ -43,3 +46,5 @@ MonoBehaviour:
   pitchRand: 0.15
   mainFOV: 80
   aimFOV: 60
+  impactPrefab: {fileID: 689458154966620557, guid: a05894fe8134a204b861397256219277, type: 3}
+  impactSound: {fileID: 8300000, guid: 55a9d6269c2852745980c0e9fd797a33, type: 3}

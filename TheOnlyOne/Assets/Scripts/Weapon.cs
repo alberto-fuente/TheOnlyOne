@@ -3,32 +3,29 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    [Header("Special Weapon properties")]
+    [Header("Weapon properties")]
     public WeaponBlueprint weaponData;
-    public ItemRarityBlueprint rarityData;
+    private ItemRarityBlueprint rarityData;
 
     [Header("Shared properties")]
     [Header("Cameras")]
-    public Transform cameraHolder;
-    public Camera weaponCam;
-    public Camera playerCam;
-    public PlayerLook playerLook;
+    private Transform cameraHolder;
+    private Camera weaponCam;
+    private Camera playerCam;
+    private PlayerLook playerLook;
 
     [Header("Recoil")]
     private Recoil actualRecoil;
     private VisualRecoil viusalRecoil;
 
     [Header("Fire and stats")]
-    public int currentAmmo;
-    public int totalAmmo;
+    private int currentAmmo;
+    private int totalAmmo;
     private float nextTimeToFire;
-    public bool isReloading;
-    const int HEADSHOTMULTIPLIER = 2;
+    private bool isReloading;
 
     [Header("Aim")]
-    public bool isAming;
-    private float sensMultAim = 0.8f;
-    private float sensMultDefault = 2f;
+    private bool isAming;
     private Transform anchor;
     private Transform hipState;
     private Transform aimState;
@@ -40,20 +37,26 @@ public class Weapon : MonoBehaviour
     private Animator animator;
     private LayerMask shootLayer;
     private ParticleSystem muzzleFlash;
-    [SerializeField] private GameObject bulletHit;
-    [SerializeField] private AudioClip impactSound;
     private Transform prefabContainer;
     private GameObject prefab;
-    
 
+    public ItemRarityBlueprint RarityData { get => rarityData; set => rarityData = value; }
+    public Transform CameraHolder { get => cameraHolder; set => cameraHolder = value; }
+    public Camera WeaponCam { get => weaponCam; set => weaponCam = value; }
+    public Camera PlayerCam { get => playerCam; set => playerCam = value; }
+    public PlayerLook PlayerLook { get => playerLook; set => playerLook = value; }
+    public int CurrentAmmo { get => currentAmmo; set => currentAmmo = value; }
+    public int TotalAmmo { get => totalAmmo; set => totalAmmo = value; }
+    public bool IsReloading { get => isReloading; set => isReloading = value; }
+    public bool IsAming { get => isAming; set => isAming = value; }
 
     private void Awake()
     {
         gameManager = GameManager.Instance;
-        cameraHolder = GameObject.Find("/CameraHolder").transform;
-        playerCam = GameObject.Find("/CameraHolder/CameraRecoil/MainCamera").GetComponent<Camera>();
-        weaponCam = GameObject.Find("/CameraHolder/CameraRecoil/WeaponCamera").GetComponent<Camera>();
-        playerLook = FindObjectOfType<PlayerLook>();
+        CameraHolder = GameObject.Find("/CameraHolder").transform;
+        PlayerCam = GameObject.Find("/CameraHolder/CameraRecoil/MainCamera").GetComponent<Camera>();
+        WeaponCam = GameObject.Find("/CameraHolder/CameraRecoil/WeaponCamera").GetComponent<Camera>();
+        PlayerLook = FindObjectOfType<PlayerLook>();
         playerInventory = FindObjectOfType<PlayerInventory>();
         audioSource = GetComponent<AudioSource>();
         actualRecoil = FindObjectOfType<Recoil>();
@@ -64,13 +67,13 @@ public class Weapon : MonoBehaviour
         aimState = transform.Find("States/Aim");
         prefabContainer = transform.Find("Anchor/Design");
         GenerateWeapon();
-        float damagePerSecond = weaponData.damage * rarityData.multiplier / weaponData.fireRate;
+        float damagePerSecond = weaponData.damage * RarityData.multiplier / weaponData.fireRate;
         prefab = GetComponentInChildren<Collider>().gameObject;
-        gameManager.GenerateLabel(prefab.transform, prefab.transform.position + new Vector3(0.07f, 0.63f, 0.28f), weaponData.weaponName, rarityData.rarity, rarityData.labelIcon, ((int)damagePerSecond).ToString(), rarityData.color);
+        gameManager.GenerateLabel(prefab.transform, prefab.transform.position + new Vector3(0.07f, 0.63f, 0.28f), weaponData.weaponName, RarityData.rarity, RarityData.labelIcon, ((int)damagePerSecond).ToString(), RarityData.color);
         muzzleFlash = GetComponentInChildren<ParticleSystem>();
         animator = GetComponentInChildren<Animator>();
-        currentAmmo = weaponData.maxClipAmmo;
-        totalAmmo = weaponData.maxClipAmmo * 4;
+        CurrentAmmo = weaponData.maxClipAmmo;
+        TotalAmmo = weaponData.maxClipAmmo * 4;
     }
 
     private void GenerateWeapon()
@@ -79,22 +82,22 @@ public class Weapon : MonoBehaviour
         switch (weaponData.weaponID)
         {
             case 0: //Pistol
-                rarityData = GetRarityWeapon(gameManager.rarityDataPistols);
+                RarityData = GetRarityWeapon(gameManager.rarityDataPistols);
                 break;
             case 1: //Subfusil
-                rarityData = GetRarityWeapon(gameManager.rarityDataSubfusils);
+                RarityData = GetRarityWeapon(gameManager.rarityDataSubfusils);
                 break;
             case 2: //Rifle
-                rarityData = GetRarityWeapon(gameManager.rarityDataRifles);
+                RarityData = GetRarityWeapon(gameManager.rarityDataRifles);
                 break;
             case 3: //Sniper
-                rarityData = GetRarityWeapon(gameManager.rarityDataSnipers);
+                RarityData = GetRarityWeapon(gameManager.rarityDataSnipers);
                 break;
             case 4: //Shotgun
-                rarityData = GetRarityWeapon(gameManager.rarityDataShotguns);
+                RarityData = GetRarityWeapon(gameManager.rarityDataShotguns);
                 break;
         }
-        Instantiate(rarityData.prefab, prefabContainer);
+        Instantiate(RarityData.prefab, prefabContainer);
     }
     ItemRarityBlueprint GetRarityWeapon(ItemRarityBlueprint[] collection)
     {
@@ -123,7 +126,7 @@ public class Weapon : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        anchor.rotation = cameraHolder.rotation;
+        anchor.rotation = CameraHolder.rotation;
 
     }
     void Update()
@@ -139,14 +142,14 @@ public class Weapon : MonoBehaviour
     }
     public void ListenReloadInput()
     {
-        if ((Input.GetKeyDown(KeyCode.R) || currentAmmo <= 0) && CanReload())
+        if ((Input.GetKeyDown(KeyCode.R) || CurrentAmmo <= 0) && CanReload())
         {
             StartCoroutine("Reload");
         }
     }
     bool CanReload()
     {
-        return !isReloading && currentAmmo < weaponData.maxClipAmmo && totalAmmo > 0;
+        return !IsReloading && CurrentAmmo < weaponData.maxClipAmmo && TotalAmmo > 0;
     }
     public void CutReload(object sender, InventoryEventArgs e)
     {
@@ -154,33 +157,33 @@ public class Weapon : MonoBehaviour
             audioSource.Stop();
         if (gameObject != null)
             StopCoroutine("Reload");
-        isReloading = false;
+        IsReloading = false;
 
     }
     public IEnumerator Reload()
     {
-        isReloading = true;
+        IsReloading = true;
         animator.SetTrigger("Reload");
         audioSource.pitch = 1;
         audioSource.PlayOneShot(weaponData.reloadSound, 1f);
         yield return new WaitForSeconds(weaponData.reloadTime);
-        if (totalAmmo + currentAmmo < weaponData.maxClipAmmo)
+        if (TotalAmmo + CurrentAmmo < weaponData.maxClipAmmo)
         {
-            currentAmmo += totalAmmo;
-            totalAmmo = 0;
+            CurrentAmmo += TotalAmmo;
+            TotalAmmo = 0;
         }
         else
         {
-            totalAmmo -= weaponData.maxClipAmmo - currentAmmo;
-            currentAmmo = weaponData.maxClipAmmo;
+            TotalAmmo -= weaponData.maxClipAmmo - CurrentAmmo;
+            CurrentAmmo = weaponData.maxClipAmmo;
         }
-        isReloading = false;
+        IsReloading = false;
 
     }
     private void ListenAimInput()
     {
-        isAming = Input.GetMouseButton(1);
-        Aim(isAming);
+        IsAming = Input.GetMouseButton(1);
+        Aim(IsAming);
     }
 
     private void ListenShootInput()
@@ -200,15 +203,15 @@ public class Weapon : MonoBehaviour
     }
     private bool CanShoot()
     {
-        return !playerInventory.IsChanging && !isReloading && nextTimeToFire > weaponData.fireRate && currentAmmo > 0;
+        return !playerInventory.IsChanging && !IsReloading && nextTimeToFire > weaponData.fireRate && CurrentAmmo > 0;
     }
     private void Shoot()
     {
         audioSource.pitch = Random.Range(weaponData.pitch - weaponData.pitchRand, weaponData.pitch + weaponData.pitchRand);
         audioSource.PlayOneShot(weaponData.shootSound, 0.3f);
-        if (muzzleFlash!=null) muzzleFlash.Play();
+        if (muzzleFlash != null) muzzleFlash.Play();
         //recoil
-        if (isAming)
+        if (IsAming)
         {
             actualRecoil.RecoilFire(weaponData.aimRecoilRotation);
             viusalRecoil.VisualRecoilFire(weaponData.vRecoilRotationAim, weaponData.vRecoilKickBackAim);
@@ -218,11 +221,11 @@ public class Weapon : MonoBehaviour
             actualRecoil.RecoilFire(weaponData.recoilRotation);
             viusalRecoil.VisualRecoilFire(weaponData.vRecoilRotation, weaponData.vRecoilKickBack);
         }
-        currentAmmo--;
+        CurrentAmmo--;
         nextTimeToFire = 0;
 
         RaycastHit hit;
-        Physics.Raycast(weaponCam.transform.position, weaponCam.transform.forward, out hit, weaponData.range, shootLayer);
+        Physics.Raycast(WeaponCam.transform.position, WeaponCam.transform.forward, out hit, weaponData.range, shootLayer);
 
         if (hit.transform)
         {
@@ -232,7 +235,7 @@ public class Weapon : MonoBehaviour
     }
     private bool CheckEnemyHit(RaycastHit hit)
     {
-        GameObject bulletParticles = Instantiate(bulletHit, hit.point + hit.normal * 0.001f, Quaternion.identity);
+        GameObject bulletParticles = Instantiate(weaponData.impactPrefab, hit.point + hit.normal * 0.001f, Quaternion.identity);
         bulletParticles.transform.LookAt(hit.point + hit.normal);
         Destroy(bulletParticles, 2);
         //enemy hit
@@ -240,18 +243,18 @@ public class Weapon : MonoBehaviour
         if (hitBox != null)
         {
             bulletParticles.transform.localScale *= 2;
-            hitBox.HealthSystem.waslastHitHead = false;//reset variable
+            hitBox.HealthSystem.WaslastHitHead = false;//reset variable
             if (hitBox.CompareTag("Head"))//Headshot
             {
-                hitBox.HealthSystem.waslastHitHead = true;
-                hitBox.OnHit(weaponData.damage * rarityData.multiplier * HEADSHOTMULTIPLIER, transform);
+                hitBox.HealthSystem.WaslastHitHead = true;
+                hitBox.OnHit((int)(weaponData.damage * RarityData.multiplier * weaponData.headshotMultiplier), transform);
                 audioSource.PlayOneShot(gameManager.headshotSound, 0.2f);
             }
             else
             {
-                hitBox.OnHit(weaponData.damage * rarityData.multiplier, transform);
+                hitBox.OnHit(weaponData.damage * RarityData.multiplier, transform);
                 audioSource.pitch = Random.Range(0.95f, 1.05f);
-                audioSource.PlayOneShot(impactSound, 0.5f);
+                audioSource.PlayOneShot(weaponData.impactSound, 0.5f);
                 audioSource.pitch = 1;//reset pitch
             }
             return true;
@@ -263,16 +266,16 @@ public class Weapon : MonoBehaviour
         if (aiming)
         {
             anchor.position = Vector3.Lerp(anchor.position, aimState.position, Time.deltaTime * weaponData.aimSpeed);
-            playerCam.fieldOfView = Mathf.Lerp(playerCam.fieldOfView, weaponData.aimFOV, weaponData.aimSpeed * Time.deltaTime);
+            PlayerCam.fieldOfView = Mathf.Lerp(PlayerCam.fieldOfView, weaponData.aimFOV, weaponData.aimSpeed * Time.deltaTime);
             gameManager.HUDCrosshair.rectTransform.localScale = new Vector3(weaponData.crosshairSizeAim, weaponData.crosshairSizeAim, weaponData.crosshairSizeAim);
-            playerLook.sensMult = sensMultAim;//reduce sensitivity when aiming
+            PlayerLook.sensMult = weaponData.sensitivityMultiplierAim;//reduce sensitivity when aiming
         }
         else
         {
             anchor.position = Vector3.Lerp(anchor.position, hipState.position, Time.deltaTime * weaponData.aimSpeed);
-            playerCam.fieldOfView = Mathf.Lerp(playerCam.fieldOfView, weaponData.mainFOV, weaponData.aimSpeed * Time.deltaTime);
+            PlayerCam.fieldOfView = Mathf.Lerp(PlayerCam.fieldOfView, weaponData.mainFOV, weaponData.aimSpeed * Time.deltaTime);
             gameManager.HUDCrosshair.transform.localScale = new Vector3(0.03f, 0.03f, 0.03f);//default size of the crosshair
-            playerLook.sensMult = sensMultDefault;
+            PlayerLook.sensMult = weaponData.sensitivityMultiplierDefault;
         }
     }
     public void Sway()

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ExplosiveGranade
   m_EditorClassIdentifier: 
   id: 0
-  name: granada de fuego
+  granadeName: granada
   granadeType: "da\xF1o explosivo"
   prefab: {fileID: 9205368523358960027, guid: dc1d97fc61accec49831c357222ccf7e, type: 3}
   Material: {fileID: 0}

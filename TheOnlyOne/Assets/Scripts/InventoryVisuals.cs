@@ -1,40 +1,51 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class InventoryVisuals : MonoBehaviour
 {
-    private PlayerInventory itemHolder;
-    private const float SCALEFACTOR = 1.3f;
-    
+    private PlayerInventory playerInventory;
+    private Vector3 defaultScale = new Vector3(1.6f, 1.392f, 10);
+    private Vector3 selectedScale = new Vector3(2.08f, 1.81f, 10);
+
+    [Header("Sounds")] 
+    private AudioManager audioManager;
+    [SerializeField] private AudioClip pickSound;
+    [SerializeField] private AudioClip dropSound;
+    [SerializeField] private AudioClip switchSound;
+
     void Start()
     {
-        itemHolder = FindObjectOfType<PlayerInventory>();
-        itemHolder.OnItemAdded += InventoryScript_ItemAdded;
-        itemHolder.OnItemRemoved += InventoryScript_ItemRemoved;
-        itemHolder.OnNewItemSwitched+= InventoryScript_NewItemSwitched;
-        itemHolder.OnOldItemSwitched += InventoryScript_OldItemSwitched;
+        audioManager = AudioManager.Instance;
+        playerInventory = FindObjectOfType<PlayerInventory>();
+        playerInventory.OnItemAdded += InventoryScript_ItemAdded;
+        playerInventory.OnItemRemoved += InventoryScript_ItemRemoved;
+        playerInventory.OnNewItemSwitched += InventoryScript_NewItemSwitched;
+        playerInventory.OnOldItemSwitched += InventoryScript_OldItemSwitched;
     }
     private void OnDisable()
     {
-        itemHolder.OnItemAdded -= InventoryScript_ItemAdded;
-        itemHolder.OnItemRemoved -= InventoryScript_ItemRemoved;
-        itemHolder.OnNewItemSwitched -= InventoryScript_NewItemSwitched;
-        itemHolder.OnOldItemSwitched -= InventoryScript_OldItemSwitched;
+        playerInventory.OnItemAdded -= InventoryScript_ItemAdded;
+        playerInventory.OnItemRemoved -= InventoryScript_ItemRemoved;
+        playerInventory.OnNewItemSwitched -= InventoryScript_NewItemSwitched;
+        playerInventory.OnOldItemSwitched -= InventoryScript_OldItemSwitched;
     }
     //make new slot larger
     private void InventoryScript_NewItemSwitched(object sender, InventoryEventArgs _slot)
     {
-        transform.GetChild(_slot.SlotId).localScale *= SCALEFACTOR;
+        transform.GetChild(_slot.SlotId).localScale = selectedScale;
     }
     //make previus slot default size
     private void InventoryScript_OldItemSwitched(object sender, InventoryEventArgs _slot)
     {
-        transform.GetChild(_slot.SlotId).localScale /= SCALEFACTOR;
+        audioManager.PlaySound(switchSound, 0.3f);
+        transform.GetChild(_slot.SlotId).localScale = defaultScale;
     }
     //update visual components when item is added
     private void InventoryScript_ItemAdded(object sender, InventoryEventArgs _slot)
     {
+
+        audioManager.PlaySound(pickSound);
         Transform imageTransform = transform.GetChild(_slot.SlotId).GetChild(0).GetChild(0);
         Transform textTransform = transform.GetChild(_slot.SlotId).GetChild(0).GetChild(1);
 
@@ -44,7 +55,7 @@ public class InventoryVisuals : MonoBehaviour
         Color color = Color.white;//default
         if (_slot.Item.typeOfItem.Equals(GameUtils.TypeOfItem.GUN))
         {
-            color = _slot.Item.gameObject.GetComponent<Weapon>().rarityData.color;
+            color = _slot.Item.gameObject.GetComponent<Weapon>().RarityData.color;
             imageTransform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
         }
         else if (_slot.Item.typeOfItem.Equals(GameUtils.TypeOfItem.THROWEABLE))
@@ -58,11 +69,12 @@ public class InventoryVisuals : MonoBehaviour
         icon.enabled = true;
         icon.sprite = _slot.Item.Icon;
         int itemCount = _slot.Item.Slot.Count();
-        txtCount.text = itemCount > 1?itemCount.ToString(): "";
+        txtCount.text = itemCount > 1 ? itemCount.ToString() : "";
     }
     //update visual components when item is removed
     private void InventoryScript_ItemRemoved(object sender, InventoryEventArgs _slot)
     {
+        audioManager.PlaySound(dropSound, 0.3f);
         Transform imageTransform = transform.GetChild(_slot.SlotId).GetChild(0).GetChild(0);
         Transform textTransform = transform.GetChild(_slot.SlotId).GetChild(0).GetChild(1);
 
@@ -70,7 +82,8 @@ public class InventoryVisuals : MonoBehaviour
         TMP_Text txtCount = textTransform.GetComponent<TMP_Text>();
         //color background
         int itemCount = _slot.Item.Slot.Count();
-        switch (itemCount){
+        switch (itemCount)
+        {
             case 0://slot empty
                 image.enabled = false;
                 image.sprite = null;
@@ -84,5 +97,5 @@ public class InventoryVisuals : MonoBehaviour
                 txtCount.text = itemCount.ToString();
                 break;
         }
-     }
+    }
 }

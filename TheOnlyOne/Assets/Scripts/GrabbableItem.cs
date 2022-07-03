@@ -46,7 +46,7 @@ public class GrabbableItem : MonoBehaviour
         }
         else if (typeOfItem.Equals(GameUtils.TypeOfItem.GUN))
         {
-            Icon = GetComponent<Weapon>().rarityData.inventoryIcon;
+            Icon = GetComponent<Weapon>().RarityData.inventoryIcon;
             IsStackable = false;
         }
     }
@@ -71,15 +71,12 @@ public class GrabbableItem : MonoBehaviour
     {
         gameManager.HUDCrosshair.enabled = true;
         gameObject.SetActive(true);
-        //animacion de sacar objeto
     }
     public void DisableItem()
     {
-        gameManager.HUDCrosshair.enabled = false;
+        gameManager.HUDCrosshair.enabled=false;
         gameObject.GetComponentInChildren<Animator>().enabled = false;
         gameObject.SetActive(false);
-
-        //animacion de guardar objeto
     }
     private void CheckItemLayer()
     {

@@ -40,7 +40,7 @@ public class Granade : MonoBehaviour
         GranadeData = GenerateGranade(gameManager.granadeTypes);
         granadePrefab = Instantiate(GranadeData.prefab, anchor);
         SetLabelText();
-        gameManager.GenerateLabel(granadePrefab.transform, granadePrefab.transform.position + new Vector3(0.07f, 0.35f, -0.37f), GranadeData.name, GranadeData.granadeType, GranadeData.labelIcon, statText, GranadeData.color);
+        gameManager.GenerateLabel(granadePrefab.transform, granadePrefab.transform.position + new Vector3(0.07f, 0.35f, -0.37f), GranadeData.granadeName, GranadeData.granadeType, GranadeData.labelIcon, statText, GranadeData.color);
 
         animator = GetComponentInChildren<Animator>();
         GranadeIdleCollider = GetComponentInChildren<BoxCollider>();
@@ -51,7 +51,7 @@ public class Granade : MonoBehaviour
 
     private void SetLabelText()
     {
-        if (GranadeData.id==0)//explosive
+        if (GranadeData.id == 0)//explosive
         {
             int totalDamage = GranadeData.damage * 11;//x11 because bots have 11 colliders
             statText = totalDamage.ToString();
@@ -97,7 +97,7 @@ public class Granade : MonoBehaviour
     {
         hasExploded = true;
         RaycastHit hit;
-        Physics.Raycast(transform.position,-transform.up, out hit);
+        Physics.Raycast(transform.position, -transform.up, out hit);
         Destroy(Instantiate(GranadeData.explosionEffect, hit.point, Quaternion.identity), GranadeData.effectDuration);
         audioSource.PlayOneShot(GranadeData.explodeSound);
         Collider[] colliders = Physics.OverlapSphere(transform.position, GranadeData.radius);
@@ -107,7 +107,7 @@ public class Granade : MonoBehaviour
         {
             if (GranadeData.id == 0)//explosive
             {
-                
+
                 Rigidbody objectRigidBody = nearObject.GetComponent<Rigidbody>();
                 if (objectRigidBody)
                 {
@@ -117,7 +117,7 @@ public class Granade : MonoBehaviour
                 HealthSystem healthSystem = nearObject.gameObject.GetComponentInParent<HealthSystem>();
                 if (healthSystem)
                 {
-                    healthSystem.Damage(GranadeData.damage,true,transform);
+                    healthSystem.Damage(GranadeData.damage, true, transform);
                 }
             }
             else if (GranadeData.id == 1)//explosive
@@ -142,11 +142,12 @@ public class Granade : MonoBehaviour
     }
     private IEnumerator FreezeCoroutine(EnemyIA _enemyRef, Transform _point, GameObject _icePilarRef)
     {
+        Vector3 pointPosition = _point.position;
         yield return new WaitForSeconds(GranadeData.effectDuration);
         audioSource.PlayOneShot(GranadeData.freezelessSound);
-        _enemyRef.isFrozen = false;
-        GameObject fragments = Instantiate(GranadeData.icePilarFragmented, _point.position, _point.rotation);
-        if (_point!=null)
+        if(_enemyRef!=null)_enemyRef.isFrozen = false;
+        GameObject fragments = Instantiate(GranadeData.icePilarFragmented, pointPosition, _point.rotation);
+        if (_point != null)
         {
             Destroy(_icePilarRef);
             Destroy(fragments, 3);
@@ -154,10 +155,10 @@ public class Granade : MonoBehaviour
     }
 
     public void Throw(Vector3 _position, Vector3 _direction)
-    { 
+    {
         animator.SetTrigger("Throw");
         audioSource.PlayOneShot(GranadeData.throwSound);
-        audioSource.PlayOneShot(GranadeData.counterSound,.1f);
+        audioSource.PlayOneShot(GranadeData.counterSound, .1f);
         GranadeIdleCollider.enabled = false;
         trail.enabled = true;
         item.enabled = false;

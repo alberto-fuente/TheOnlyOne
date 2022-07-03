@@ -131,7 +131,7 @@ public class EnemyIA : MonoBehaviour
                                 if (Random.value <= enemyController.EnemyData.hitProbability)
                                 {
                                     animatorController.SetTrigger("Shoot");
-                                    targetHealthSystem.Damage(Random.Range(enemyController.EnemyData.minDamage, enemyController.EnemyData.maxDamage),false,transform);
+                                    targetHealthSystem.Damage(Random.Range(enemyController.EnemyData.minDamage, enemyController.EnemyData.maxDamage), false, transform);
                                     audioSource.PlayOneShot(enemyController.EnemyData.shootSound, 0.2f);
                                 }
                                 Invoke(nameof(ResetAttack), enemyController.EnemyData.attackDelay);
@@ -166,7 +166,8 @@ public class EnemyIA : MonoBehaviour
     {
         int numberOfEntitiesInRange;
         //enemy moves to another layer to prevent detect itself during scan
-        foreach (Transform child in children) { 
+        foreach (Transform child in children)
+        {
             child.gameObject.layer = temporaryIgnoreLayer;
         }
         //scans

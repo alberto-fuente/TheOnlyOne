@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
@@ -51,7 +50,7 @@ public class Spawner : MonoBehaviour
     public int treeCount = 200;
     public int rockCount = 25;
     public int lightpostCount = 50;
-    public int enemyCount=49;
+    public int enemyCount = 49;
     public int crateCount = 13;
 
     void Awake()
@@ -67,7 +66,7 @@ public class Spawner : MonoBehaviour
         SpawnBuildings();
         StartCoroutine(Spawn(bouncepad, bouncepadCount, new Vector3(0, 1, 0)));
         StartCoroutine(Spawn(crate, crateCount, new Vector3(0, 1, 0)));
-        StartCoroutine(SpawnRandom(trees, treeCount,new Vector3(0, 0, 0)));
+        StartCoroutine(SpawnRandom(trees, treeCount, new Vector3(0, 0, 0)));
         StartCoroutine(SpawnRandom(rocks, rockCount, new Vector3(0, 0, 0)));
         StartCoroutine(Spawn(lightpost, lightpostCount, new Vector3(0, 0, 0)));
         StartCoroutine(Spawn(grass, grassCount, Vector3.zero));
@@ -86,9 +85,9 @@ public class Spawner : MonoBehaviour
 
     private void SpawnBuildings()
     {
-        foreach(Transform point in spawnPoints)
+        foreach (Transform point in spawnPoints)
         {
-            GameObject building=Instantiate(buildings[Random.Range(0, buildings.Length)],point.position,Quaternion.Euler(new Vector3(-90,0,Random.Range(0,361))));
+            GameObject building = Instantiate(buildings[Random.Range(0, buildings.Length)], point.position, Quaternion.Euler(new Vector3(-90, 0, Random.Range(0, 361))));
             building.GetComponentInChildren<MeshRenderer>().material.color = buildingColors[Random.Range(0, buildingColors.Length)];
 
         }
@@ -101,10 +100,10 @@ public class Spawner : MonoBehaviour
         return position;
     }
     //spawns "count" number of items at a certain offset of the ground
-    private IEnumerator Spawn(GameObject item, int count,Vector3 offset)
+    private IEnumerator Spawn(GameObject item, int count, Vector3 offset)
     {
         int placed = 0;
-        while(placed < count)
+        while (placed < count)
         {
             Vector2 coordinates = GetRandomPosition(radius);
             Vector3 position = new Vector3(coordinates.x, 200, coordinates.y);
@@ -117,7 +116,7 @@ public class Spawner : MonoBehaviour
             }
         }
         yield return null;
-        
+
 
     }
     private IEnumerator SpawnRandom(GameObject[] items, int count, Vector3 offset)
@@ -133,16 +132,16 @@ public class Spawner : MonoBehaviour
             if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Ground"))
             {
                 var item = items[Random.Range(0, items.Length)];
-                GameObject inst=Instantiate(item, hit.point + offset, item.transform.rotation);
-                inst.transform.localScale *= Random.Range(1f,2.15f);
-                inst.transform.Rotate(new Vector3(0,0, Random.Range(0, 360)));
+                GameObject inst = Instantiate(item, hit.point + offset, item.transform.rotation);
+                inst.transform.localScale *= Random.Range(1f, 2.15f);
+                inst.transform.Rotate(new Vector3(0, 0, Random.Range(0, 360)));
                 placed++;
             }
         }
         yield return null;
 
     }
-    
+
     private void CreateMap(int xSize, int zSize)
     {
         GenerateRandomValues(Random.Range(0, 100));

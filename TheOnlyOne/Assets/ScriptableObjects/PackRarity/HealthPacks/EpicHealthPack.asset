@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4867a44d2e10b28439cf1df59e8bf2f4, type: 3}
   m_Name: EpicHealthPack
   m_EditorClassIdentifier: 
-  name: "botiqu\xEDn"
+  itemName: "botiqu\xEDn"
   rarity: "\xE9pico"
   prefab: {fileID: 2443405433640292565, guid: a7c2157122464d74f8e8bc49cfde66c9, type: 3}
   multiplier: 3

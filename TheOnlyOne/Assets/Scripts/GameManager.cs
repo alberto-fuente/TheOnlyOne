@@ -1,9 +1,9 @@
+using Firebase.Database;
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Firebase.Database;
-using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,25 +21,21 @@ public class GameManager : MonoBehaviour
     [Header("Properties")]
     private bool matchIsFinished;
     [SerializeField] private float safeRadius = 300;
-    public float SafeRadius { get => safeRadius; set => safeRadius = value; }
 
     [Header("Entities")]
     public TMP_Text entitiesLeftText;
     public TMP_Text defeatedEnemies;
     [HideInInspector] public int beatenEnemies = 0;
     private int entitiesLeft;
-    public int EntitiesLeft { get => entitiesLeft; set => entitiesLeft = value; }
-    public static GameManager Instance { get => instance; private set => instance = value; }
 
     [Header("References")]
     public PlayerInventory playerInventory;
     public GameObject ammoPanel;
-    public GameObject Label;
+    public GameObject emptyLabel;
     public AudioClip headshotSound;
     private DatabaseReference DBreference;
 
     [Header("Ammo UI")]
-    public TMP_Text fpsText;
     public TMP_Text currentAmmoText;
     public TMP_Text totalAmmoText;
 
@@ -77,6 +73,9 @@ public class GameManager : MonoBehaviour
     private int victoryExp = 300;
     private int totalExp = 0;
 
+    public static GameManager Instance { get => instance; private set => instance = value; }
+    public float SafeRadius { get => safeRadius; set => safeRadius = value; }
+    public int EntitiesLeft { get => entitiesLeft; set => entitiesLeft = value; }
 
     void Awake()
     {
@@ -113,8 +112,8 @@ public class GameManager : MonoBehaviour
         {
             ammoPanel.SetActive(true);
             Weapon weapon = playerInventory.GetCurrentItem().GetComponent<Weapon>();
-            int currentAmmo = weapon.currentAmmo;
-            int totalAmmo = weapon.totalAmmo;
+            int currentAmmo = weapon.CurrentAmmo;
+            int totalAmmo = weapon.TotalAmmo;
             int maxClipAmmo = weapon.weaponData.maxClipAmmo;
             currentAmmoText.text = currentAmmo.ToString();
             totalAmmoText.text = totalAmmo.ToString();
@@ -123,12 +122,12 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            if(ammoPanel!=null)ammoPanel.SetActive(false);
+            if (ammoPanel != null) ammoPanel.SetActive(false);
         }
     }
     public void GenerateLabel(Transform _parent, Vector3 _position, string _name, string _type, Sprite icon, string _stat, Color _color)
     {
-        GameObject label = Instantiate(Label, _position, Quaternion.identity, _parent);
+        GameObject label = Instantiate(emptyLabel, _position, Quaternion.identity, _parent);
         Label labelInfo = label.GetComponent<Label>();
         labelInfo.itemName.text = _name;
         labelInfo.itemType.text = _type;
@@ -170,7 +169,7 @@ public class GameManager : MonoBehaviour
     }
     public void Lose()
     {
-        playerRank.text = "#"+(EntitiesLeft + 1).ToString();//final rank
+        playerRank.text = "#" + (EntitiesLeft + 1).ToString();//final rank
         StartCoroutine(EndMatchCorroutine(false));
     }
 
@@ -202,7 +201,7 @@ public class GameManager : MonoBehaviour
         var user = FirebaseManager.User;
         int userXP = 0;
         int newTotalXP = 0;
-        var DBGetTask = FirebaseManager.DBReference.Child("players").Child(user.UserId).Child("xp").GetValueAsync();
+        var DBGetTask = DBreference.Child("players").Child(user.UserId).Child("xp").GetValueAsync();
         yield return new WaitUntil(predicate: () => DBGetTask.IsCompleted);
         if (DBGetTask.Exception != null)
         {

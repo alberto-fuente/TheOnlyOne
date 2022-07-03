@@ -106,7 +106,7 @@ public class PlayerMove : MonoBehaviour
         verticalMove = Input.GetAxisRaw("Vertical");
         if (playerInventory.GetCurrentItem() != null && playerInventory.GetCurrentItem().typeOfItem == GameUtils.TypeOfItem.GUN)
         {
-            isAiming = playerInventory.GetCurrentItem().gameObject.GetComponent<Weapon>().isAming;
+            isAiming = playerInventory.GetCurrentItem().gameObject.GetComponent<Weapon>().IsAming;
         }
         else isAiming = false;
         wantsToJump = Input.GetButton("Jump");
@@ -128,8 +128,8 @@ public class PlayerMove : MonoBehaviour
         if (isGrounded)
         {
             headBobTime += Time.deltaTime * headBobSpeed;
-            playerInventory.transform.localPosition = Vector3.Lerp(playerInventory.transform.localPosition, 
-                HeadBob(headBobTime, headBobAmplitude / headBobAimDividerX * headBobSpeed, 
+            playerInventory.transform.localPosition = Vector3.Lerp(playerInventory.transform.localPosition,
+                HeadBob(headBobTime, headBobAmplitude / headBobAimDividerX * headBobSpeed,
                 headBobAmplitude / headBobAimDividerY * headBobSpeed), Time.deltaTime * 5);
         }
 
@@ -221,7 +221,7 @@ public class PlayerMove : MonoBehaviour
                 desiredSpeed = crouchSpeed;
             }
             else
-             if (wantsToSprint && isGrounded&&!wantsToCrouch)
+             if (wantsToSprint && isGrounded && !wantsToCrouch)
             {
                 desiredSpeed = runSpeed;
             }

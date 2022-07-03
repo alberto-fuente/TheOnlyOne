@@ -18,7 +18,7 @@ public class InventorySlot
     {
         return Count() <= 0;
     }
-    public GrabbableItem FirstItem()
+    public GrabbableItem Peek()
     {
         if (IsEmpty()) return null;
         return itemStack.Peek();
@@ -26,7 +26,7 @@ public class InventorySlot
     public bool IsStackable(GrabbableItem _item)
     {
         if (IsEmpty()) return false;
-        return (FirstItem().IsStackable && _item.ItemID.Equals(FirstItem().ItemID));
+        return (Peek().IsStackable && _item.ItemID.Equals(Peek().ItemID));
     }
     public GrabbableItem GetItemAt(int _index)
     {
@@ -34,12 +34,12 @@ public class InventorySlot
         GrabbableItem[] array = itemStack.ToArray();
         return array[_index];
     }
-    public void AddItem(GrabbableItem _item)
+    public void Push(GrabbableItem _item)
     {
         _item.Slot = this;
         itemStack.Push(_item);
     }
-    public bool RemoveItem()
+    public bool Pop()
     {
         if (IsEmpty()) return false;
         itemStack.Pop();

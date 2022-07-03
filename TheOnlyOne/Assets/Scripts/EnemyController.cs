@@ -39,7 +39,7 @@ public class EnemyController : MonoBehaviour
         groundCollider = GetComponent<Collider>();
 
         EnemyData = GenerateEnemy();
-        enemyPrefab = Instantiate(EnemyData.enemyPrefab, transform);
+        enemyPrefab = Instantiate(EnemyData.enemyModel, transform);
         AnimatorController = enemyPrefab.GetComponentInChildren<Animator>();
         rigidbodies = enemyPrefab.transform.GetComponentsInChildren<Rigidbody>();
         foreach (Rigidbody rb in rigidbodies)
@@ -67,7 +67,7 @@ public class EnemyController : MonoBehaviour
         }
     }
     //the more health it has or the more damage it recieves, the more chances there are to play hit animation
-    private void HitAnimate(object sender, HealthArgs damage)
+    private void HitAnimate(object sender, HealthEventArgs damage)
     {
         int hitChance = UnityEngine.Random.Range(0, 100);
         if (hitChance < damage.Amount * 100 / Math.Max((healthSystem.CurrentHealth + healthSystem.CurrentArmor), 1))
@@ -75,19 +75,19 @@ public class EnemyController : MonoBehaviour
             if (damage.Amount > 145)
             {
                 AnimatorController.Play("BigHit");
-                if(enabled) StartCoroutine(HurtCoroutine(bigHurtDelay));
+                if (enabled) StartCoroutine(HurtCoroutine(bigHurtDelay));
             }
             else
             {
                 AnimatorController.SetInteger("HitIndex", UnityEngine.Random.Range(0, 3));
                 AnimatorController.SetTrigger("Hit");
-                if (enabled)StartCoroutine(HurtCoroutine(hurtDelay));
+                if (enabled) StartCoroutine(HurtCoroutine(hurtDelay));
             }
 
         }
     }
     //if hit by player, its sight becomes larger in order to try to detect him
-    private void IncreaseSensors(object sender, HealthArgs hit)
+    private void IncreaseSensors(object sender, HealthEventArgs hit)
     {
         if (hit.ByPlayer)
         {
@@ -108,7 +108,7 @@ public class EnemyController : MonoBehaviour
     }
     void DropItems(object sender, EventArgs e)
     {
-        for (int i = 0; i < UnityEngine.Random.Range(MINITEMSDROP, MAXITEMSDROP+1); i++)
+        for (int i = 0; i < UnityEngine.Random.Range(MINITEMSDROP, MAXITEMSDROP + 1); i++)
         {
             GameObject item = gameManager.spawnableItems[UnityEngine.Random.Range(0, gameManager.spawnableItems.Length)];
             Instantiate(item, transform.position + new Vector3(UnityEngine.Random.Range(-2, 2), 3f, UnityEngine.Random.Range(-2, 2)), item.transform.rotation);

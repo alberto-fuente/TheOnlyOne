@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4867a44d2e10b28439cf1df59e8bf2f4, type: 3}
   m_Name: RareAmmoPack
   m_EditorClassIdentifier: 
-  name: "munici\xF3n"
+  itemName: "munici\xF3n"
   rarity: raro
   prefab: {fileID: 8121593748169125817, guid: b838be0eefd971244af7a1a53755692f, type: 3}
   multiplier: 2

@@ -16,8 +16,8 @@ public class Recoil : MonoBehaviour
     void Update()
     {
         //Check current weapon
-        if (playerInventory.GetCurrentItem()==null || playerInventory.GetCurrentItem().typeOfItem != GameUtils.TypeOfItem.GUN)
-        return;
+        if (playerInventory.GetCurrentItem() == null || playerInventory.GetCurrentItem().typeOfItem != GameUtils.TypeOfItem.GUN)
+            return;
         currentWeapon = playerInventory.GetCurrentItem().GetComponent<Weapon>();
         //Constantly tries to rotate back to initial rotation
         targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, currentWeapon.weaponData.returnSpeed * Time.deltaTime);

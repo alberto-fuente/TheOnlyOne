@@ -24,7 +24,7 @@ public class Pack : MonoBehaviour
         itemHolder = FindObjectOfType<PlayerInventory>();
         GeneratePack();
         prefab = GetComponentInChildren<Collider>().gameObject;
-        gameManager.GenerateLabel(prefab.transform, prefab.transform.position + new Vector3(0, 0.3f, 0), RarityData.name, RarityData.rarity, RarityData.labelIcon, statText, RarityData.color);
+        gameManager.GenerateLabel(prefab.transform, prefab.transform.position + new Vector3(0, 0.3f, 0), RarityData.itemName, RarityData.rarity, RarityData.labelIcon, statText, RarityData.color);
         Label = GetComponentInChildren<Label>();
     }
     private void GeneratePack()
@@ -68,10 +68,10 @@ public class Pack : MonoBehaviour
             case GameUtils.TypeOfPack.AMMO:
                 foreach (InventorySlot slot in itemHolder.inventory)
                 {
-                    if (slot.FirstItem() != null && slot.FirstItem().typeOfItem.Equals(GameUtils.TypeOfItem.GUN))
+                    if (slot.Peek() != null && slot.Peek().typeOfItem.Equals(GameUtils.TypeOfItem.GUN))
                     {
-                        Weapon weapon = slot.FirstItem().gameObject.GetComponent<Weapon>();
-                        weapon.totalAmmo += weapon.weaponData.maxClipAmmo * RarityData.multiplier;
+                        Weapon weapon = slot.Peek().gameObject.GetComponent<Weapon>();
+                        weapon.TotalAmmo += weapon.weaponData.maxClipAmmo * RarityData.multiplier;
                     }
                 }
                 break;

@@ -3,11 +3,10 @@ using UnityEngine;
 
 public class HealthSystem : MonoBehaviour
 {
-    public event EventHandler<HealthArgs> OnDamaged;
-    public event EventHandler<HealthArgs> OnHealthHealed;
-    public event EventHandler<HealthArgs> OnArmorHealed;
-    public event EventHandler<HealthArgs> OnArmorDestroyed;
-    public event EventHandler<HealthArgs> OnDead;
+    public event EventHandler<HealthEventArgs> OnDamaged;
+    public event EventHandler<HealthEventArgs> OnHealthHealed;
+    public event EventHandler<HealthEventArgs> OnArmorHealed;
+    public event EventHandler<HealthEventArgs> OnDead;
 
     [SerializeField] const int MAXHEALTH = 100;
     [SerializeField] const int MAXARMOR = 100;
@@ -15,12 +14,14 @@ public class HealthSystem : MonoBehaviour
     int currentHealth;
     int currentArmor;
 
-    public bool isDead;
-    public bool waslastHitHead;
-    public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
-    public int CurrentArmor { get => currentArmor; set => currentArmor = value; }
+    private bool isDead;
+    private bool waslastHitHead;
     public int MaxHealth { get => MAXHEALTH; }
     public int MaxArmor { get => MAXARMOR; }
+    public int CurrentHealth { get => currentHealth; private set => currentHealth = value; }
+    public int CurrentArmor { get => currentArmor; private set => currentArmor = value; }
+    public bool IsDead { get => isDead; private set => isDead = value; }
+    public bool WaslastHitHead { get => waslastHitHead; set => waslastHitHead = value; }
 
     private void Awake()
     {
@@ -31,41 +32,37 @@ public class HealthSystem : MonoBehaviour
     {
         CurrentHealth += amount;
         if (CurrentHealth > MaxHealth) CurrentHealth = MaxHealth;
-        if (OnHealthHealed != null) OnHealthHealed(this, new HealthArgs(amount));
+        if (OnHealthHealed != null) OnHealthHealed(this, new HealthEventArgs(amount));
     }
     public void HealShield(int amount)
     {
         CurrentArmor += amount;
         if (CurrentArmor > MaxArmor) CurrentArmor = MaxArmor;
-        if (OnArmorHealed != null) OnArmorHealed(this, new HealthArgs(amount));
+        if (OnArmorHealed != null) OnArmorHealed(this, new HealthEventArgs(amount));
     }
-    public void Damage(int amount,bool byPlayer,Transform sourceTransform)
+    public void Damage(int amount, bool byPlayer, Transform sourceTransform)
     {
         var dif = CurrentArmor - amount;
         CurrentArmor = dif;
         if (CurrentArmor < 0)
         {
             CurrentArmor = 0;
-            if (OnArmorDestroyed != null) OnArmorDestroyed(this, new HealthArgs(amount));
             CurrentHealth -= Mathf.Abs(dif);
         }
-
-        if (OnDamaged != null)
-        {
-            OnDamaged(this, new HealthArgs(amount,byPlayer, sourceTransform));//enemy sensors increase if hit by player
-        }
-
         if (CurrentHealth < 0)
         {
             CurrentHealth = 0;
-            if (!isDead) Die(byPlayer);
+            if (!IsDead) Die(byPlayer);
         }
-        
+        if (OnDamaged != null)
+        {
+            OnDamaged(this, new HealthEventArgs(amount, byPlayer, sourceTransform));//enemy sensors increase if hit by player
+        }
     }
     public void Die(bool byPlayer)
     {
-        isDead = true;
-        if (OnDead != null) OnDead(this, new HealthArgs(byPlayer));
+        IsDead = true;
+        if (OnDead != null) OnDead(this, new HealthEventArgs(byPlayer));
     }
     public float GetHealthNormalized()
     {

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4867a44d2e10b28439cf1df59e8bf2f4, type: 3}
   m_Name: CommonAmmoPack
   m_EditorClassIdentifier: 
-  name: "munici\xF3n"
+  itemName: "munici\xF3n"
   rarity: "com\xFAn"
   prefab: {fileID: 6682986236604658010, guid: 65282ded64b9f214d9cab8c203fec40a, type: 3}
   multiplier: 1

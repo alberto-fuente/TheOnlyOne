@@ -1,5 +1,5 @@
-using UnityEngine;
 using System;
+using UnityEngine;
 public class HeadShot : MonoBehaviour
 {
     [Header("Components")]
@@ -23,23 +23,23 @@ public class HeadShot : MonoBehaviour
 
     public void DoHeadShot(object sender, EventArgs e)
     {
-        if (hitbox.HealthSystem.waslastHitHead && !hasExploded)
+        if (hitbox.HealthSystem.WaslastHitHead && !hasExploded)
         {
             hasExploded = true;
             OriginalHead.SetActive(false);
             Destroy(ScatteredHead = Instantiate(ScatteredHead, OriginalHead.transform.position, OriginalHead.transform.rotation), 10);
             Destroy(Instantiate(explosionVFX, OriginalHead.transform.position, OriginalHead.transform.rotation), 10);
-            audioSource.PlayOneShot(explodeSound,0.2f);
+            audioSource.PlayOneShot(explodeSound, 0.2f);
             Collider[] colliders = Physics.OverlapSphere(transform.position, 0.5f);
             foreach (Collider coll in colliders)
             {
-                
+
                 Rigidbody rigidBody = coll.GetComponent<Rigidbody>();
                 if (rigidBody != null)
                 {
                     rigidBody.AddForce(new Vector3(0, 55, 0), ForceMode.VelocityChange);
                 }
-                
+
             }
         }
     }

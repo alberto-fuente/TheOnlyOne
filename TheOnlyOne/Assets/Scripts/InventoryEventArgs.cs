@@ -7,7 +7,7 @@ public class InventoryEventArgs : EventArgs
     {
         SlotId = _slotId;
     }
-    public InventoryEventArgs(GrabbableItem _item,int _slotId)
+    public InventoryEventArgs(GrabbableItem _item, int _slotId)
     {
         Item = _item;
         SlotId = _slotId;

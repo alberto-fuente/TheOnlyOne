@@ -16,6 +16,8 @@ MonoBehaviour:
   weaponName: fusil de asalto
   crosshair: {fileID: 21300000, guid: aff738817e1ccf0448548ef0efb78627, type: 3}
   crosshairSizeAim: 0.1
+  sensitivityMultiplierAim: 1
+  sensitivityMultiplierDefault: 2
   maxClipAmmo: 35
   range: 200
   fireRate: 0.1
@@ -23,6 +25,7 @@ MonoBehaviour:
   aimSpeed: 20
   autoShoot: 1
   damage: 10
+  headshotMultiplier: 1.5
   swayIntensity: 10
   swaySpeed: 5
   recoilRotation: {x: -2, y: 1.2, z: 0.5}
@@ -43,3 +46,5 @@ MonoBehaviour:
   pitchRand: 0.1
   mainFOV: 80
   aimFOV: 30
+  impactPrefab: {fileID: 689458154966620557, guid: a05894fe8134a204b861397256219277, type: 3}
+  impactSound: {fileID: 8300000, guid: 55a9d6269c2852745980c0e9fd797a33, type: 3}

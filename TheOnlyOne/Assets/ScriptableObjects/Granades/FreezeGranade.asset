@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FreezeGranade
   m_EditorClassIdentifier: 
   id: 1
-  name: granada de hielo
+  granadeName: granada
   granadeType: "congelaci\xF3n"
   prefab: {fileID: 9205368523358960027, guid: be78f2b02addf6742af9d6986e2a722e, type: 3}
   Material: {fileID: 0}

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
-using TMPro;
 
 public class OptionsMenu : MonoBehaviour
 {
@@ -13,7 +13,7 @@ public class OptionsMenu : MonoBehaviour
     private void Start()
     {
         //Resolutions
-        resolutions=Screen.resolutions;
+        resolutions = Screen.resolutions;
         resolutionDropDown.ClearOptions();
         List<string> options = new List<string>();
         int currentResolutionIndex = 0;
@@ -21,7 +21,8 @@ public class OptionsMenu : MonoBehaviour
         {
             string option = resolutions[i].width + " x " + resolutions[i].height;
             options.Add(option);
-            if(resolutions[i].width == Screen.currentResolution.width&& (resolutions[i].height == Screen.currentResolution.height)){
+            if (resolutions[i].width == Screen.currentResolution.width && (resolutions[i].height == Screen.currentResolution.height))
+            {
                 currentResolutionIndex = i;
             }
         }
@@ -32,7 +33,7 @@ public class OptionsMenu : MonoBehaviour
     public void SetResolution(int resolutionIndex)
     {
         Resolution resolution = resolutions[resolutionIndex];
-        Screen.SetResolution(resolution.width,resolution.height,Screen.fullScreen);
+        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
     public void SetVolume(float volume)
     {

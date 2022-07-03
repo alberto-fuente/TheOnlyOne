@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 public class Crate : MonoBehaviour
 {
@@ -31,7 +31,7 @@ public class Crate : MonoBehaviour
     }
     private Renderer[] GetRenderers()
     {
-        Renderer[] meshes=GetComponentsInChildren<Renderer>();
+        Renderer[] meshes = GetComponentsInChildren<Renderer>();
         return meshes;
     }
     void Update()
@@ -56,7 +56,7 @@ public class Crate : MonoBehaviour
         foreach (Transform point in spawnPoints)
         {
             yield return new WaitForSeconds(.12f);
-            GameObject item=Instantiate(GameManager.Instance.spawnableItems[Random.Range(0, GameManager.Instance.spawnableItems.Length)], point.position, point.rotation);
+            GameObject item = Instantiate(GameManager.Instance.spawnableItems[Random.Range(0, GameManager.Instance.spawnableItems.Length)], point.position, point.rotation);
 
         }
     }

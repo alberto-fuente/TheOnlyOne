@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -8,7 +6,7 @@ public class GranadeBlueprint : ScriptableObject
 {
     [Header("Attributes")]
     public int id;
-    public string name;
+    public string granadeName;
     public string granadeType;
     public GameObject prefab;
     public Material Material;

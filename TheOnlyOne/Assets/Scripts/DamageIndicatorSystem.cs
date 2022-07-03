@@ -13,7 +13,7 @@ public class DamageIndicatorSystem : MonoBehaviour
     private Dictionary<Transform, DamageIndicator> Indicators = new Dictionary<Transform, DamageIndicator>();
     #region Delegates
     public static Action<Transform> CreateIndicator = delegate { };
-    public static Func<Transform,bool> CheckIfObjectInSight=null;
+    public static Func<Transform, bool> CheckIfObjectInSight = null;
     #endregion
     private void OnEnable()
     {
@@ -40,6 +40,6 @@ public class DamageIndicatorSystem : MonoBehaviour
     bool InSight(Transform t)
     {
         Vector3 screenPoint = camera.WorldToViewportPoint(t.position);
-        return screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x <1 && screenPoint.y >0 && screenPoint.y <1;
+        return screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
     }
 }

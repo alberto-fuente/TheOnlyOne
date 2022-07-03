@@ -17,7 +17,7 @@ public class DamageIndicator : MonoBehaviour
                 canvasGroup = GetComponent<CanvasGroup>();
                 if (canvasGroup == null)
                 {
-                   canvasGroup = gameObject.AddComponent<CanvasGroup>();
+                    canvasGroup = gameObject.AddComponent<CanvasGroup>();
 
                 }
             }
@@ -51,7 +51,7 @@ public class DamageIndicator : MonoBehaviour
     private Quaternion targetRotation = Quaternion.identity;
     private Vector3 targetPos = Vector3.zero;
 
-    public void Appear(Transform _target,Transform _player, Action _unRegister)
+    public void Appear(Transform _target, Transform _player, Action _unRegister)
     {
         this.Target = _target;
         this.player = _player;

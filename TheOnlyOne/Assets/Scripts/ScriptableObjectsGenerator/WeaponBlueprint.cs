@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Weapon")]
@@ -9,18 +7,19 @@ public class WeaponBlueprint : ScriptableObject
     public int weaponID;
     public string weaponName;
     public Sprite crosshair;
-    public float crosshairSizeAim=1;
+    public float crosshairSizeAim = 1;
+    public float sensitivityMultiplierAim = 0.8f;
+    public float sensitivityMultiplierDefault = 2f;
     [Space]
     [Header("Stats")]
     public int maxClipAmmo;
-    //public int currentAmmo;
-    //public int totalAmmo;
     public float range;
     public float fireRate;
     public float reloadTime;
     public float aimSpeed;
     public bool autoShoot;
     public int damage;
+    public float headshotMultiplier = 1.5f;
     [Space]
     [Header("Sway")]
     public int swayIntensity;
@@ -52,5 +51,6 @@ public class WeaponBlueprint : ScriptableObject
     public float pitchRand;
     [Range(0, 100)] public float mainFOV;
     [Range(0, 100)] public float aimFOV;
-
+    public GameObject impactPrefab;
+    public AudioClip impactSound;
 }

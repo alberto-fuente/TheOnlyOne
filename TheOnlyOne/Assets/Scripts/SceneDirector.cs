@@ -5,20 +5,22 @@ using UnityEngine.SceneManagement;
 public class SceneDirector : MonoBehaviour
 {
     //Singleton
-    public static SceneDirector instance;
+    private static SceneDirector instance;
     [Header("Components")]
     public GameObject loadingScreen;
     public GameObject loadingWheel;
     [SerializeField] private float wheelSpeed;
-    [SerializeField] private float minLoadTime = 2;
+    [SerializeField] private float minLoadTime = 1.7f;
 
     public bool isLoading;
 
+    public static SceneDirector Instance { get => instance; set => instance = value; }
+
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else

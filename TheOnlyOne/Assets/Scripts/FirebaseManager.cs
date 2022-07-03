@@ -7,7 +7,7 @@ using UnityEngine;
 public class FirebaseManager : MonoBehaviour
 {
     // Firebase variables
-    [Header("Firebase")]
+    [Header("Firebase References")]
     public DependencyStatus dependencyStatus;
     public static FirebaseAuth Auth;
     public static FirebaseUser User;
@@ -29,7 +29,7 @@ public class FirebaseManager : MonoBehaviour
     public TMP_Text warningRegisterText;
 
     //Screens
-   [Header("Canvas")]
+    [Header("Canvas")]
     public GameObject loginCanvas;
     public GameObject registerCanvas;
 
@@ -201,14 +201,14 @@ public class FirebaseManager : MonoBehaviour
             // User has logged in successfully!
             User = LoginTask.Result;
             warningLoginText.text = "";
-            confirmLoginText.text = "Hola, " + User.DisplayName;
+            confirmLoginText.text = "Bienvenido/a, " + User.DisplayName;
 
             yield return new WaitForSeconds(1.5f);
             ClearRegisterFeilds();
             ClearLoginFeilds();
             confirmLoginText.text = "";
             //Go to Main Menu Screen 
-            SceneDirector.instance.LoadScene(1);
+            SceneDirector.Instance.LoadScene(1);
 
         }
     }

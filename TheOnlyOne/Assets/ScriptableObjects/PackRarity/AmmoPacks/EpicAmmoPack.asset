@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4867a44d2e10b28439cf1df59e8bf2f4, type: 3}
   m_Name: EpicAmmoPack
   m_EditorClassIdentifier: 
-  name: "munici\xF3n"
+  itemName: "munici\xF3n"
   rarity: "\xE9pico"
   prefab: {fileID: 8121593748169125817, guid: 1d52e2f1881ba5141afca5d6ddf6b30f, type: 3}
   multiplier: 3

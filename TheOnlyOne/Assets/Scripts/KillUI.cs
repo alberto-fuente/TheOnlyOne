@@ -24,5 +24,5 @@ public class KillUI : MonoBehaviour
     {
         background.LeanAlpha(0, .5f).setOnComplete(DestryMe);
     }
-    
+
 }

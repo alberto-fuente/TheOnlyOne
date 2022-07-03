@@ -3,7 +3,7 @@ using UnityEngine;
 public class VisualRecoil : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField]private Weapon weapon;
+    [SerializeField] private Weapon weapon;
     [SerializeField] private Transform recoilPosition;
     [SerializeField] private Transform rotationPoint;
 
@@ -27,7 +27,7 @@ public class VisualRecoil : MonoBehaviour
 
     }
 
-    public void VisualRecoilFire(Vector3 recoilRot,Vector3 recoilKickback)
+    public void VisualRecoilFire(Vector3 recoilRot, Vector3 recoilKickback)
     {
         rotationRecoil += new Vector3(-recoilRot.x, Random.Range(-recoilRot.y, recoilRot.y), Random.Range(-recoilRot.z, recoilRot.z));
         positionRecoil += new Vector3(Random.Range(-recoilKickback.x, recoilKickback.x), Random.Range(-recoilKickback.y, recoilKickback.y), recoilKickback.z);

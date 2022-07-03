@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GranadeThrower : MonoBehaviour
@@ -21,11 +18,11 @@ public class GranadeThrower : MonoBehaviour
 
     void ListenThrowInput()
     {
-        if (currentItemIsThroweable()&&Input.GetMouseButtonDown(0))
+        if (currentItemIsThroweable() && Input.GetMouseButtonDown(0))
         {
             currentItem.GetComponent<Granade>().HasBeenthrown = true;
             weaponHolder.DropItem();
-            currentItem.GetComponent<Granade>().Throw(shootPoint.position,shootPoint.forward);
+            currentItem.GetComponent<Granade>().Throw(shootPoint.position, shootPoint.forward);
         }
     }
     private bool currentItemIsThroweable()

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4867a44d2e10b28439cf1df59e8bf2f4, type: 3}
   m_Name: CommonHealthPack
   m_EditorClassIdentifier: 
-  name: "botiqu\xEDn"
+  itemName: "botiqu\xEDn"
   rarity: "com\xFAn"
   prefab: {fileID: 2443405433640292565, guid: a89948dd8ebff1a4891141c25f1f7479, type: 3}
   multiplier: 1

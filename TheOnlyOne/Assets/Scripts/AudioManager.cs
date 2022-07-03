@@ -30,9 +30,9 @@ public class AudioManager : MonoBehaviour
     {
         Instance.audioSource.PlayOneShot(_sound);
     }
-    public void PlaySound(AudioClip _sound,float _volume)
+    public void PlaySound(AudioClip _sound, float _volume)
     {
-        Instance.audioSource.PlayOneShot(_sound,_volume);
+        Instance.audioSource.PlayOneShot(_sound, _volume);
     }
     public void HoverButton()
     {

@@ -16,20 +16,23 @@ MonoBehaviour:
   weaponName: subfusil
   crosshair: {fileID: 21300000, guid: a0e5349be5959ca44be9a86f8019717c, type: 3}
   crosshairSizeAim: 0.085
+  sensitivityMultiplierAim: 1
+  sensitivityMultiplierDefault: 2
   maxClipAmmo: 25
   range: 50
   fireRate: 0.08
   reloadTime: 1.7
   aimSpeed: 30
   autoShoot: 1
-  damage: 6
+  damage: 4
+  headshotMultiplier: 1.5
   swayIntensity: 10
   swaySpeed: 5
-  recoilRotation: {x: -2, y: 1.2, z: 0.5}
-  aimRecoilRotation: {x: -1.2, y: 0.5, z: 0}
+  recoilRotation: {x: -3.1, y: 1.5, z: 0.8}
+  aimRecoilRotation: {x: -1.2, y: 0.6, z: 0}
   recoilSpeed: 4
   returnSpeed: 2
-  vRecoilRotation: {x: 1, y: 1, z: 2}
+  vRecoilRotation: {x: 1.45, y: 1.5, z: 2}
   vRecoilKickBack: {x: 0.02, y: 0.02, z: -0.2}
   vRecoilRotationAim: {x: 1, y: 1, z: 1}
   vRecoilKickBackAim: {x: 0.015, y: 0, z: -0.02}
@@ -43,3 +46,5 @@ MonoBehaviour:
   pitchRand: 0.1
   mainFOV: 80
   aimFOV: 50
+  impactPrefab: {fileID: 689458154966620557, guid: a05894fe8134a204b861397256219277, type: 3}
+  impactSound: {fileID: 8300000, guid: 55a9d6269c2852745980c0e9fd797a33, type: 3}

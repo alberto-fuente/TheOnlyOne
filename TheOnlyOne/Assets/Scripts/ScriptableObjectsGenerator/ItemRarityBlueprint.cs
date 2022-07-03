@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(fileName = "New Item Rarity Type", menuName = "Item Rarity Type")]
 public class ItemRarityBlueprint : ScriptableObject
 {
     [Header("Properties")]
-    public string name;
+    public string itemName;
     public string rarity;
     public GameObject prefab;
     public int multiplier;
