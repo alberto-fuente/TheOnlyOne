@@ -40,7 +40,7 @@ MonoBehaviour:
   vRotationRecoilSpeed: 1.1
   vPositionReturnSpeed: 15
   vRotationReturnSpeed: 15
-  shootSound: {fileID: 8300000, guid: 688063760bc3c284993c21053d63d6a3, type: 3}
+  shootSound: {fileID: 8300000, guid: b9aff0239bf4d494b8ce74f8d18ae381, type: 3}
   reloadSound: {fileID: 8300000, guid: 8e124f78ce148234ead9e6dda47cf622, type: 3}
   pitch: 0.92
   pitchRand: 0.1

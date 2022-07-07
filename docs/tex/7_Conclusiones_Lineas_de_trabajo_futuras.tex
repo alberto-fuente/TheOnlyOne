@@ -1,0 +1,45 @@
+\capitulo{7}{Conclusiones y Líneas de trabajo futuras}
+
+A modo de cierre, se van a exponer las conclusiones finales que se han extraído sobre la realización de este proyecto, así como las líneas de trabajo propuestas por el alumno a realizar en un futuro para continuar y mejorar el desarrollo del mismo.
+
+\section{Conclusiones}
+Una vez finalizado el desarrollo de este proyecto, se han extraído algunas conclusiones dignas de mencionar.
+
+En cuanto a los requisitos y objetivos que se marcaron para este proyecto, se han cumplido todos ellos de manera satisfactoria, incluso a un mayor nivel de lo esperado en un principio.
+Se ha conseguido, siendo una sola persona, realizar un videojuego completo, con múltiples mecánicas, una buena jugabilidad, sistemas procedurales que hacen que cada partida sea única, con menús e interfaces diseñadas de cero, opciones de personalización, conexión a una base de datos y un sistema de autenticación de usuarios.
+
+Gracias a la combinación de mecánicas, animaciones, sonidos, efectos visuales y movimientos de cámara, se ha logrado cumplir satisfactoriamente todos los objetivos.
+Al fin y al cabo, el objetivo principal de un producto software como este es que resulte divertido de jugar, y que la experiencia de uso sea agradable e inmersiva, haciendo que el jugador sienta que todos los elementos funcionan como espera.
+
+Se ha conseguido obtener un videojuego muy disfrutable para toda clase de público al que le guste los retos y la acción, que pone a prueba la puntería, así como la capacidad de estrategia y exploración del jugador.
+
+Además, gracias al desarrollo de este proyecto, se ha obtenido otra perspectiva desde la que observar los videojuegos, fuera del rol de jugador. Se ha comprendido la gran magnitud que tienen este tipo de productos a nivel profesional, y que el hecho de que su desarrollo se lleve a cabo por grandes equipos multidisciplinares es algo inevitable para poder entregar un software de calidad en los escuetos plazos que suelen marcarse en esta industria.
+
+Este proyecto ha sido una forma ideal de aplicar y aunar varios de los conocimientos adquiridos durante la carrera, al tiempo que se crea un producto concreto y funcional de gran interés para el alumno.
+
+\textbf{\textit{The Only One}} es un proyecto que requería una implicación muy grande por parte del alumno, aún más si se tiene en cuenta la escasa experiencia del tutor con proyectos de este tipo, enfocados al desarrollo de un videojuego. El alumno, de manera autónoma, ha investigado y encontrado soluciones ante numerosas cuestiones y situaciones que ponían en aprietos al proyecto. Ha conseguido implementar y adaptar mecánicas, interfaces, modelos, animaciones, sonidos, efectos visuales y otros elementos para hacer que el desarrollo avanzara adecuadamente, acorde a los objetivos fijados.
+
+Se ha conseguido asentar unas bases firmes en materia del desarrollo de videojuegos con las que se espera construir productos de cada vez más calidad de aquí en adelante.
+
+\section{Líneas de trabajo futuras}
+
+Debido a la limitación temporal de este proyecto, se da por finalizado su desarrollo por el momento, consiguiendo haber creado un producto software completamente funcional.
+Sin embargo, existen algunas líneas de trabajo futuras que sería interesante desarrollar de aquí en adelante y que aportarían un gran valor al videojuego para crear un producto software más completo.\\ Además, dada la complejidad de alguna de ellas, se valora la opción de buscar un grupo de trabajo más amplio que pueda implementar dichas mejoras de forma más eficiente. Las líneas de trabajo consideradas para el futuro son las siguientes:
+\begin{itemize}
+    \item La funcionalidad que se tiene como prioridad para desarrollar en el futuro es implementar un \textbf{modo multijugador}. En el género \textit{battle royale}, es habitual poder competir contra otros jugadores reales, incluso con amigos, y así tener una sensación más realista al jugar una partida. Los enemigos actuales tienen una “inteligencia” limitada, lejos de la de una persona real. Cuando se compite contra otras personas, surgen enfrentamientos más interesantes, con estrategias de juego más elaboradas y distintos niveles de juego en función de la experiencia con el juego.
+    \item Mejorar la \textbf{inteligencia de los enemigos}. En caso de no implementarse el modo multijugador, sería conveniente añadir mejoras en el comportamiento automático de los enemigos. Es cierto que el sistema actual funciona bien, y crea la sensación de que realmente los enemigos interactúan con el resto de entidades como lo haría un jugador real. Sin embargo, una vez se descubre su funcionamiento interno, es relativamente sencillo adecuarse a su comportamiento para salir victorioso de los enfrentamientos.\\
+    Lo ideal es que, en lugar de un sistema tan cerrado y definido como el existente, se implemente algún tipo machine learning, como el sistema de aprendizaje por refuerzo de Unity llamado ML-Agents \cite{wiki:MLAgents}. Con él, los enemigos aprenderían con cada partida nuevos movimientos, habilidades y estrategias para, de esta forma, ser menos predecibles y tener una mejor técnica en los enfrentamientos, dando como resultado un nivel de inmersión más profundo y real.
+    \item Incluir nuevos tipos de \textbf{armas}, como lanzacohetes, ametralladoras o incluso armas cuerpo a cuerpo, como cuchillos o espadas, para crear nuevos tipos de enfrentamientos, más variados e interesantes.
+    \item Incluir nuevos tipos de \textbf{granadas} para aportar una jugabilidad más variada.
+    
+    Algunos conceptos de granadas que se tienen en mente son los siguientes:
+    \begin{itemize}
+    \item Granadas eléctricas que aturdan e inmovilicen a los enemigos durante unos segundos.
+    \item Granadas de veneno, que dejen un charco tóxico que haga daño a quien se encuentre sobre él.
+    \item Granadas de impulso que permitan a los jugadores impulsarse una gran distancia como si se subieran a una plataforma de salto.
+    \end{itemize}
+    \item Implementar un sistema de potenciadores o \textbf{\textit{power ups}}, objetos especiales que el jugador puede equipar o consumir, otorgándole diversas ventajas sobre el resto por unos segundos, como poder correr más rápido, saltar más alto, hacerse invisible o ralentizar el tiempo. Crearía nuevas dinámicas y estrategias que aportarían más diversión al juego,
+    \item Pulir \textbf{aspectos visuales}, como los modelos, la iluminación, las texturas, así como el \textit{HUD} o  las interfaces de los menús, para mantener la armonía estética y la usabilidad, ofreciendo una experiencia de usuario limpia y coherente.
+    \item Crear un \textbf{sistema de niveles del jugador}, que vaya aumentando según se gane experiencia, desbloqueando aspectos visuales para modificar el aspecto de los brazos, las armas y demás objetos. Estos cosméticos no afectarían a la jugabilidad de la partida, sino únicamente a la apariencia de dichos objetos para adecuarse al estilo del jugador.
+    \item Buscar otras formas de hacer que el juego sea viable económicamente para poder \textbf{publicarlo} en alguna plataforma dedicada para ello, como \textit{Steam}. Según la licencia acordada para este proyecto, se debería crear una pantalla especial de créditos para mencionar a los autores de los elementos usados en el proyecto que lo requieren.
+\end{itemize}

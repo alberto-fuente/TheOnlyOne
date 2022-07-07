@@ -5682,13 +5682,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 595384060403733236, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
+      propertyPath: m_Value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 595384060626383608, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 595384060626383608, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 595384060777495379, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -5.0001
+      value: -0.00033569
       objectReference: {fileID: 0}
     - target: {fileID: 595384060777495379, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 2.5
+      value: 0.00033569336
       objectReference: {fileID: 0}
     - target: {fileID: 595384060970228513, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -5836,7 +5848,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 595384061190212547, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.69375
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 595384061190212547, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_AnchorMax.y
@@ -5844,7 +5856,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 595384061190212547, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 27.5298
+      value: -0.000030518
       objectReference: {fileID: 0}
     - target: {fileID: 595384061190212547, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_SizeDelta.y
@@ -5852,7 +5864,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 595384061190212547, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 8.911495
+      value: -0.000030517578
       objectReference: {fileID: 0}
     - target: {fileID: 595384061190212547, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -5957,6 +5969,14 @@ PrefabInstance:
     - target: {fileID: 595384061401251901, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
+      objectReference: {fileID: 6840097340750523892}
+    - target: {fileID: 595384061401251901, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PressDropDownButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 595384061401251901, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: ButtonsManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 595384061401251902, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -5965,6 +5985,14 @@ PrefabInstance:
     - target: {fileID: 595384061444551462, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
+      objectReference: {fileID: 6840097340750523892}
+    - target: {fileID: 595384061444551462, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PressDropDownButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 595384061444551462, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: ButtonsManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 595384061444551467, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -6024,7 +6052,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 595384061984412614, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.69375
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 595384061984412614, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_AnchorMax.y
@@ -6032,7 +6060,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 595384061984412614, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.69375
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 595384061984412614, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_SizeDelta.x
@@ -6044,7 +6072,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 595384061984412614, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 17.5
+      value: -6.4000244
       objectReference: {fileID: 0}
     - target: {fileID: 595384061984412614, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -6116,7 +6144,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 595384062205041853, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: -12.5169
       objectReference: {fileID: 0}
     - target: {fileID: 595384062205041853, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_SizeDelta.y
@@ -6124,7 +6152,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 595384062205041853, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 6.2587
       objectReference: {fileID: 0}
     - target: {fileID: 595384062205041853, guid: 51528dd9d20fbbf4f95a8f9588b8ea6a, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -8248,7 +8276,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 496ceb09fbe7d684f8c29d3b65eef3fe, type: 2}
+  - {fileID: 2100000, guid: 84604a5df0700284f8ebf20808592b08, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

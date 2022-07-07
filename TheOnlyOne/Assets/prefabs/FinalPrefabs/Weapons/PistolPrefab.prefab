@@ -202,15 +202,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponData: {fileID: 11400000, guid: ae9fbfa8b092223498b381ad3769dccb, type: 2}
-  rarityData: {fileID: 0}
-  cameraHolder: {fileID: 0}
-  weaponCam: {fileID: 0}
-  playerCam: {fileID: 0}
-  playerLook: {fileID: 0}
-  currentAmmo: 0
-  totalAmmo: 0
-  isReloading: 0
-  isAming: 0
 --- !u!114 &8870931787838259531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,7 +240,7 @@ AudioSource:
   m_GameObject: {fileID: 8870931787838259520}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 0dcf23bba906dc84db3a6fa33cae476a, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1

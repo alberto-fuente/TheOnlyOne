@@ -29,11 +29,11 @@ public class Spawner : MonoBehaviour
     [Header("Color")]
     private Color[] colors;
     private Gradient gradient;
-    public Gradient[] gradientOptions;
+    public Gradient[] terrainColorGradients;
 
     [Header("Elements")]
     private int radius = 290;
-    public Transform[] spawnPoints;
+    public Transform[] buildingsSpawnPoints;
     public GameObject[] buildings;
     public Color[] buildingColors;
     public GameObject bouncepad;
@@ -63,7 +63,7 @@ public class Spawner : MonoBehaviour
     IEnumerator GenerateScene()
     {
         GenerateTerrain();
-        SpawnBuildings();
+       SpawnBuildings();
         StartCoroutine(Spawn(bouncepad, bouncepadCount, new Vector3(0, 1, 0)));
         StartCoroutine(Spawn(crate, crateCount, new Vector3(0, 1, 0)));
         StartCoroutine(SpawnRandom(trees, treeCount, new Vector3(0, 0, 0)));
@@ -75,7 +75,7 @@ public class Spawner : MonoBehaviour
     }
     private void GenerateTerrain()
     {
-        gradient = gradientOptions[Random.Range(0, gradientOptions.Length)];
+        gradient = terrainColorGradients[Random.Range(0, terrainColorGradients.Length)];
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         CreateMap(xSize, xSize);
@@ -85,7 +85,7 @@ public class Spawner : MonoBehaviour
 
     private void SpawnBuildings()
     {
-        foreach (Transform point in spawnPoints)
+        foreach (Transform point in buildingsSpawnPoints)
         {
             GameObject building = Instantiate(buildings[Random.Range(0, buildings.Length)], point.position, Quaternion.Euler(new Vector3(-90, 0, Random.Range(0, 361))));
             building.GetComponentInChildren<MeshRenderer>().material.color = buildingColors[Random.Range(0, buildingColors.Length)];
@@ -192,7 +192,7 @@ public class Spawner : MonoBehaviour
         {
             for (int x = 0; x <= xSize; x++)
             {
-                float height = Mathf.InverseLerp(minTerrainHeight, maxTerrainHeight, vertices[i].y);//vertexaltura del vertice normalizada(entre 0 y 1)
+                float height = Mathf.InverseLerp(minTerrainHeight, maxTerrainHeight, vertices[i].y);//vertex height normalized (between 0 and 1)
                 colors[i] = gradient.Evaluate(height);
                 i++;
             }

@@ -10,6 +10,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource musicAudioSource;
     public AudioClip buttonHover;
     public AudioClip buttonPress;
+    public AudioClip dropDownButton;
     public AudioClip music;
 
     public static AudioManager Instance { get => instance; private set => instance = value; }
@@ -41,6 +42,10 @@ public class AudioManager : MonoBehaviour
     public void PressButton()
     {
         Instance.audioSource.PlayOneShot(buttonPress);
+    }
+    public void PressDropDownButton()
+    {
+        Instance.audioSource.PlayOneShot(dropDownButton);
     }
     public void PlayMusic()
     {

@@ -42,7 +42,7 @@ AudioSource:
   m_GameObject: {fileID: 7450497886724497549}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 0dcf23bba906dc84db3a6fa33cae476a, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.1
@@ -138,7 +138,7 @@ AudioSource:
   m_GameObject: {fileID: 7450497886724497549}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 0dcf23bba906dc84db3a6fa33cae476a, type: 2}
   m_audioClip: {fileID: 8300000, guid: 220912b9925e170448f72b9b2221b107, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.01
@@ -241,4 +241,5 @@ MonoBehaviour:
   musicAudioSource: {fileID: 7450497886724497551}
   buttonHover: {fileID: 8300000, guid: c8f401dd3ece7004b96485f61cdce08d, type: 3}
   buttonPress: {fileID: 8300000, guid: 894bc84b4d8fe1144a3e93143f28dfba, type: 3}
+  dropDownButton: {fileID: 8300000, guid: d7f8d0cc155712e488e271e61aa910a4, type: 3}
   music: {fileID: 8300000, guid: 220912b9925e170448f72b9b2221b107, type: 3}

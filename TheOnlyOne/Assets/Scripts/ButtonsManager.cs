@@ -26,6 +26,10 @@ public class ButtonsManager : MonoBehaviour
         AudioManager.Instance.PressButton();
         SceneDirector.Instance.LoadScene((int)GameUtils.SceneIndex.GAME);
     }
+    public void PressDropDownButton()
+    {
+        AudioManager.Instance.PressDropDownButton();
+    }
     /////////////////Main Menu/////////////////////////
     public void PressOptionsButton(bool enter)
     {
