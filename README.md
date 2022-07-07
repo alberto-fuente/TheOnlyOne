@@ -1,6 +1,6 @@
 # The Only One
 
-Esta aplicación es accesible a través de OneDrive mediante el siguiente enlace: https://universidaddeburgos-my.sharepoint.com/:f:/g/personal/afr1004_alu_ubu_es/Ei_2b5muAPNGocDZ6OlOePkBiSd7YS9sqEIEs4rnnWH6Og?e=dhFtGp
+El ejecutable de esta aplicación es accesible a través de OneDrive mediante el siguiente enlace: https://universidaddeburgos-my.sharepoint.com/:f:/g/personal/afr1004_alu_ubu_es/Ei_2b5muAPNGocDZ6OlOePkBiSd7YS9sqEIEs4rnnWH6Og?e=dhFtGp
 
 "The Only One" es un videojuego "shooter" en el que el jugador controlará al personaje protagonista en primera persona (FPS).
 
